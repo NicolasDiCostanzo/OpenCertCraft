@@ -104,7 +104,7 @@ The bundle file:
 | `timeLimitMinutes` | number | yes | Real exam duration in minutes. Ask the user if not stated anywhere in the source material. |
 | `passingScore.passingScore` | number | yes | The passing score. A plain percentage (0-100) if the cert has no scaled score, or a scaled value (e.g. `720`) if it does. |
 | `passingScore.scale` | number | no | Max of the scale (e.g. `1000`). Omit entirely for percentage-based certs. **Setting this changes the UI**: the app then shows a *projected* scaled score (a linear projection, e.g. 75% → "750 / 1000") with a disclaimer that it does not reproduce the real exam's scoring. Omitting it means `passingScore` is read as a plain percentage. Only set it when the certification genuinely uses a scaled score — never to "normalize" a number. |
-| `weights` | `Record<string, number>` | no | Maps each topic name (must exactly match the `topic` values you assign to questions) to a percentage; values must sum to 100. Omit the whole field if the cert has no published domain weights — do not invent weights. |
+| `weights` | `Record<string, number>` | no | Maps each topic name (must exactly match the `topic` values you assign to questions) to a percentage; values must sum to 100. Use the weights the certification publishes. If it publishes its domains but no weights, split 100 equally across those domains, rounded to two decimals (13 domains: `7.69` each; the validator tolerates a total within 0.5 of 100). Never invent unequal weights. Omit the whole field only if the certification publishes no domain list at all. The keys are the official domain names, verbatim, including domains for which the bank has no question yet: sampling ignores a weighted topic without questions and renormalizes the others. |
 | `instructions` | string | no | Free-text instructions shown to the user. |
 
 ### `themes` (taxonomy registry)
@@ -195,7 +195,7 @@ ecosystem, it belongs in that cert's own groups.
 |---|---|---|---|
 | `id` | string | yes | Unique within the file. Follow the bundle's own numbering: continue from the highest existing id rather than reusing the source dump's numbering (see the id rule below). |
 | `question` | string | yes | Full prompt, unicode preserved. |
-| `options` | string[] | yes | 2-5 entries, no `A. ` letter prefixes — the app renders letters itself. An image that belongs to a specific *option* (not the prompt) is embedded inline as markdown: `![alt](url)`. |
+| `options` | string[] | yes | At least 2 entries, no `A. ` letter prefixes — the app renders letters itself. An image that belongs to a specific *option* (not the prompt) is embedded inline as markdown: `![alt](url)`. |
 | `answers` | string \| string[] | yes | A single letter (`"C"`) for single-select, an array (`["B","D"]`) for multi-select. The cardinality must match the source question's type: single-select questions use a string — never a one-item array like `["C"]`; multi-select questions use an array with one entry per correct answer, matching the number of answers the source states. Arrays must be non-empty with no duplicate letters. Every letter must be within the `options` range. Take the accepted answer from the source; if the source shows disagreement (e.g. community votes conflicting with a stated "most accepted answer") and no answer is clearly authoritative, stop and ask. |
 | `topic` | string | yes | The question's primary topic/domain. If `exam.weights` is present, this **must** be one of its keys — don't introduce a topic that isn't in the weights table without asking first. |
 | `explanation` | string | no | Rationale for the correct answer, if the source material supports one. Don't fabricate an explanation the source doesn't substantiate. |
@@ -375,9 +375,10 @@ After tagging, `npm run test:certs` must be green before you move on.
 Bundle (`src/assets/<CODE> questions.json`):
 
 - [ ] Top level has exactly `version` (`2`), `exam`, `themes`, `questions`.
-- [ ] Every `options` array has 2-5 entries, none with an `A. `/`B. ` prefix.
+- [ ] Every `options` array has at least 2 entries, none with an `A. `/`B. ` prefix.
 - [ ] Every `answers` letter is within that question's `options` range.
 - [ ] Every `topic` is present, and — if `exam.weights` exists — is one of its keys.
+- [ ] `exam.weights` keys are the certification's official domain names, verbatim; when the official guide publishes no percentages, the weights are split equally.
 - [ ] No optional field is present as `null`, `""`, or `[]`; it's omitted entirely instead.
 - [ ] Every value under a question's `themes` exists in the top-level `themes` registry.
 - [ ] No drag-and-drop / matching / simulation question was force-fit — those were flagged and skipped instead.

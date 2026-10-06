@@ -7,7 +7,7 @@ export interface ValidationResult {
   warnings: string[]
 }
 
-const OPTION_LETTERS = ['A', 'B', 'C', 'D', 'E']
+const OPTION_LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 const SUPPORTED_VERSION = 2
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
@@ -289,10 +289,6 @@ function validateQuestions(
     }
     if (raw.options.length < 2) {
       errors.push(`${label}.options must have at least 2 entries (has ${raw.options.length}).`)
-      return
-    }
-    if (raw.options.length > 5) {
-      errors.push(`${label}.options must have at most 5 entries (has ${raw.options.length}).`)
       return
     }
 

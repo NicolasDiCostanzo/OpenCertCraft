@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { validateCertBundle } from '../utils/schemaValidator'
 import type { CertBundle } from '../types'
+import { validateCertBundle } from '../utils/schemaValidator'
 
 const modules = import.meta.glob<{ default: unknown }>('./*questions.json', { eager: true })
 
@@ -11,7 +11,7 @@ const CERT_FAMILY: Record<string, string> = {
   'CCAO-F': 'claude',
   'CCAR-P': 'claude',
   'CCDV-F': 'claude',
-  'GCP-ACE': 'gcp',
+  'GCP-ACE': 'gcp'
 }
 
 function loadBundle(path: string, mod: { default: unknown }): CertBundle {

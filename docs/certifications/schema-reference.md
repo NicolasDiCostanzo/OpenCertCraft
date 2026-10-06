@@ -55,7 +55,7 @@ Metadata about the certification itself. Displayed on the home screen and used f
 | `timeLimitMinutes` | number | ✅ | Real exam duration. Exam mode's fixed countdown, and the default length of the optional timer in preparation mode. |
 | `passingScore.passingScore` | number | ✅ | Score needed to pass. A raw percentage (0–100) when `scale` is absent; a scaled score (e.g. out of 1000) when `scale` is present. |
 | `passingScore.scale` | number | optional | Max scale (e.g. `1000` for AWS scaled scores). Omit for percentage-based certs — `passingScore` is then itself the pass percentage. The pass percentage is always computed as `passingScore / scale`. |
-| `weights` | `Record<string, number>` | optional | Keys **must** be topic names used on questions; values are percentages summing to 100. Omit if the cert has no published domain weights — the app then samples uniformly. |
+| `weights` | `Record<string, number>` | optional | Keys **must** be topic names used on questions; values are percentages summing to 100. When the cert publishes its domains but no percentages, split 100 equally across the official domain names (two decimals, e.g. `7.69` for 13 domains; the validator tolerates a total within 0.5 of 100). Omit only if no domain list is published; the app then samples uniformly. A weighted topic that no question uses yet is ignored by sampling and the remaining weights are renormalized. |
 | `instructions` | string | optional | Free-text instructions shown on the home screen. |
 
 ### Session scoring
@@ -118,7 +118,7 @@ A dictionary mapping **theme groups** to their possible **values**. Each key is 
 |---|---|---|---|
 | `id` | string | ✅ | Unique within the file. Stable across re-generations. |
 | `question` | string | ✅ | Full prompt. Unicode preserved. |
-| `options` | string[] | ✅ | 2–5 entries. No `A. ` prefixes — the app renders letters. Inline images inside an option are markdown (`![...](...)`). |
+| `options` | string[] | ✅ | At least 2 entries. No `A. ` prefixes — the app renders letters. Inline images inside an option are markdown (`![...](...)`). |
 | `answers` | string \| string[] | ✅ | Single letter (`"C"`) for single-select; array (`["B","D"]`) for multi-select. Every letter must be within the `options` range. |
 | `topic` | string | ✅ | **Exactly one** topic name — see the rule below. Never an array, and never several topics joined by commas or slashes. If `exam.weights` exists, must be exactly one of its keys. |
 | `explanation` | string | optional | Rationale for the correct answer. Shown as immediate feedback in preparation mode and on the end-of-quiz review screen in both modes. |
@@ -179,7 +179,7 @@ sampling:
 questions[0] (id 1).topic "Evaluation, Testing & Optimization, Integration" is not one of exam.weights' keys.
 ```
 
-When `exam.weights` is absent (a cert with no published domain breakdown), any
+When `exam.weights` is absent (a cert that publishes no domain list at all), any
 non-empty topic string is accepted and the app samples the bank uniformly.
 
 

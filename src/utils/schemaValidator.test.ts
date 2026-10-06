@@ -41,7 +41,6 @@ describe('validateCertBundle', () => {
     ['a question is missing its question text', (b) => ({ ...b, questions: [{ ...b.questions[0], question: '' }] }), '.question must be a non-empty string'],
     ['a question is missing its options', (b) => ({ ...b, questions: [{ ...b.questions[0], options: undefined }] }), '.options must be an array of strings'],
     ['a question has fewer than 2 options', (b) => ({ ...b, questions: [{ ...b.questions[0], options: ['only one'] }] }), '.options must have at least 2 entries'],
-    ['a question has more than 5 options', (b) => ({ ...b, questions: [{ ...b.questions[0], options: ['a', 'b', 'c', 'd', 'e', 'f'] }] }), '.options must have at most 5 entries'],
     ['a question has non-string options', (b) => ({ ...b, questions: [{ ...b.questions[0], options: [1, 2, 3] }] }), '.options must contain only strings'],
     ['a question is missing its answers', (b) => ({ ...b, questions: [{ ...b.questions[0], answers: undefined }] }), '.answers is required'],
     ['answers is an empty array', (b) => ({ ...b, questions: [{ ...b.questions[1], answers: [] }] }), '.answers must contain at least one letter when given as an array'],
@@ -65,6 +64,20 @@ describe('validateCertBundle', () => {
 
     expect(result.valid).toBe(false)
     expect(result.errors.some((e) => e.includes(expectedError))).toBe(true)
+  })
+
+  it('accepts more than 5 options when every answer letter stays within range', () => {
+    const bundle = cloneBundle()
+    bundle.questions[0] = {
+      ...bundle.questions[0],
+      options: ['a', 'b', 'c', 'd', 'e', 'f'],
+      answers: ['B', 'F'],
+    }
+
+    const result = validateCertBundle(bundle)
+
+    expect(result.valid).toBe(true)
+    expect(result.errors).toEqual([])
   })
 
   it('warns, but does not fail, on a question theme value unknown to the registry', () => {
