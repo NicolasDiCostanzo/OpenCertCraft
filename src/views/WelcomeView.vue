@@ -17,7 +17,7 @@ import { texts } from '../texts/en';
   const authAvailable = isAuthAvailable()
   const syncAvailable = isSyncConfigured()
   const canSyncLater = authAvailable && syncAvailable
-  const { availableCerts } = useQuizLoader()
+  const { groupedCerts } = useQuizLoader()
   const historyStore = useQuizHistoryStore();
   const progressStore = useUserProgressStore();
   const hasLocalData = computed(
@@ -55,7 +55,7 @@ import { texts } from '../texts/en';
         :description="canSyncLater ? texts.welcomeNoAccountDesc : texts.welcomeNoAccountDescNoSync"
         :cta-label="texts.welcomeNoAccountCta" @select="continueLocal" />
     </div>
-    <AvailableExams :certs="availableCerts" />
+    <AvailableExams :groups="groupedCerts" />
   </section>
 </template>
 

@@ -41,6 +41,12 @@ export interface CertBundleMeta {
   questionCount: number
 }
 
+export interface CertFamilyGroup {
+  familyId: string
+  label: string
+  certs: CertBundleMeta[]
+}
+
 export interface CertManifestEntry extends CertBundleMeta {
   file: string
 }

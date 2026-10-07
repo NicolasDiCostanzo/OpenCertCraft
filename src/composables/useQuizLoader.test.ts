@@ -38,11 +38,28 @@ describe('createCertRegistry', () => {
       'SECOND',
     ])
     expect(registry.availableCertMetas().every((meta) => meta.questionCount === 2)).toBe(true)
-
     await expect(registry.ensureCertLoaded('FIX-001')).resolves.toBe(true)
     expect(registry.getCert('FIX-001')).toEqual(validCertBundle)
     await expect(registry.ensureCertLoaded('SECOND')).resolves.toBe(true)
     expect(registry.issuesByPath).toEqual({})
+  })
+
+  it('groups metas by family and collects unknown codes under Other', () => {
+    const registry = createCertRegistry(
+      loadersFor({
+        '/src/assets/dva.json': validCertBundle,
+        '/src/assets/unknown.json': validCertBundle,
+      }),
+      [manifestEntry('DVA-C02', 'dva.json', 2), manifestEntry('NEW-01', 'unknown.json', 2)],
+    )
+
+    const groups = registry.groupedCertMetas()
+    const aws = groups.find((group) => group.familyId === 'aws')
+    expect(aws?.label).toBe('AWS')
+    expect(aws?.certs.map((meta) => meta.exam.code)).toEqual(['DVA-C02'])
+
+    const other = groups.find((group) => group.familyId === 'other')
+    expect(other?.certs.map((meta) => meta.exam.code)).toEqual(['NEW-01'])
   })
 
   it('caches a loaded cert and never re-imports its bundle', async () => {

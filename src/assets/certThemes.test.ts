@@ -1,18 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import type { CertBundle } from '../types'
 import { validateCertBundle } from '../utils/schemaValidator'
+import { CERT_FAMILIES, CERT_FAMILY } from './certFamilies'
 
 const modules = import.meta.glob<{ default: unknown }>('./*questions.json', { eager: true })
-
-const CERT_FAMILY: Record<string, string> = {
-  'DVA-C02': 'aws',
-  'CLF-C02': 'aws',
-  'CCA-F': 'claude',
-  'CCAO-F': 'claude',
-  'CCAR-P': 'claude',
-  'CCDV-F': 'claude',
-  'GCP-ACE': 'gcp'
-}
 
 function loadBundle(path: string, mod: { default: unknown }): CertBundle {
   const result = validateCertBundle(mod.default)
@@ -77,6 +68,16 @@ describe('cert theme integrity', () => {
         `${path} has questions with no themes: they can never be selected by a theme filter. Tag them, or drop "themes" for the whole bundle deliberately.`,
       ).toEqual([])
     }
+  })
+
+  it('keeps the family code lists consistent with CERT_FAMILY', () => {
+    expect(CERT_FAMILY).toEqual(
+      Object.fromEntries(
+        CERT_FAMILIES.flatMap((family) =>
+          family.codes.map((code) => [code, family.id]),
+        ),
+      ),
+    )
   })
 
   it('uses one taxonomy shape across certs in the same family', () => {

@@ -1,28 +1,36 @@
 <script setup lang="ts">
   import { texts } from '../../texts/en'
-import type { CertBundleMeta } from '../../types'
+import type { CertFamilyGroup } from '../../types'
+import { familyCertCount } from '../../assets/certFamilies'
 import CertCodeBadge from '../cert/CertCodeBadge.vue'
 import Badge from '../ui/BaseBadge.vue'
 import Card from '../ui/BaseCard.vue'
 
-  const { certs } = defineProps<{ certs: CertBundleMeta[] }>()
+  const { groups } = defineProps<{ groups: CertFamilyGroup[] }>()
 </script>
 
 <template>
   <Card tag="details" padding="lg" class="available-exams">
     <summary class="available-exams__summary">
       <span class="available-exams__chevron" aria-hidden="true">▼</span>
-      <span>{{ texts.examsIncluded(certs.length) }}</span>
+      <span>{{ texts.examsIncluded(familyCertCount(groups)) }}</span>
     </summary>
-    <ul class="available-exams__list">
-      <li v-for="cert in certs" :key="cert.exam.code" class="available-exams__item">
-        <span class="available-exams__name">{{ cert.exam.name }}</span>
-        <span class="available-exams__meta">
-          <CertCodeBadge :code="cert.exam.code" />
-          <Badge variant="weight">{{ texts.questionBankValue(cert.questionCount) }}</Badge>
-        </span>
-      </li>
-    </ul>
+    <details v-for="group in groups" :key="group.familyId" class="available-exams__group" open>
+      <summary class="available-exams__family">
+        <span class="available-exams__chevron" aria-hidden="true">▼</span>
+        <span>{{ group.label }}</span>
+        <span class="available-exams__count">{{ texts.familyCertCount(group.certs.length) }}</span>
+      </summary>
+      <ul class="available-exams__list">
+        <li v-for="cert in group.certs" :key="cert.exam.code" class="available-exams__item">
+          <span class="available-exams__name">{{ cert.exam.name }}</span>
+          <span class="available-exams__meta">
+            <CertCodeBadge :code="cert.exam.code" />
+            <Badge variant="weight">{{ texts.questionBankValue(cert.questionCount) }}</Badge>
+          </span>
+        </li>
+      </ul>
+    </details>
   </Card>
 </template>
 
@@ -71,6 +79,37 @@ import Card from '../ui/BaseCard.vue'
 
   .available-exams[open] .available-exams__chevron {
     transform: rotate(180deg);
+  }
+
+  .available-exams__family {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 16px 0 0;
+    padding: 0;
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text);
+  }
+
+  .available-exams__family::-webkit-details-marker {
+    display: none;
+  }
+
+  .available-exams__group:not([open]) .available-exams__chevron {
+    transform: rotate(-90deg);
+  }
+
+  .available-exams__count {
+    margin-left: auto;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: normal;
   }
 
   .available-exams__list {

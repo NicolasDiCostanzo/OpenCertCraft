@@ -1,5 +1,6 @@
 import certManifestRaw from '../assets/cert-manifest.json'
-import type { CertBundle, CertBundleMeta, CertManifestEntry, Question } from '../types'
+import { CERT_FAMILIES } from '../assets/certFamilies'
+import type { CertBundle, CertBundleMeta, CertFamilyGroup, CertManifestEntry, Question } from '../types'
 import { isQuestionAnswerable, validateCertBundle } from '../utils/schemaValidator'
 
 const certManifest = certManifestRaw as unknown as CertManifestEntry[]
@@ -82,12 +83,27 @@ export function createCertRegistry(
     return manifest.map(({ exam, questionCount }) => ({ exam, questionCount }))
   }
 
+  function groupedCertMetas(): CertFamilyGroup[] {
+    const metas = availableCertMetas()
+    const byCode = new Map(metas.map((meta) => [meta.exam.code, meta]))
+    const groups = CERT_FAMILIES.map((family) => ({
+      familyId: family.id,
+      label: family.label,
+      certs: family.codes.map((code) => byCode.get(code)).filter((meta): meta is CertBundleMeta => meta !== undefined),
+    })).filter((group) => group.certs.length > 0)
+    const known = new Set(CERT_FAMILIES.flatMap((family) => family.codes))
+    const ungrouped = metas.filter((meta) => !known.has(meta.exam.code))
+    if (ungrouped.length > 0) groups.push({ familyId: 'other', label: 'Other', certs: ungrouped })
+    return groups
+  }
+
   return {
     ensureCertLoaded,
     getCert,
     activePool,
     resolveQuestions,
     availableCertMetas,
+    groupedCertMetas,
     issuesByPath,
   }
 }
@@ -97,6 +113,7 @@ const registry = createCertRegistry(modules, certManifest)
 export function useQuizLoader() {
   return {
     availableCerts: registry.availableCertMetas(),
+    groupedCerts: registry.groupedCertMetas(),
     certLoadIssues: registry.issuesByPath,
     ensureCertLoaded: registry.ensureCertLoaded,
     getCert: registry.getCert,
