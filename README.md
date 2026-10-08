@@ -5,7 +5,7 @@
 
 A certification-agnostic quiz web app for exam preparation. Ships with several certification question banks built in; other certifications are added as new built-in bundles — request one via a GitHub issue.
 
-**Live at [quiz-cert.com](https://quiz-cert.com).**
+**Live at [opencertcraft.com](https://opencertcraft.com).**
 
 Built with **Vue 3 + TypeScript + Vite**, pinned with **Pinia**. The frontend is a **static site** — no server, no database, no build-time secrets — so you can host it on any static host or run it locally in a minute. Progress lives in your browser; an account is optional and only used to sync it.
 
