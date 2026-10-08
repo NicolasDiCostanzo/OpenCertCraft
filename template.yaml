@@ -181,6 +181,38 @@ Resources:
         SigningBehavior: always
         SigningProtocol: sigv4
 
+  LegacyRedirectFunction:
+    Type: AWS::CloudFront::Function
+    Properties:
+      Name: !Sub ${AWS::StackName}-legacy-domain-redirect
+      AutoPublish: true
+      FunctionCode: !Sub |
+        function handler(event) {
+          var request = event.request;
+          var host = request.headers.host.value;
+          if (host === 'quiz-cert.com' || host === 'www.quiz-cert.com') {
+            var location = 'https://${SiteCustomDomain}' + request.uri;
+            var params = request.querystring;
+            var keys = Object.keys(params);
+            if (keys.length > 0) {
+              var query = [];
+              for (var i = 0; i < keys.length; i++) {
+                query.push(keys[i] + '=' + params[keys[i]].value);
+              }
+              location += '?' + query.join('&');
+            }
+            return {
+              statusCode: 301,
+              status: 'Found',
+              headers: { location: { value: location } }
+            };
+          }
+          return request;
+        }
+      FunctionConfig:
+        Comment: Redirect legacy quiz-cert.com hostnames to the current site domain
+        Runtime: cloudfront-js-2.0
+
   SiteDistribution:
     Type: AWS::CloudFront::Distribution
     Properties:
@@ -190,6 +222,8 @@ Resources:
         Aliases:
           - !Ref SiteCustomDomain
           - !Sub www.${SiteCustomDomain}
+          - quiz-cert.com
+          - www.quiz-cert.com
         ViewerCertificate:
           AcmCertificateArn: !Ref SiteCertificateArn
           SslSupportMethod: sni-only
@@ -213,6 +247,9 @@ Resources:
           ForwardedValues:
             QueryString: false
           Compress: true
+          FunctionAssociations:
+            - EventType: viewer-request
+              FunctionARN: !GetAtt LegacyRedirectFunction.FunctionARN
         PriceClass: PriceClass_100
         CustomErrorResponses:
           - ErrorCode: 403
