@@ -77,6 +77,8 @@ test.describe.serial('quiz journey on the DVA-C02 certification', () => {
   test('lists every declared certification as a card', async ({ sharedPage: page }) => {
     await page.goto('/cert')
 
+    await page.getByRole('button', { name: texts.expandAllLabel }).click()
+
     await expect(page.locator('.cert-card')).toHaveCount(certManifest.length)
     for (const entry of certManifest) {
       await expect(page.getByRole('heading', { name: entry.exam.name })).toBeVisible()
