@@ -8,7 +8,7 @@ import { useUserAccountStore } from '../../stores/userAccount'
 import { texts } from '../../texts/en'
 import IconCoffee from '../icons/IconCoffee.vue'
 import IconGithub from '../icons/IconGithub.vue'
-import IconHome from '../icons/IconHome.vue'
+import IconLogo from '../icons/IconLogo.vue'
 import IconMoon from '../icons/IconMoon.vue'
 import IconSun from '../icons/IconSun.vue'
 import SecondaryButton from '../ui/SecondaryButton.vue'
@@ -41,7 +41,7 @@ import ExternalLink from './ExternalLink.vue'
 <template>
   <header class="app-header">
     <RouterLink :to="titleTarget" class="app-title" :title="texts.appTitle">
-      <span class="app-title__mark"><IconHome class="app-title__icon" /></span>
+      <IconLogo class="app-title__logo" />
       <span class="app-title__name">{{ texts.headerBrand }}</span>
     </RouterLink>
     <div class="app-header__actions">
@@ -100,27 +100,16 @@ import ExternalLink from './ExternalLink.vue'
     transition: color 0.15s ease;
   }
 
-  .app-title__mark {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: var(--radius-md);
-    background: var(--brand-bg);
+  .app-title__logo {
+    width: 30px;
+    height: 30px;
     color: var(--brand);
     flex-shrink: 0;
-    transition: background 0.15s ease;
+    transition: color 0.15s ease, opacity 0.15s ease;
   }
 
-  .app-title:hover .app-title__mark {
-    background: var(--brand);
-    color: var(--bg);
-  }
-
-  .app-title__icon {
-    width: 17px;
-    height: 17px;
+  .app-title:hover .app-title__logo {
+    color: var(--text-h);
   }
 
   .app-title__name {
