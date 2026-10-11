@@ -8,6 +8,7 @@ export const CERT_FAMILIES: readonly CertFamily[] = [
   { id: 'aws', label: 'AWS', codes: ['DVA-C02', 'CLF-C02'] },
   { id: 'claude', label: 'Claude', codes: ['CCA-F', 'CCAO-F', 'CCAR-P', 'CCDV-F'] },
   { id: 'gcp', label: 'Google Cloud', codes: ['GCP-ACE'] },
+  { id: 'kubernetes', label: 'Kubernetes', codes: ['CKA', 'CKS'] },
   { id: 'scaleway', label: 'Scaleway', codes: ['SCW-SA', 'SCW-FND', 'SCW-SEC'] },
 ]
 

@@ -1,0 +1,2219 @@
+{
+  "version": 2,
+  "exam": {
+    "name": "Certified Kubernetes Administrator (CKA)",
+    "code": "CKA",
+    "totalQuestions": 20,
+    "timeLimitMinutes": 120,
+    "passingScore": {
+      "passingScore": 66
+    },
+    "weights": {
+      "Cluster Architecture, Installation & Configuration": 25,
+      "Workloads & Scheduling": 15,
+      "Services & Networking": 20,
+      "Storage": 10,
+      "Troubleshooting": 30
+    }
+  },
+  "themes": {
+    "resources": [
+      "config-map",
+      "cron-job",
+      "daemon-set",
+      "deployment",
+      "etcd",
+      "events",
+      "horizontal-pod-autoscaler",
+      "ingress",
+      "job",
+      "kubeconfig",
+      "namespace",
+      "network-policy",
+      "node",
+      "persistent-volume",
+      "persistent-volume-claim",
+      "pod",
+      "probes",
+      "rbac",
+      "resource-usage",
+      "scheduler",
+      "secret",
+      "security-context",
+      "service",
+      "service-account",
+      "stateful-set",
+      "volume"
+    ],
+    "questionTypes": [
+      "concept",
+      "how-to",
+      "troubleshooting"
+    ]
+  },
+  "questions": [
+    {
+      "id": "1",
+      "question": "Lab Environment:\n\nmaster node: k8s-master\n\nworker node: k8s-node-01\n\nTake backup of etcd and store at `/tmp/etcd-snapshot.db`. You can use existing CA cert, Server cert and Server key configured for etcd.\n\n* To view existing cert and key location, you can `describe` etcd pod in kube-system namespace",
+      "options": [
+        "```\nETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 \\\n--ca-cert=/etc/kubernetes/pki/etcd/ca.crt \\\n--server-cert=/etc/kubernetes/pki/etcd/server.crt \\\n--server-key=/etc/kubernetes/pki/etcd/server.key \\\nsnapshot save /tmp/etcd-snapshot.db\n```",
+        "```\nETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2380 \\\n--cacert=/etc/kubernetes/pki/etcd/ca.crt \\\n--cert=/etc/kubernetes/pki/etcd/server.crt \\\n--key=/etc/kubernetes/pki/etcd/server.key \\\nsnapshot save /tmp/etcd-snapshot.db\n```",
+        "```\nETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 \\\n--cacert=/etc/kubernetes/pki/etcd/ca.crt \\\n--cert=/etc/kubernetes/pki/etcd/server.crt \\\n--key=/etc/kubernetes/pki/etcd/server.key \\\nsnapshot save /tmp/etcd-snapshot.db\n```"
+      ],
+      "answers": "C",
+      "topic": "Cluster Architecture, Installation & Configuration",
+      "explanation": "This command correctly takes a `snapshot` of the etcd database and saves it to the specified file. It uses the correct API `version` (3), the correct endpoint (2379), and specifies the CA certificate, server certificate, and server key for secure communication with etcd. The `snapshot` save command is the correct `etcdctl` subcommand for creating a snapshot.",
+      "themes": {
+        "resources": [
+          "etcd",
+          "namespace",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "2",
+      "question": "Lab Environment:\n\nmaster node: k8s-master\n\nworker node: k8s-node-01\n\nDeploy a pod called limit-test with resource limit of 1 CPU and 256Mi of memory . Use image nginx.",
+      "options": [
+        "```\napiVersion: v1\nkind: Pod\nmetadata:\nlabels:\nrun: limit-test\nname: limit-test\nspec:\ncontainers:\n- image: nginx\nname: limit-test\nresources:\nrequests:\ncpu: \"1\"\nmemory: 256Mi\n```",
+        "```\nkubectl run limit-test --image=nginx --limits='cpu=1,memory=256Mi'\n```",
+        "```\nkubectl run limit-test --image=nginx --requests='cpu=1,memory=256Mi'\n```",
+        "```\napiVersion: v1\nkind: Pod\nmetadata:\nlabels:\nrun: limit-test\nname: limit-test\nspec:\ncontainers:\n- image: nginx\nname: limit-test\nresources:\nlimits:\ncpu: \"1\"\nmemory: 256Mi\n```"
+      ],
+      "answers": "D",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This YAML definition correctly defines a Pod named limit-test using the `nginx` image and sets resource limits for CPU and memory. The resources section, specifically the limits subsection, is used to constrain the maximum amount of CPU and memory a container can use. This ensures that the pod does not consume more resources than allocated, preventing resource starvation for other pods in the cluster. The CPU limit is set to 1 core, and the memory limit is set to 256Mi (256 mebibytes).",
+      "themes": {
+        "resources": [
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "3",
+      "question": "Lab Environment:\n\nmaster node: k8s-master\n\nworker node: k8s-node-01\n\nDisplay ONLY names of those nodes which DO NOT have label node-role.kubernetes.io/master= configured.\n\nThere should be only one column called NAME.",
+      "options": [
+        "```\nkubectl get nodes -l=node-role.kubernetes.io/master=\n```",
+        "```\nkubectl get nodes -l=node-role.kubernetes.io/master -o=custom-columns=NAME:.metadata.name\n```",
+        "```\nkubectl get nodes -l='!node-role.kubernetes.io/master' -o=custom-columns=NAME:.metadata.name\n```",
+        "```\nkubectl get nodes -o=custom-columns=NAME:.metadata.name\n```"
+      ],
+      "answers": "C",
+      "topic": "Cluster Architecture, Installation & Configuration",
+      "explanation": "This command correctly retrieves the names of nodes that do NOT have the label node-role.kubernetes.io/master. The `-l` flag is used to filter resources based on labels. The ! symbol negates the label selector, so it selects nodes that do not have the specified label. The `-o=custom-columns=NAME:.metadata.name` option formats the output to display only the name of the nodes in a column named NAME. This is the correct way to filter nodes based on the absence of a specific label and format the output as requested.",
+      "themes": {
+        "resources": [
+          "node"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "4",
+      "question": "Lab Environment:\n\nmaster node: k8s-master\n\nworker node: k8s-node-01\n\nCreate a ConfigMap by name test-cm with following data. Please use imperative commands for this task.\n\nKey Value\n\n```\nenv dev\n```\n\nlog_path `/var/log`",
+      "options": [
+        "```\nkubectl create cm test-cm --from-literal=key=env --from-literal=value=dev --from-literal=key=log_path --from-literal=value=/var/log\n```",
+        "```\nkubectl create cm test-cm --from-literal=env=dev,log_path=/var/log\n```",
+        "```\nkubectl create cm test-cm --from-literal=env=dev --from-literal=log_path=/var/log\n```"
+      ],
+      "answers": "C",
+      "topic": "Cluster Architecture, Installation & Configuration",
+      "explanation": "This command correctly creates a ConfigMap named test-cm using imperative commands. The `--from-literal` flag allows you to define key-value pairs directly on the command line. Each key-value pair is specified as `key=value`, and multiple pairs can be added by using the `--from-literal` flag multiple times. This approach is suitable for creating ConfigMaps with a small number of key-value pairs.",
+      "themes": {
+        "resources": [
+          "config-map"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "5",
+      "question": "Lab Environment:\n\nmaster node: k8s-master\n\nworker node: k8s-node-01\n\nDeploy a network policy called allow-only-namespace in webapp namespace. Make sure it allows ALL traffic ONLY from dev namespace.\n\nNote:\n\n1. Policy should NOT allow communication between pods in same namespace\n\n2. Traffic ONLY from dev namespace is allowed on ALL ports\n\n* Create necessary dependent resources",
+      "options": [
+        "```\napiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\nname: allow-only-namespace\nnamespace: webapp\nspec:\npodSelector: {}\npolicyTypes: - Ingress\ningress:\n- from:\n- namespaceSelector:\nmatchLabels:\nname: dev\n```",
+        "```\napiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\nname: allow-only-namespace\nnamespace: webapp\nspec:\npodSelector: {}\npolicyTypes: - Ingress\ningress:\n- from:\n- namespaceSelector:\nmatchLabels:\nname: dev\nports:\nport: *\nprotocol: TCP\n```",
+        "```\napiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\nname: allow-only-namespace\nnamespace: webapp\nspec:\npodSelector: {}\npolicyTypes: - Ingress\ningress:\n- from:\n- namespaceSelector:\nmatchLabels:\nname: dev\n- podSelector: {}\n```"
+      ],
+      "answers": "A",
+      "topic": "Services & Networking",
+      "explanation": "Ingress ingress: `-` from: `-` namespaceSelector: `matchLabels:` name: dev\n\nThis YAML defines a NetworkPolicy named allow-only-namespace in the webapp namespace. The podSelector: {} ensures that the policy applies to all pods in the webapp namespace. policyTypes: `-` Ingress specifies that this policy controls inbound traffic. The ingress section defines the rules for allowing traffic. The from section with namespaceSelector and `matchLabels:` name: dev allows traffic only from pods within a namespace labeled with name: dev. This correctly implements the requirement to allow all traffic only from the dev namespace to the webapp namespace.",
+      "themes": {
+        "resources": [
+          "network-policy",
+          "namespace",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "6",
+      "question": "Lab Environment:\n\nmaster node: k8s-master\n\nworker node: k8s-node-01\n\nYou have to make k8s-node-01 unavailable for new deployments. Please perform required steps without interrupting existing deployments.",
+      "options": [
+        "```\nkubectl drain node k8s-node-01\n```",
+        "```\nkubectl cordon k8s-node-01\n```",
+        "```\nkubectl cordon node k8s-node-01\n```",
+        "```\nkubectl drain k8s-node-01\n```"
+      ],
+      "answers": "B",
+      "topic": "Workloads & Scheduling",
+      "explanation": "The `kubectl cordon` command marks a node as unschedulable. This prevents new pods from being scheduled onto the node. Existing pods continue to `run` without interruption. This is the correct approach to make a node unavailable for new deployments without affecting existing ones. The correct syntax is `kubectl cordon`",
+      "themes": {
+        "resources": [
+          "node",
+          "deployment"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "7",
+      "question": "Lab Environment:\n\nmaster node: k8s-master\n\nworker node: k8s-node-01\n\nCreate a service called webapp-svc listening on port 8080 . Deploy a pod with label `app=web` and image `nginx` as backend of the service. Deploy an Ingress called webapp-ingress and map it with the service webapp-svc on path `/web`\n\n* Create necessary dependent resources",
+      "options": [
+        "```\nkubectl run nginx --image=nginx -l=app=web kubectl expose pod nginx --port=8080 apiVersion: networking.k8s.io/v1 kind: Ingress metadata: name: webapp-ingress annotations: nginx.ingress.kubernetes.io/rewrite-target: / spec: rules: - http: paths: - path: /web pathType: Prefix backend: service: name: webapp-svc port: number: 8080\n```",
+        "```\nkubectl run nginx --image=nginx kubectl expose pod nginx --name=webapp-svc --port=8080 apiVersion: networking.k8s.io/v1 kind: Ingress metadata: name: webapp-ingress annotations: nginx.ingress.kubernetes.io/rewrite-target: / spec: rules: - http: paths: - path: /web pathType: Prefix backend: service: name: webapp-svc port: number: 8080\n```",
+        "```\nkubectl run nginx --image=nginx -l=app=web kubectl expose pod nginx --name=webapp-svc --port=8080 apiVersion: networking.k8s.io/v1 kind: Ingress metadata: name: webapp-ingress annotations: nginx.ingress.kubernetes.io/rewrite-target: / spec: rules: - http: paths: - path: /web pathType: Prefix backend: service: name: webapp-svc port: number: 8080\n```"
+      ],
+      "answers": "C",
+      "topic": "Services & Networking",
+      "explanation": "This option correctly creates the necessary resources. First, it creates a pod named 'nginx' using the 'nginx' image and applies the label '`app=web`'. Then, it exposes this pod as a service named 'webapp-svc' on port 8080. Finally, it defines an Ingress resource named 'webapp-ingress' that maps the path '/web' to the 'webapp-svc' service on port 8080. The nginx.ingress.kubernetes.io/rewrite-target: / annotation ensures that the request is rewritten to the root path of the service, which is necessary for the `nginx` container to serve the content correctly. The pathType: Prefix indicates that any path starting with `/web` will be routed to the service.",
+      "themes": {
+        "resources": [
+          "ingress",
+          "service",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "8",
+      "question": "Lab Environment:\n\n`-` Master node: k8s-master\n\n`-` Worker nodes: k8s-node-01, k8s-node-02\n\nRequirement: Deploy new pods with label `env=prod` only on k8s-node-01.",
+      "options": [
+        "```\napiVersion: v1\nkind: Pod\nmetadata:\nname: nginx\nlabels:\nenv: prod\nspec:\ncontainers:\n- name: nginx\nimage: nginx\nimagePullPolicy: IfNotPresent\nnodeSelector:\nkubernetes.io/hostname: k8s-node-01\n```",
+        "```\napiVersion: v1\nkind: Pod\nmetadata:\nname: nginx\nlabels:\nenv: prod\nspec:\ncontainers:\n- name: nginx\nimage: nginx\nimagePullPolicy: IfNotPresent\nnodeSelector:\nname: k8s-node-01\n```",
+        "```\napiVersion: v1\nkind: Pod\nmetadata:\nname: nginx\nlabels:\nenv: prod\nspec:\ncontainers:\n- name: nginx\nimage: nginx\nimagePullPolicy: IfNotPresent\nnodeName:\nkubernetes.io/hostname: k8s-node-01\n```"
+      ],
+      "answers": "A",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This is the correct answer because it uses the nodeSelector field within the pod's specification to target a specific node. The nodeSelector uses key-value pairs to match node labels. In this case, it selects nodes where the label kubernetes.io/hostname matches the value k8s-node-01. This ensures that the pod is scheduled only on the specified node, while also applying the `env=prod` label to the pod itself.",
+      "themes": {
+        "resources": [
+          "node",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "9",
+      "question": "Lab Environment:\n\nmaster node: k8s-master\n\nworker node: k8s-node-01\n\nFind expiry date of etcd CA certificate and write that to file `/tmp/etcd-ca-expiry.txt`",
+      "options": [
+        "```\nopenssl x509 -in /etc/kubernetes/pki/etcd/ca.crt --text --noout | grep -i \"not after\" > /tmp/etcd-ca-expiry.txt\n```",
+        "```\nopenssl x509 -in /etc/kubernetes/pki/ca.crt --text --noout | grep -i \"not after\" > /tmp/etcd-ca-expiry.txt\n```",
+        "```\nopenssl x509 -in /etc/kubernetes/pki/etcd/server.crt --text --noout | grep -i \"not after\" > /tmp/etcd-ca-expiry.txt\n```"
+      ],
+      "answers": "A",
+      "topic": "Cluster Architecture, Installation & Configuration",
+      "explanation": "This command correctly extracts the expiration date of the etcd CA certificate. The `openssl x509` command is used to read and decode the certificate file. The `-in` flag specifies the input file, which in this case is the etcd CA certificate located at `/etc/kubernetes/pki/etcd/ca.crt`. The `--text` flag tells `openssl` to output the certificate in human-readable text format. The `--noout` flag suppresses the output of the raw certificate data. The output is then piped to `grep -i` \"not after\", which filters the output to find the line containing the \"not after\" field, which indicates the certificate's expiration date. The `-i` flag makes the `grep` case-insensitive. Finally, the output of `grep` is redirected to the file `/tmp/etcd-ca-expiry.txt`.",
+      "themes": {
+        "resources": [
+          "etcd"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "10",
+      "question": "Lab Environment:\n\nmaster node: k8s-master\n\nworker node: k8s-node-01\n\nWorker node k8s-node-01 is in Not Ready state. Perform necessary steps to make k8s-node-01 available again.",
+      "options": [
+        "```\nCheck logs of kube proxy server:\nkubectl logs -f-n kube-system Check logs from docker container:\ndocker ps -a | grep kube-proxy - It will returndocker logsRe-deploy kube API server if necessary\n```",
+        "```\nSSH to node k8s-node-01 Check status of kubelet service:\nsystemctl status kubelet Check logs of kubelet service:\njournalctl -u kubelet Fix the error as found in kubelet logs Start the kubelet service:\nsystemctl start kubelet\n```",
+        "```\nCheck logs of kube API server:\nkubectl logs -f-n kube-system Check logs from docker container:\ndocker ps -a | grep kube-api - It will returndocker logsRe-deploy kube API server if necessary\n```"
+      ],
+      "answers": "B",
+      "topic": "Troubleshooting",
+      "explanation": "This is the correct approach to troubleshoot a node in a NotReady state. The `kubelet` is the primary node agent that communicates with the Kubernetes control plane. When a node is NotReady, the `kubelet` is often the culprit. SSHing to the node allows direct inspection of the kubelet's status and logs. `systemctl status kubelet` reveals if the service is running and if there are any recent errors. `journalctl -u kubelet` provides a detailed log of the kubelet's activity, which is crucial for identifying the root cause of the problem. After identifying and fixing the issue (e.g., network connectivity problems, resource exhaustion, configuration errors), restarting the `kubelet` with `systemctl start kubelet` attempts to bring the node back into a Ready state.",
+      "themes": {
+        "resources": [
+          "node"
+        ],
+        "questionTypes": [
+          "troubleshooting"
+        ]
+      }
+    },
+    {
+      "id": "11",
+      "question": "Lab Environment:\n\nmaster node: k8s-master\n\nworker node: k8s-node-01\n\nCreate a pod with required configuration that allows you to change date on the container. Use busybox image.\n\nUse following command to test:\n\ndate –set=”2020-01-01 10:00:00″",
+      "options": [
+        "```\nkubectl run datetime --image=busybox --command sleep 1200 --dry-run=client -o yaml > datetime.yaml Edit datetime.yaml and add security configuration. spec: securityContext: capabilities: add: [\"SYS_TIME\"] containers: - command: - sleep - \"1200\" image: busybox name: datetime\n```",
+        "```\nkubectl run datetime --image=busybox --command sleep 1200 --dry-run=client -o yaml > datetime.yaml Edit datetime.yaml and add security configuration. spec: containers: - command: - sleep - \"1200\" image: busybox name: datetime securityContext: capabilities: add: [\"SYS_TIME\"]\n```",
+        "```\nkubectl run datetime --image=busybox --command sleep 1200 --dry-run=client -o yaml > datetime.yaml Edit datetime.yaml and add security configuration. spec: containers: - command: - sleep - \"1200\" image: busybox name: datetime securityContext: capabilities: add: [\"SYS_DATE\"]\n```"
+      ],
+      "answers": "B",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This option correctly configures the pod to allow changing the date inside the container. The key is the securityContext, specifically the capabilities section. By adding SYS_TIME, we grant the container the necessary permission to modify the system time. The securityContext is correctly placed within the container definition, allowing the capability to be applied to that specific container. The command sleep 1200 is used to keep the pod running for a sufficient amount of time to allow the date change to be tested.",
+      "themes": {
+        "resources": [
+          "security-context",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "12",
+      "question": "Lab Environment:\n\nmaster node: k8s-master\n\nworker node: k8s-node-01\n\nCreate a NetworkPolicy which allows ALL outgoing traffic to dev namespace.",
+      "options": [
+        "```\napiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\nname: allow-to-ns\nnamespace: default\nspec:\npodSelector: {}\npolicyTypes: - Ingress\ningress:\n- from:\n- namespaceSelector:\nmatchLabels:\nname: \"dev\"\n```",
+        "```\napiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\nname: allow-to-ns\nnamespace: default\nspec:\npodSelector: {}\npolicyTypes: - Egress\negress:\n- from:\n- namespaceSelector:\nmatchLabels:\nname: \"dev\"\n```",
+        "```\napiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\nname: allow-to-ns\nnamespace: default\nspec:\npodSelector: {}\npolicyTypes: - Egress\negress:\n- to:\n- namespaceSelector:\nmatchLabels:\nname: \"dev\"\n```"
+      ],
+      "answers": "C",
+      "topic": "Services & Networking",
+      "explanation": "This is the correct answer because it defines a NetworkPolicy that allows all outgoing (egress) traffic from pods in the default namespace to pods in the dev namespace. The policyTypes: `-` Egress specifies that this policy applies to outgoing traffic. The egress section defines the rules for outgoing traffic. The to field specifies the destination of the traffic, and the namespaceSelector with `matchLabels:` name: \"dev\" ensures that the traffic is allowed only to the dev namespace. The podSelector: {} means that this policy applies to all pods in the default namespace.",
+      "themes": {
+        "resources": [
+          "network-policy",
+          "namespace"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "13",
+      "question": "Which cluster component is responsible for scheduling pods on the cluster?",
+      "options": [
+        "Kube Controller Manager",
+        "Kube Proxy Server",
+        "Kube Scheduler",
+        "Kube API Server"
+      ],
+      "answers": "C",
+      "topic": "Workloads & Scheduling",
+      "explanation": "Kube Scheduler\n\nThe kube-scheduler is a core Kubernetes component responsible for watching newly created pods that have no node assigned, and selecting a node for them to `run` on. The scheduler considers various factors, including resource requirements, hardware/software/policy constraints, affinity and anti-affinity specifications, data locality, inter-workload interference, and deadlines. It then ranks the available nodes and binds the pod to the most suitable node. This process is crucial for ensuring efficient resource utilization and optimal performance of applications within the Kubernetes cluster.",
+      "themes": {
+        "resources": [
+          "pod",
+          "scheduler"
+        ],
+        "questionTypes": [
+          "concept"
+        ]
+      }
+    },
+    {
+      "id": "14",
+      "question": "Lab Environment:\n\nmaster node: k8s-master\n\nworker node: k8s-node-01\n\nCreate a PersistentVolume called pv-test with 8GB capacity. Set the access mode to ReadWriteMany. Any output from the container should be stored on the disk of underlying host at location `/mnt/data`.",
+      "options": [
+        "```\napiVersion: v1\nkind: PersistentVolume\nmetadata:\nname: pv-test\nspec:\ncapacity:\nstorage: 8Gi\naccessModes: - ReadWriteMany\nemptyDir: {}\n```",
+        "```\napiVersion: v1\nkind: PersistentVolume\nmetadata:\nname: pv-test\nspec:\ncapacity:\nstorage: 8Gi\naccessModes: - ReadWriteMany\nhostPath:\npath: \"/mnt/data\"\n```",
+        "```\napiVersion: v1\nkind: PersistentVolume\nmetadata:\nname: pv-test\nspec:\ncapacity:\nstorage: 8Gi\naccessModes: - ReadWriteMany\nemptyDir:\npath: \"/mnt/data\"\n```"
+      ],
+      "answers": "B",
+      "topic": "Storage",
+      "explanation": "ReadWriteMany `hostPath: path: \"/mnt/data\"`\n\nThis is the correct answer because it defines a PersistentVolume (PV) named `pv-test` with a capacity of 8Gi, an access mode of ReadWriteMany, and uses `hostPath` to specify the directory on the host where the data will be stored. The `hostPath` volume type allows a PersistentVolume to use a directory on the node's filesystem. This configuration fulfills all the requirements of the question: creating a PV, setting its capacity, defining the access mode, and specifying the host path for storage.",
+      "themes": {
+        "resources": [
+          "persistent-volume",
+          "volume"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "15",
+      "question": "Lab Environment:\n\nmaster node: k8s-master\n\nworker node: k8s-node-01\n\nList all the pods running in ALL namespaces based on CPU utilization. Save the output to `/tmp/pod-high-cpu.txt`\n\nDeploy the metrics server first if you already don’t have one.",
+      "options": [
+        "```\nkubectl get pods -A --sort-by=cpu > /tmp/pod-high-cpu.txt\n```",
+        "```\nkubectl top pods --all-namespaces --sort-by=cpu > /tmp/pod-high-cpu.txt\n```",
+        "```\nkubectl top pods -A > /tmp/pod-high-cpu.txt\n```",
+        "```\nkubectl top pods -A --sort-by=cpu > /tmp/pod-high-cpu.txt\n```"
+      ],
+      "answers": [
+        "B",
+        "D"
+      ],
+      "topic": "Troubleshooting",
+      "explanation": "This command correctly lists all pods across all namespaces, sorts them by CPU utilization, and redirects the output to the specified file. The `kubectl top` pods command is specifically designed to display resource usage of pods. The `--all-namespaces` flag ensures that pods from all namespaces are included. The `--sort-by=cpu` flag sorts the pods based on their CPU usage. Finally, `> /tmp/pod-high-cpu.txt` redirects the output to the desired file.\n\nThis command is functionally equivalent to option B. The `-A` flag is a shorthand for `--all-namespaces`. It achieves the same result of listing pods from all namespaces, sorting by CPU utilization, and saving the output to the specified file. Therefore, this option is also correct.",
+      "themes": {
+        "resources": [
+          "resource-usage",
+          "namespace",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "16",
+      "question": "Lab Environment:\n\nmaster node: k8s-master\n\nworker node: k8s-node-01\n\nCreate secure environment variables and configure the pod as per below specifications:\n\npod name: secure-pod\n\nImage: busybox\n\nEnvironment Variables:\n\nKey Value\n\nusername admin\n\npassword cka@2020!",
+      "options": [
+        "```\nkubectl create secret generic my-secret --from-literal=username=admin --from-literal=password=cka@2020! apiVersion: v1 kind: Pod metadata: name: secure-pod spec: containers: - name: secure-pod image: busybox envFrom: - secretRef: name: my-secret\n```",
+        "```\nkubectl create secret my-secret --from-literal=username=admin --from-literal=password=cka@2020! apiVersion: v1 kind: Pod metadata: name: secure-pod spec: containers: - name: secure-pod image: busybox envFrom: - secretRef: name: my-secret\n```",
+        "```\nkubectl create secret generic my-secret --from-literal=username=admin --from-literal=password=cka@2020! apiVersion: v1 kind: Pod metadata: name: secure-pod spec: containers: - name: secure-pod image: busybox env: - secretRef: name: my-secret\n```"
+      ],
+      "answers": "A",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This option correctly creates a Kubernetes secret named my-secret using `kubectl create` secret generic and populates it with the provided username and password using the `--from-literal` flag. The pod definition then references this secret using envFrom and secretRef. envFrom is used to source all key-value pairs from a secret or configmap as environment variables. This is the correct and most secure way to inject multiple environment variables from a secret into a pod.",
+      "themes": {
+        "resources": [
+          "secret",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "17",
+      "question": "Lab Environment:\n\nmaster node: k8s-master\n\nworker node: k8s-node-01\n\nCreate a role called dev-user-role in the dev namespace which can list all the pods and deployments Create necessary role binding for service account dev-sa",
+      "options": [
+        "```\nkubectl create sa dev-sa -n dev\nkubectl create role dev-user-role -n dev --resource=pods,deployments --verb=list kubectl create rolebinding dev-user-role-binding -n dev --role=dev-user-role --serviceaccount=dev-sa\n```",
+        "```\nkubectl create sa dev-sa -n dev\nkubectl create role dev-user-role -n dev --resource=pods,deployments --verb=list kubectl create rolebinding dev-user-role-binding -n dev\n```",
+        "```\nkubectl create sa dev-sa -n dev\nkubectl create role dev-user-role -n dev --resource=pods,deployments --verb=list kubectl create rolebinding dev-user-role-binding -n dev --role=dev-user-role --serviceaccount=dev:dev-sa\n```"
+      ],
+      "answers": "C",
+      "topic": "Services & Networking",
+      "explanation": "This option correctly creates a service account named dev-sa in the dev namespace. It then creates a role named dev-user-role in the same namespace, granting the permission to list pods and deployments. Finally, it creates a role binding named dev-user-role-binding, also in the dev namespace, which binds the dev-user-role to the dev-sa service account. The crucial part is specifying the service account correctly in the rolebinding using the format namespace:serviceaccountname. This ensures that the service account has the permissions defined in the role.",
+      "themes": {
+        "resources": [
+          "service-account",
+          "rbac",
+          "namespace",
+          "deployment",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "18",
+      "question": "Lab Environment:\n\nmaster node: k8s-master\n\nworker node: k8s-node-01\n\nCreate a pod called secure-admin with user id set to 1000. Make this setting DEFAULT for ALL containers and use busybox image with sleep command set to 1200 seconds",
+      "options": [
+        "```\nkubectl run secure-admin --image=busybox --command sleep 1200 --dry-run=client -o yaml > secure-admin.yaml Edit secure-admin.yaml and add security configuration: spec: containers: - command: - sleep - \"1200\" image: busybox name: secure-admin securityContext: runAsUser: 1000\n```",
+        "```\nkubectl run secure-admin --image=busybox --command sleep 1200 --dry-run=client -o yaml > secure-admin.yaml Edit secure-admin.yaml and add security configuration: spec: securityContext: runAsUser: 1000 containers: - command: - sleep - \"1200\" image: busybox name: secure-admin\n```",
+        "```\nkubectl run secure-admin --image=busybox --command sleep 1200 --dry-run=client -o yaml > secure-admin.yaml Edit secure-admin.yaml and add security configuration: spec: securityContext: runAsGroup: 1000 containers: - command: - sleep - \"1200\" image: busybox name: secure-admin\n```"
+      ],
+      "answers": "B",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This is the correct answer because it demonstrates the proper way to set the runAsUser parameter as a default for all containers within a pod. The securityContext is defined at the pod level (under spec), which means that the runAsUser: 1000 setting will `apply` to all containers in the pod unless a container specifically overrides it. This satisfies the requirement of setting the user ID to 1000 as a default for all containers.",
+      "themes": {
+        "resources": [
+          "security-context",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "19",
+      "question": "Lab Environment:\n\nmaster node: k8s-master\n\nworker node: k8s-node-01\n\nList all container images of all pods running in all namespaces and save the output to `/tmp/container-images.txt`",
+      "options": [
+        "```\nkubectl get pods -A -o=jsonpath='{range .items[*]}{.image}{\"\\n\"}'\n```",
+        "```\nkubectl get pods -A -o=jsonpath='{range .items[*]}{..image}{\"\\n\"}'\n```",
+        "```\nkubectl get pods -A -o=jsonpath='{range .items[*]}{range .spec.containers}{.image}{\"\\n\"}{end}{end}'\n```",
+        "```\nkubectl get pods -A -o=jsonpath='{range .items[*]}{range .spec.containers[*]}{.image}{\"\\n\"}{end}{end}'\n```"
+      ],
+      "answers": [
+        "B",
+        "D"
+      ],
+      "topic": "Troubleshooting",
+      "explanation": "This command correctly retrieves all container images from all pods in all namespaces. The `kubectl get` pods `-A` part fetches all pods across all namespaces. The -o=jsonpath='{range .items[*]}{..image}{\"\\n\"}{end}' part formats the output using JSONPath. {range .items[*]} iterates over each pod. {..image} recursively searches for the image field within each pod's structure. This is crucial because the image field can be nested within different levels of the pod's specification (e.g., within containers, initContainers, or ephemeralContainers). The {\"\\n\"} adds a newline after each image for readability. This option is correct because it handles the variability in the location of the image field within the pod specification.\n\nThis command also correctly retrieves container images, but it only considers the containers section of the pod spec. The `kubectl get` pods `-A` part fetches all pods across all namespaces. The -o=jsonpath='{range .items[*]}{range .spec.containers[*]}{.image}{\"\\n\"}{end}{end}' part formats the output using JSONPath. {range .items[*]} iterates over each pod. {range .spec.containers[*]} iterates over each container within the spec.containers list of the pod. {.image} extracts the image name from each container. {\"\\n\"} adds a newline after each image. While this works for standard containers, it will miss images defined in initContainers or ephemeralContainers. However, since the question doesn't explicitly exclude initContainers or ephemeralContainers, and the question asks for *all* container images, this is also a valid interpretation, assuming only the standard containers are to be considered. It's more specific than option B, but not necessarily incorrect in the context of the question.",
+      "themes": {
+        "resources": [
+          "namespace",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "20",
+      "question": "Let’s assume you have etcd backup stored at location `/tmp/etcd-snapshot.db`. What are the correct steps to `restore` the etcd backup with following configuration:\n\nDefault certificate and key files\n\nUse localhost endpoints",
+      "options": [
+        "```\nETCDCTL=3 etcdctl --endpoints=https://127.0.0.1:2379 \\\n--cacert=/etc/kubernetes/pki/etcd/ca.crt \\\n--cert=/etc/kubernetes/pki/etcd/server.crt \\\n--key=/etc/kubernetes/pki/etcd/server.key \\\n--data-dir=/var/lib/etcd-from-backup \\\nsnapshot restore /tmp/etcd-snapshot.db Modify data directory path in existing etcd manifest\n```",
+        "```\nETCDCTL=3 etcdctl --endpoints=https://127.0.0.1:2380 \\\n--cacert=/etc/kubernetes/pki/etcd/ca.crt \\\n--cert=/etc/kubernetes/pki/etcd/server.crt \\\n--key=/etc/kubernetes/pki/etcd/server.key \\\n--data-dir=/var/lib/etcd-from-backup \\\nsnapshot restore /tmp/etcd-snapshot.db Modify data directory path in existing etcd manifest\n```",
+        "```\nETCDCTL=3 etcdctl --endpoints=https://127.0.0.1:2379 \\\n--cacert=/etc/kubernetes/pki/etcd/ca.crt \\\n--cert=/etc/kubernetes/pki/etcd/server.crt \\\n--key=/etc/kubernetes/pki/etcd/server.key \\\n--data-dir=/var/lib/etcd-from-backup \\\nsnapshot restore /tmp/etcd-snapshot.db\n```"
+      ],
+      "answers": "A",
+      "topic": "Cluster Architecture, Installation & Configuration",
+      "explanation": "This is the correct answer because it provides the correct command to `restore` the etcd `snapshot` to a new data directory and then updates the etcd manifest to point to the new data directory. The `etcdctl snapshot restore` command requires specifying the endpoints, CA certificate, client certificate, client key, the new data directory, and the `snapshot` file. After restoring the snapshot, the etcd manifest file (usually a static pod definition) must be updated to reflect the new data directory location. The default etcd client port is 2379.",
+      "themes": {
+        "resources": [
+          "etcd"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "21",
+      "question": "Lab Environment:\n\nmaster node: k8s-master\n\nworker node: k8s-node-01\n\nLabel the node node k8s-node-01 with key equals to disk and value equals to ssd. Deploy new pods using this label.",
+      "options": [
+        "```\nkubectl label node k8s-node-01 disk=ssd Add following snippet in your Pod's configuration: nodeName: disk: ssd\n```",
+        "```\nkubectl label node k8s-node-01 disk=ssd Add following snippet in your Pod's configuration: nodeSelector: disk: ssd\n```",
+        "```\nkubectl label k8s-node-01 disk=ssd Add following snippet in your Pod's configuration: nodeSelector: disk: ssd\n```"
+      ],
+      "answers": "B",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This answer is correct because it accurately describes how to label a node and then schedule a pod onto that node using a nodeSelector. The `kubectl` label node k8s-node-01 `disk=ssd` command correctly labels the node k8s-node-01 with the key-value pair `disk=ssd`. To schedule a pod on this node, you must use the nodeSelector field in the pod's specification. The nodeSelector field specifies a map of key-value pairs. For the pod to be eligible to `run` on a node, the node must have each of the indicated key-value pairs as labels.",
+      "themes": {
+        "resources": [
+          "node",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "22",
+      "question": "Lab Environment\n\n`-` master node: k8s-master\n\n`-` worker node: k8s-node-01\n\nTask: Deploy a pod which runs the `nginx` image for a web app. However, it needs 1200 seconds to initialize before the `nginx` container starts.",
+      "options": [
+        "```\nkubectl run webapp --image=nginx --command sleep 1200\nkubectl run webapp --image=nginx --dry-run=client -o yaml > webapp.yaml Edit webapp.yaml and add following snippet:\n```",
+        "```\nspec: initContainers: - name: install image: busybox command: - sleep -1200\nkubectl apply -f webapp.yaml\n```",
+        "```\nkubectl run webapp --image=nginx --dry-run=client -o yaml > webapp.yaml Edit webapp.yaml and add following snippet:\n```",
+        "```\nspec: initContainers: - name: install image: busybox args: - sleep -1000\n```"
+      ],
+      "answers": "B",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This answer utilizes an initContainer to delay the `start` of the main `nginx` container. Init containers `run` before the application containers in a pod. By using the busybox image and the sleep 1200 command, the `init` container will pause for 1200 seconds before completing. Only after the `init` container finishes successfully will the `nginx` container start. This effectively delays the initialization of the web application as requested.",
+      "themes": {
+        "resources": [
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "23",
+      "question": "Lab Environment\n\nmaster node: k8s-master\n\nworker node: k8s-node-01\n\nList all the endpoints in kube-system namespace and save the output to `/tmp/endpoints.txt`",
+      "options": [
+        "```\nkubectl get endpoints -n kube-system > /tmp/endpoints.txt\n```",
+        "```\nkubectl get svc -n kube-system > /tmp/endpoints.txt\n```",
+        "```\nkubectl get ep -n kube-system > /tmp/endpoints.txt\n```",
+        "```\nkubectl describe svc -n kube-system | grep -i endpoints > /tmp/endpoints.txt\n```"
+      ],
+      "answers": [
+        "A",
+        "C"
+      ],
+      "topic": "Services & Networking",
+      "explanation": "This command correctly retrieves all endpoints within the kube-system namespace and redirects the output to the file `/tmp/endpoints.txt`. The `kubectl get` endpoints command specifically targets endpoint resources. The `-n` kube-system flag specifies the namespace, and `> /tmp/endpoints.txt` redirects the standard output to the specified file.\n\nThis command is functionally equivalent to option A. ep is a shorthand alias for endpoints in kubectl. Therefore, `kubectl get` ep `-n` kube-system `> /tmp/endpoints.txt` also correctly retrieves all endpoints within the kube-system namespace and saves the output to the specified file.",
+      "themes": {
+        "resources": [
+          "service",
+          "namespace"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "24",
+      "question": "Lab Environment\n\nmaster node: k8s-master\n\nworker node: k8s-node-01\n\nCreate necessary configuration so that all pods with label `app=nginx` can only be deployed on node k8s-node-01.\n\nUse `nginx` image for pods. Label the node with label `env=dev`\n\nNote:\n\nThese pods should be preferred to be deployed on node k8s-node-01",
+      "options": [
+        "```\nkubectl label node node01 env=dev kubectl run nginx --image=nginx -l=app=nginx --dry-run=client -o yaml > nginx.yaml Edit the nginx.yaml file and add following snippet. spec: affinity: nodeAffinity: preferredDuringSchedulingIgnoredDuringExecution: nodeSelectorTerms: - matchExpressions: - key: env operator: In values: - dev\n```",
+        "```\nkubectl label node node01 env=dev kubectl run nginx --image=nginx -l=app=nginx --dry-run=client -o yaml > nginx.yaml Edit the nginx.yaml file and add following snippet. spec: affinity: nodeAffinity: requiredDuringSchedulingIgnoredDuringExecution: nodeSelectorTerms: - matchExpressions: - key: env operator: In values: - dev\n```",
+        "```\nkubectl run nginx --image=nginx -l=app=nginx --dry-run=client -o yaml > nginx.yaml Edit the nginx.yaml file and add following snippet. spec: affinity: nodeAffinity: preferredDuringSchedulingIgnoredDuringExecution: nodeSelectorTerms: - matchExpressions: - key: env operator: In values: - dev\n```"
+      ],
+      "answers": "A",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This answer correctly addresses the problem. First, it labels the node k8s-node-01 with `env=dev` using `kubectl` label node node01 `env=dev`. Then, it creates a pod definition file nginx.yaml using `kubectl` `run` `nginx --image=nginx -l=app=nginx --dry-run=client -o` yaml `>` nginx.yaml. The `--dry-run=client -o` yaml options are crucial for generating the YAML without actually deploying the pod. Finally, it modifies the nginx.yaml file to include a nodeAffinity section under spec.affinity. The preferredDuringSchedulingIgnoredDuringExecution setting ensures that the scheduler tries to place the pod on a node matching the specified criteria (`env=dev`), but if it can't, it will still schedule the pod on another node. This fulfills the \"preferred\" requirement. The nodeSelectorTerms with matchExpressions correctly targets nodes with the label `env=dev`.",
+      "themes": {
+        "resources": [
+          "node",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "25",
+      "question": "Lab Environment\n\nmaster node: k8s-master\n\nworker node: k8s-node-01\n\nCreate 5 PersistentVolume with storage set to 8Mi, 8Gi, 1Gi, 1Mi and 10Gi. Now list all volumes in following format and `sort` the volumes based on their capacity and save the output to `/tmp/pv-capacity.txt`\n\nVOLUME_NAME CAPACITY NAMESPACE\n\nUse template provided below to create PersistentVolume. Keep any random name for each volume.\n\n```\napiVersion: v1\nkind: PersistentVolume\nmetadata:\nname: pv0001\nlabels:\ntype: local\nspec:\nstorageClassName: manual\ncapacity:\nstorage: 10Gi\naccessModes:\n– ReadWriteOnce\nhostPath:\npath: “/mnt/data”\n```",
+      "options": [
+        "```\nkubectl get pv -o=jsonpath=VOLUME_NAME:.metadata.name,CAPACITY:.spec.capacity.storage,NAMESPACE:.metadata.namespace --sort-by=.spec.capacity.storage > /tmp/pv-capacity.txt\n```",
+        "```\nkubectl get pv -o=custom-columns=VOLUME_NAME:.metadata.name,CAPACITY:.spec.capacity.storage,NAMESPACE:.metadata.namespace > /tmp/pv-capacity.txt\n```",
+        "```\nkubectl get pv -o=custom-columns=VOLUME_NAME:.metadata.name,CAPACITY:.spec.capacity.storage,NAMESPACE:.metadata.namespace --sort-by=.spec.capacity.storage > /tmp/pv-capacity.txt\n```"
+      ],
+      "answers": "C",
+      "topic": "Storage",
+      "explanation": "This command correctly retrieves PersistentVolume (PV) information, formats it as specified, sorts it by capacity, and saves the output to a file. `kubectl get` pv retrieves the PVs. `-o=custom-columns=`... specifies the output format, extracting the name, capacity, and namespace. `--sort-by=.spec.capacity.storage` sorts the PVs based on their storage capacity. Finally, `> /tmp/pv-capacity.txt` redirects the output to the specified file.",
+      "themes": {
+        "resources": [
+          "persistent-volume",
+          "volume",
+          "namespace"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "26",
+      "question": "Describe all steps required to `restore` existing etcd backup stored at `/tmp/etcd-pre-snapshot.db`. Use following information for restore:\n\nendpoints `https://127.0.0.1:2379`\n\nCA Cert `/tmp/pki/etcd/ca.crt`\n\nServer Cert `/tmp/pki/etcd/server.crt`\n\nServer Key `/tmp/pki/etcd/server.key`",
+      "options": [
+        "```\nETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 \\\n--cacert=/tmp/pki/etcd/ca.crt \\\n--cert=/tmp/pki/etcd/server.crt \\\n--key=/tmp/pki/etcd/server.key \\\n--data-dir=/var/lib/etcd-from-backup \\\nsnapshot restore /tmp/etcd-pre-snapshot.db Make necessary changes for --data-dir path in etcd static deployment manifest\n```",
+        "```\nETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2380 \\\n--cacert=/tmp/pki/etcd/ca.crt \\\n--cert=/tmp/pki/etcd/server.crt \\\n--key=/tmp/pki/etcd/server.key \\\n--data-dir=/var/lib/etcd-from-backup \\\nsnapshot restore /tmp/etcd-pre-snapshot.db Make necessary changes for --data-dir path in etcd static deployment manifest\n```",
+        "```\nETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 \\\n--ca-cert=/tmp/pki/etcd/ca.crt \\\n--cert=/tmp/pki/etcd/server.crt \\\n--key=/tmp/pki/etcd/server.key \\\n--data-dir=/var/lib/etcd-from-backup \\\nsnapshot restore /tmp/etcd-pre-snapshot.db Make necessary changes for --data-dir path in etcd static deployment manifest\n```"
+      ],
+      "answers": "A",
+      "topic": "Cluster Architecture, Installation & Configuration",
+      "explanation": "This option correctly restores the etcd snapshot. It uses the `etcdctl snapshot restore` command with the correct API `version` (`ETCDCTL_API=3`). It specifies the correct endpoint (https://127.0.0.1:2379), CA certificate (--cacert=/tmp/pki/etcd/ca.crt), server certificate (--cert=/tmp/pki/etcd/server.crt), server key (--key=/tmp/pki/etcd/server.key), and the data directory where the restored data will be stored (--data-dir=/var/lib/etcd-from-backup). Finally, it points to the `snapshot` file (/tmp/etcd-pre-snapshot.db). Crucially, it also mentions the necessary step of updating the etcd static pod manifest to reflect the new `--data-dir`. Without updating the manifest, etcd will not `start` correctly after the restore.",
+      "themes": {
+        "resources": [
+          "etcd"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "27",
+      "question": "Lab Environment\n\nmaster node: k8s-master\n\nworker node: k8s-node-01\n\nList out all the `iptables` rules defined for ALL services running in the cluster. Save the output to `/tmp/iptables-rules.txt`",
+      "options": [
+        "```\niptables-save\n```",
+        "```\niptables-save > /tmp/iptables-rules.txt\n```",
+        "```\niptables -L > /tmp/iptables-rules.txt\n```"
+      ],
+      "answers": "B",
+      "topic": "Services & Networking",
+      "explanation": "The iptables-save command is used to dump the current `iptables` rules to standard output. The redirection operator `>` is then used to redirect this output to the file `/tmp/iptables-rules.txt`. This will save all the `iptables` rules, including those related to Kubernetes services, to the specified file. This is the correct method for backing up or inspecting the complete `iptables` configuration.",
+      "themes": {
+        "resources": [
+          "service"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "28",
+      "question": "Describe all steps required to take etcd backup with below configuration and save the backup to `/tmp/etcd-backup.db`\n\nendpoints `https://127.0.0.1:2379`\n\nCA Cert `/tmp/pki/etcd/ca.crt`\n\nServer Cert `/tmp/pki/etcd/server.crt`\n\nServer Key `/tmp/pki/etcd/server.key`\n\nCheck the status of the backup and write the output to `/tmp/etcd-backup-status.txt` in table format.",
+      "options": [
+        "```\nETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 \\\n--cacert=/tmp/pki/etcd/ca.crt \\\n--cert=/tmp/pki/etcd/server.crt \\\n--key=/tmp/pki/etcd/server.key \\\nsnapshot save /tmp/etcd-backup.db\n```",
+        "```\nETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 \\\n--cacert=/tmp/pki/etcd/ca.crt \\\n--cert=/tmp/pki/etcd/server.crt \\\n--key=/tmp/pki/etcd/server.key \\\nsnapshot status -w table /tmp/etcd-backup.db > /tmp/etcd-backup-status.txt\n```",
+        "```\nETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 \\\n--cacert=/tmp/pki/etcd/ca.crt \\\n--cert=/tmp/pki/etcd/server.crt \\\n--key=/tmp/pki/etcd/server.key \\\nsnapshot save /tmp/etcd-backup.db\n```",
+        "```\nETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 \\\n--ca-cert=/tmp/pki/etcd/ca.crt \\\n--cert=/tmp/pki/etcd/server.crt \\\n--key=/tmp/pki/etcd/server.key \\\nsnapshot status -w table /tmp/etcd-backup.db > /tmp/etcd-backup-status.txt\n```",
+        "```\nETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 \\\n--cacert=/tmp/pki/etcd/ca.crt \\\n--cert=/tmp/pki/etcd/server.crt \\\n--key=/tmp/pki/etcd/server.key \\\nsnapshot save /tmp/etcd-backup.db\n```",
+        "```\nETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 \\\n--cacert=/tmp/pki/etcd/ca.crt \\\n--cert=/tmp/pki/etcd/server.crt \\\n--key=/tmp/pki/etcd/server.key \\\nsnapshot status /tmp/etcd-backup.db > /tmp/etcd-backup-status.txt\n```"
+      ],
+      "answers": "B",
+      "topic": "Cluster Architecture, Installation & Configuration",
+      "explanation": "This option correctly executes the command to check the status of the etcd backup and saves the output in table format to the specified file. It uses the `etcdctl snapshot status` command, specifies the output format as table using the `-w` table flag, and redirects the output to `/tmp/etcd-backup-status.txt` using the `>` operator. It also correctly specifies the endpoints and TLS certificates/key required to connect to the etcd cluster.\n\nThis option only saves the etcd `snapshot` to a file, but it does not check the status of the backup or save the output to a file.\n\nThis option checks the status of the backup and saves the output to a file, but it does not specify the output format as table. The question specifically asks for the output to be in table format, which requires the `-w` table flag.",
+      "themes": {
+        "resources": [
+          "etcd"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "29",
+      "question": "Lab Environment\n\nmaster node: k8s-master\n\nworker node: k8s-node-01\n\nCreate a pod called front-app using `nginx` image. It should be accessible on local port 80 as well as on node’s port. Make sure the port should be same for all nodes in the cluster.",
+      "options": [
+        "```\nkubectl run front-app --image=nginx\n```",
+        "```\nkubectl expose pod front-app --port=80 --type=NodePort\n```",
+        "```\nkubectl run front-app --image=nginx --port=80\n```",
+        "```\nkubectl expose pod front-app --port=8080 --type=NodePort\n```",
+        "```\nkubectl run front-app --image=nginx\n```",
+        "```\nkubectl expose pod front-app --port=80\n```"
+      ],
+      "answers": "B",
+      "topic": "Services & Networking",
+      "explanation": "This answer correctly creates a NodePort service to `expose` the pod. The `kubectl expose` command is used to create a service for a pod. The `--port=80` option specifies that the service should listen on port 80. The `--type=NodePort` option specifies that the service should be exposed on a port on each node in the cluster, making it accessible from outside the cluster. This fulfills the requirement of making the pod accessible on the node's port.\n\nThis command only creates a pod named 'front-app' using the `nginx` image. It does not `expose` the pod in any way, so it's not accessible from outside the pod's network namespace or from the nodes themselves.\n\nThis command exposes the pod on port 80, but it doesn't specify the type of service. By default, it will create a ClusterIP service, which is only accessible from within the cluster, not on the node's port.",
+      "themes": {
+        "resources": [
+          "service",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "30",
+      "question": "Lab Environment\n\nmaster node: k8s-master\n\nworker node: k8s-node-01\n\nCreate deployment webapp in frontend namespace and `scale` it to 5 replicas. Use `nginx` image.\n\nAny change made to deployment should be recorded.",
+      "options": [
+        "```\nkubectl create ns frontend\nkubectl create deployment webapp --image=nginx --replicas=5 -n frontend\n```",
+        "```\nkubectl create ns frontend\nkubectl create deployment webapp --image=nginx -n frontend\nkubectl scale deployment webapp --replicas=5 -n frontend --record\n```",
+        "```\nkubectl create ns frontend\nkubectl create deployment webapp --image=nginx -n frontend\nkubectl scale deployment webapp --replicas=5 -n frontend\n```"
+      ],
+      "answers": "B",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This option correctly creates the namespace, deployment, and scales the deployment to 5 replicas while also recording the changes. The `--record` flag is crucial for capturing the history of changes made to the deployment, which can be useful for auditing and rollback purposes. Scaling after creation allows for recording the `scale` operation itself.",
+      "themes": {
+        "resources": [
+          "namespace",
+          "deployment"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "31",
+      "question": "Lab Environment\n\nmaster node: k8s-master\n\nworker node: k8s-node-01\n\nCreate a namespace called admin1234",
+      "options": [
+        "```\nkubectl create namespace admin1234\n```",
+        "```\nkubectl create ns admin1234\n```",
+        "```\napiVersion: v1\nkind: Namespace\nmetadata:\nname: admin1234\n```"
+      ],
+      "answers": [
+        "A",
+        "B",
+        "C"
+      ],
+      "topic": "Cluster Architecture, Installation & Configuration",
+      "explanation": "This is the correct command to create a namespace using the imperative approach with kubectl. The `kubectl create` namespace command directly creates a namespace with the specified name.\n\nThis is also a correct command. ns is a shorthand alias for namespace in kubectl. Therefore, `kubectl create` ns admin1234 is equivalent to `kubectl create` namespace admin1234.\n\nThis is correct as it represents a valid YAML definition for a Kubernetes Namespace. To create the namespace using this definition, you would save this content to a file (e.g., admin1234.yaml) and then `apply` it using `kubectl` `apply` `-f` admin1234.yaml. This is the declarative approach to managing Kubernetes resources.",
+      "themes": {
+        "resources": [
+          "namespace"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "32",
+      "question": "Lab Environment\n\nmaster node: k8s-master\n\nworker node: k8s-node-01\n\nList name of all nodes as per below format and save the output in `/tmp/node-names.txt` file.\n\nNODE_NAME\n\nnode01\n\nnode02",
+      "options": [
+        "```\nkubectl get nodes > /tmp/node-names.txt\n```",
+        "```\nkubectl get nodes -o=custom-columns=NODE_NAME:.metadata.name > /tmp/node-names.txt\n```",
+        "```\nkubectl get nodes -o=jsonpath='{range .items[*]}{.metadata.name}{\"\\n\"}{end}' > /tmp/node-names.txt\n```"
+      ],
+      "answers": "B",
+      "topic": "Troubleshooting",
+      "explanation": "This command correctly retrieves the names of all nodes in the Kubernetes cluster and saves them to the specified file, `/tmp/node-names.txt`, in the required format. The `kubectl get` nodes command retrieves information about the nodes. The `-o=custom-columns=NODE_NAME:.metadata.name` option specifies that we want to output only the node names, using the custom column name \"NODE_NAME\" and extracting the value from the `.metadata.name` field of each node object. The `> /tmp/node-names.txt` redirects the output of the command to the specified file.",
+      "themes": {
+        "resources": [
+          "node"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "33",
+      "question": "Lab Environment\n\nmaster node: k8s-master\n\nworker node: k8s-node-01\n\nHow many nodes exist without label node-role.kubernetes.io/master? Count the number and write in file `/tmp/node-count.txt`",
+      "options": [
+        "```\nkubectl get nodes --selector='!node-role.kubernetes.io/master'\n```",
+        "Count the number of nodes and manually write in the file /tmp/node-count.txt",
+        "```\nkubectl get nodes --selector='!node-role.kubernetes.io/master' | grep -i name -v | wc -l > /tmp/node-count.txt\n```",
+        "```\nkubectl get nodes --selector!=node-role.kubernetes.io/master | grep -i name -v | wc -l > /tmp/node-count.txt\n```"
+      ],
+      "answers": [
+        "B",
+        "C"
+      ],
+      "topic": "Cluster Architecture, Installation & Configuration",
+      "explanation": "Count the number of nodes and manually write in the file `/tmp/node-count.txt`\n\nThis is correct because the question asks for the *number* of nodes without a specific label to be written to a file. Since there are only two nodes (k8s-master and k8s-node-01), and the question specifies that k8s-master is the master node (implying it *has* the label `node-role.kubernetes.io/master`), then k8s-node-01 is the only node without the label. Therefore, the correct answer is 1. Manually writing '1' to the file `/tmp/node-count.txt` fulfills the requirements of the question.\n\nThis is correct because it uses `kubectl` to retrieve the nodes that do *not* have the label `node-role.kubernetes.io/master`. The `--selector` flag with ! negates the label selection. The output is then piped to `grep -i` name `-v` to remove the header row containing \"NAME\". Finally, wc `-l` counts the number of lines (which corresponds to the number of nodes without the label) and redirects the output to the file `/tmp/node-count.txt`.",
+      "themes": {
+        "resources": [
+          "node"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "34",
+      "question": "Lab Environment\n\nmaster node: k8s-master\n\nworker node: k8s-node-01\n\nDeploy an Ingress resource called wildcard-host-ingress with following configuration:\n\nHost *.video.example.com\n\nService video-service\n\nPath /\n\nPort 8080\n\n———————————————————————–\n\nHost *.web.example.com\n\nPath /\n\nService web-service\n\nPort 9090",
+      "options": [
+        "```\napiVersion: networking.k8s.io/v1\nkind: Ingress\nmetadata:\nname: wildcard-host-ingress\nspec:\nrules:\n- host: \"*.video.example.com\"\nhttp:\npaths:\n- pathType: Prefix\npath: \"/\"\nbackend:\nservice:\nname: video-service\nport:\nnumber: 8080\n- host: \"*.web.example.com\"\nhttp:\npaths:\n- pathType: Prefix\npath: \"/\"\nbackend:\nservice:\nname: web-service\nport:\nnumber: 9090\n```",
+        "```\napiVersion: networking.k8s.io/v1\nkind: Ingress\nmetadata:\nname: wildcard-host-ingress\nnamespace: dev\nspec:\nrules:\n- host: \"*.video.example.com\"\nhttp:\npaths:\n- pathType: Prefix\npath: \"/\"\nbackend:\nservice:\nname: video-service\nport:\nnumber: 8080\n- host: \"*.web.example.com\"\nhttp:\npaths:\n- pathType: Prefix\npath: \"/\"\nbackend:\nservice:\nname: web-service\nport:\nnumber: 9090\n```",
+        "```\napiVersion: networking.k8s.io/v1\nkind: Ingress\nmetadata:\nname: wildcard-host-ingress\nspec:\nrules:\n- host: \"video.example.com\"\nhttp:\npaths:\n- pathType: Prefix\npath: \"/\"\nbackend:\nservice:\nname: video-service\nport:\nnumber: 8080\n- host: \"web.example.com\"\nhttp:\npaths:\n- pathType: Prefix\npath: \"/\"\nbackend:\nservice:\nname: web-service\nport:\nnumber: 9090\n```"
+      ],
+      "answers": "A",
+      "topic": "Services & Networking",
+      "explanation": "This is the correct answer because it accurately defines an Ingress resource named wildcard-host-ingress that uses wildcard DNS entries to route traffic to different services based on the host header. The host: \"*.video.example.com\" and host: \"*.web.example.com\" entries correctly specify the wildcard hosts. The pathType: Prefix and `path: \"/\"` entries specify that any path under the given host should be routed to the specified service. The backend section correctly maps the wildcard hosts to the appropriate services (video-service on port 8080 and web-service on port 9090). The apiVersion and kind are also correct for defining an Ingress resource.",
+      "themes": {
+        "resources": [
+          "ingress",
+          "service",
+          "namespace"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "35",
+      "question": "Lab Environment\n\nmaster node: k8s-master\n\nworker node: k8s-node-01\n\nCreate a NetworkPolicy called deny-outgoing which does NOT allow any outgoing traffic from secure namespace",
+      "options": [
+        "```\napiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\nname: deny-outgoing\nnamespace: secure\nspec:\npodSelector: {}\npolicyTypes: - Ingress\n```",
+        "```\napiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\nname: deny-outgoing\nnamespace: secure\nspec:\npodSelector: {}\npolicyTypes: - Egress - Ingress\n```",
+        "```\napiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\nname: deny-outgoing\nnamespace: secure\nspec:\npodSelector: {}\npolicyTypes: - Egress\n```"
+      ],
+      "answers": "C",
+      "topic": "Services & Networking",
+      "explanation": "Egress\n\nThis is the correct answer because it creates a NetworkPolicy named deny-outgoing in the secure namespace that denies all outgoing (egress) traffic. The podSelector: {} ensures that the policy applies to all pods in the namespace. The policyTypes: `-` Egress specifies that this policy applies to outgoing traffic. By not defining any egress rules, the default behavior is to `deny` all egress traffic.",
+      "themes": {
+        "resources": [
+          "network-policy",
+          "namespace"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "36",
+      "question": "List all pods in the current namespace, with more details",
+      "options": [
+        "```\nkubectl get pods -o wide\n```",
+        "```\nkubectl status pods\n```",
+        "```\nkubectl get all\n```",
+        "```\nkubectl get pods\n```"
+      ],
+      "answers": "A",
+      "topic": "Troubleshooting",
+      "explanation": "The command `kubectl get` pods `-o` wide lists all pods in the current namespace and provides additional details such as the node the pod is running on, the pod's IP address, and the containers' ports. The `-o` wide option is crucial for displaying these extra columns of information. This is a common command used for troubleshooting and understanding the pod's placement within the cluster.",
+      "themes": {
+        "resources": [
+          "namespace",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "37",
+      "question": "List Events sorted by timestamp",
+      "options": [
+        "```\nkubectl get events --sort-by=Time\n```",
+        "```\nkubectl get events --sort-by=.metadata.Timestamp\n```",
+        "```\nkubectl get events --sort-by=.metadata.creationTimestamp\n```",
+        "```\nkubectl get events --sort-by=.fromStart\n```"
+      ],
+      "answers": "C",
+      "topic": "Troubleshooting",
+      "explanation": "The `kubectl get events` command, when combined with the `--sort-by` flag, allows you to `sort events` based on a specific field. Events in Kubernetes have metadata, including a creationTimestamp field that records when the event was created. Sorting by `.metadata.creationTimestamp` arranges the `events` in chronological order, which is often useful for troubleshooting and understanding the sequence of `events` in a cluster.",
+      "themes": {
+        "resources": [
+          "events"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "38",
+      "question": "List all pods in all namespaces",
+      "options": [
+        "```\nkubectl get pods --all-namespaces\n```",
+        "```\nkubectl get pods --all --namespaces\n```",
+        "```\nkubectl get pods --namespaces\n```",
+        "```\nkubectl view pods --all-namespaces\n```"
+      ],
+      "answers": "A",
+      "topic": "Troubleshooting",
+      "explanation": "This command correctly lists all pods in all namespaces. The `kubectl get` pods command is used to retrieve information about pods. The `--all-namespaces` flag instructs `kubectl` to retrieve pods from all namespaces in the cluster. This is the most straightforward and efficient way to accomplish the task.",
+      "themes": {
+        "resources": [
+          "namespace",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "39",
+      "question": "Rolling restart of the “frontend” deployment",
+      "options": [
+        "```\nkubectl rolling restart deployment/frontend\n```",
+        "```\nkubectl rollout restart deployment/frontend\n```",
+        "```\nkubectl apply restart deployment/frontend\n```",
+        "```\nkubectl set restart deployment/frontend\n```"
+      ],
+      "answers": "B",
+      "topic": "Workloads & Scheduling",
+      "explanation": "The `kubectl rollout restart` deployment/frontend command is the correct way to trigger a rolling restart of a Kubernetes deployment named \"frontend\". This command initiates a new rollout, effectively restarting all the pods managed by the deployment in a controlled manner, ensuring minimal downtime. Kubernetes achieves this by gradually replacing old pods with new ones, adhering to the deployment's update strategy (typically RollingUpdate). This is the standard and recommended method for restarting deployments.",
+      "themes": {
+        "resources": [
+          "deployment"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "40",
+      "question": "Show Merged kubeconfig settings",
+      "options": [
+        "```\nkubectl config all\n```",
+        "```\nkubectl config find\n```",
+        "```\nkubectl config get\n```",
+        "```\nkubectl config view\n```"
+      ],
+      "answers": "D",
+      "topic": "Cluster Architecture, Installation & Configuration",
+      "explanation": "`kubectl config` view displays the merged kubeconfig settings. This command shows the current configuration, including clusters, contexts, and authentication information, after applying any merging rules defined by the KUBECONFIG environment variable or other configuration files. This is essential for understanding which cluster you are connected to, which user you are authenticated as, and other relevant settings. It effectively shows the active, combined configuration that `kubectl` is using.",
+      "themes": {
+        "resources": [
+          "kubeconfig"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "41",
+      "question": "`get` the documentation for pod manifests",
+      "options": [
+        "```\nkubectl explain local\n```",
+        "```\nkubectl explain pods\n```",
+        "```\nkubectl explain devices\n```",
+        "```\nkubectl explain all\n```"
+      ],
+      "answers": "B",
+      "topic": "Workloads & Scheduling",
+      "explanation": "The `kubectl explain` command is used to retrieve documentation for Kubernetes resources. To `get` the documentation for pod manifests, you would use `kubectl explain` pods. This command will output the fields and descriptions for the Pod resource, which is essential for understanding the structure and available options when defining Pods in YAML or JSON manifests. This is a core command for understanding Kubernetes resources and their configurations.",
+      "themes": {
+        "resources": [
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "42",
+      "question": "Get all running pods in the namespace",
+      "options": [
+        "```\nkubectl get pods --field-selector=status.phase=Running\n```",
+        "```\nkubectl get pods --Running\n```",
+        "```\nkubectl get pods --phase=Running\n```",
+        "```\nkubectl get pods --status=Running\n```"
+      ],
+      "answers": "A",
+      "topic": "Troubleshooting",
+      "explanation": "This command correctly filters pods based on their status.phase. The `--field-selector` flag allows you to filter Kubernetes resources based on the value of one or more of their fields. In this case, we are filtering for pods where the status.phase field is equal to Running. This is the standard and most reliable way to `get` running pods using kubectl.",
+      "themes": {
+        "resources": [
+          "namespace",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "43",
+      "question": "`start` a single instance of `nginx`",
+      "options": [
+        "```\nkubectl create deployment nginx --image=nginx\n```",
+        "```\nkubectl create deployment nginx --image=busybox\n```",
+        "```\nkubectl create service nginx --image=nginx\n```",
+        "```\nkubectl appy deployment nginx --image=nginx\n```"
+      ],
+      "answers": "A",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This command correctly creates a Kubernetes Deployment named \"nginx\" using the \"nginx\" image. Deployments are the recommended way to manage stateless applications like Nginx in Kubernetes. They ensure that the desired number of replicas (in this case, one by default) are running and automatically handle restarts and updates.",
+      "themes": {
+        "resources": [
+          "deployment"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "44",
+      "question": "Rolling update “www” containers of “frontend” deployment, updating the image",
+      "options": [
+        "```\nkubectl set image deployment/frontend www=image:v2\n```",
+        "```\nkubectl apply image deployment/frontend www=image:v2\n```",
+        "```\nkubectl put image deployment/frontend www=image:v2\n```",
+        "```\nkubectl rolling image deployment/frontend www=image:v2\n```"
+      ],
+      "answers": "A",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This command correctly updates the image of the \"www\" container within the \"frontend\" deployment. `kubectl` set image is the standard and recommended way to perform rolling updates by changing the container image. It modifies the deployment object, triggering a rolling update to gradually `replace` old pods with new pods using the specified image. The syntax deployment/frontend specifies the resource type (deployment) and name (frontend). `www=image:v2` specifies the container name (\"www\") and the new image (\"image:v2\"). Kubernetes then handles the update process, ensuring minimal downtime.",
+      "themes": {
+        "resources": [
+          "deployment"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "45",
+      "question": "List pods Sorted by Restart Count",
+      "options": [
+        "```\nkubectl get pods --sort-by='.status.restartCount'\n```",
+        "```\nkubectl get pods --sort-by='.status.containerStatuses[0].restartCount'\n```",
+        "```\nkubectl get pods --sort-by=restartCount\n```",
+        "```\nkubectl get deploy --sort-by='.status.restartCount'\n```"
+      ],
+      "answers": "B",
+      "topic": "Troubleshooting",
+      "explanation": "This command correctly sorts the pods by their restart count. The `kubectl get` pods command retrieves information about pods in the cluster. The `--sort-by` flag allows you to specify a field to `sort` the results by. In this case, .status.containerStatuses[0].restartCount is used. The `.status.containerStatuses` is an array of container statuses within the pod. Even if a pod has multiple containers, this command sorts by the restart count of the *first* container defined in the pod spec ([0]). The .restartCount field within each container status provides the number of times the container has been restarted. This is a common troubleshooting technique to identify pods experiencing issues.",
+      "themes": {
+        "resources": [
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "46",
+      "question": "Create a daemonset named “Prometheus-monitoring” using `image=prom/Prometheus` which runs in\n\nall the nodes in the cluster.",
+      "options": [
+        "```\napiVersion: apps/v1\nkind: DaemonSet\nmetadata:\nname: prometheus-monitoring\nspec:\nselector:\nmatchLabels:\nname: prometheus\ntemplate:\nmetadata:\nlabels:\nname: prometheus\nspec:\ntolerations: # remove it if your masters can't run pods\n- key: node-role.kubernetes.io/master\neffect: NoSchedule\ncontainers:\n- name: prometheus-container\nimage: node\n```",
+        "```\napiVersion: apps/v1\nkind: DaemonSet\nmetadata:\nname: prometheus-monitoring\nspec:\nselector:\nmatchLabels:\nname: prometheus\ntemplate:\nmetadata:\nlabels:\nname: prometheus\nspec:\ntolerations: # remove it if your masters can't run pods\n- key: node-role.kubernetes.io/master\neffect: NoSchedule\ncontainers:\n- name: prometheus-container\nimage: ngnix\n```",
+        "```\napiVersion: apps/v1\nkind: StatefulSet\nmetadata:\nname: prometheus-monitoring\nspec:\nselector:\nmatchLabels:\nname: prometheus\ntemplate:\nmetadata:\nlabels:\nname: prometheus\nspec:\ntolerations: # remove it if your masters can't run pods\n- key: node-role.kubernetes.io/master\neffect: NoSchedule\ncontainers:\n- name: prometheus-container\nimage: prom/prometheus\n```",
+        "```\napiVersion: apps/v1\nkind: DaemonSet\nmetadata:\nname: prometheus-monitoring\nspec:\nselector:\nmatchLabels:\nname: prometheus\ntemplate:\nmetadata:\nlabels:\nname: prometheus\nspec:\ntolerations: # remove it if your masters can't run pods\n- key: node-role.kubernetes.io/master\neffect: NoSchedule\ncontainers:\n- name: prometheus-container\nimage: prom/prometheus\n```"
+      ],
+      "answers": "D",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This is the correct answer because it defines a DaemonSet named \"prometheus-monitoring\" using the correct API `version` (apps/v1) and kind (DaemonSet). The selector and template are correctly configured to label and identify the pods managed by the DaemonSet. The container image is correctly set to \"prom/prometheus\", which fulfills the requirement of the question. The tolerations section allows the DaemonSet to `run` on nodes with the specified taint, including master nodes, which is a common practice for monitoring solutions.",
+      "themes": {
+        "resources": [
+          "daemon-set",
+          "stateful-set",
+          "node",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "47",
+      "question": "Get the deployment `rollout` status",
+      "options": [
+        "```\nkubectl rolling status deploy webapp\n```",
+        "```\nkubectl roll status deploy webapp\n```",
+        "```\nkubectl status deploy webapp\n```",
+        "```\nkubectl rollout status deploy webapp\n```"
+      ],
+      "answers": "D",
+      "topic": "Workloads & Scheduling",
+      "explanation": "The `kubectl rollout status` command is the correct way to check the status of a deployment `rollout` in Kubernetes. This command provides information about the progress of the rollout, including the number of pods that have been updated to the new `version` and any errors that have occurred. It waits until the `rollout` is complete (all pods are updated) or until a timeout occurs. The deploy keyword specifies that we are checking the status of a deployment. webapp is the name of the deployment we are checking.",
+      "themes": {
+        "resources": [
+          "deployment"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "48",
+      "question": "Print pod name and `start` time to “/opt/pod-status” file",
+      "options": [
+        "```\nkubectl get pods -o=jsonpath='{range .items[*]}{.metadata.name}{\"\\t\"}{.status.podIP}{\"\\n\"}{end}' > /opt/pod-status\n```",
+        "```\nkubectl pods -o=jsonpath='{range .items[*]}{.metadata.name}{\"\\t\"}{.status.podIP}{\"\\n\"}{end}' > /opt/pod-status\n```",
+        "```\nkubectl list pods -o=jsonpath='{range .items[*]}{.metadata.name}{\"\\t\"}{.status.podIP}{\"\\n\"}{end}' > /opt/pod-status\n```",
+        "```\nkubectl get pods -o=jsonpath='{range .items[*]}{.metadata.name}{\"\\t\"}{.status.startTime}{\"\\n\"}{end}' > /opt/pod-status\n```"
+      ],
+      "answers": "D",
+      "topic": "Troubleshooting",
+      "explanation": "This command correctly retrieves the pod name and `start` time and writes it to the specified file. `kubectl get` pods retrieves the pod information. The `-o` jsonpath option allows us to extract specific fields from the JSON output. '{range .items[*]}{.metadata.name}{\"\\t\"}{.status.startTime}{\"\\n\"}{end}' is the JSONPath expression that iterates through each pod item, extracts the pod's name from `.metadata.name` and the `start` time from .status.startTime, separates them with a tab (\"\\t\"), and adds a newline (\"\\n\") after each entry. Finally, `> /opt/pod-status` redirects the output to the file `/opt/pod-status`.",
+      "themes": {
+        "resources": [
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "49",
+      "question": "Undo the deployment to the previous `version` 1.17.1 and verify Image has the previous `version`",
+      "options": [
+        "```\nkubectl roll undo deploy webapp\nkubectl describe deploy webapp | grep Image\n```",
+        "```\nkubectl rollout undo deploy webapp\nkubectl describe deploy webapp | grep Image\n```",
+        "```\nkubectl undo deploy webapp\nkubectl describe deploy webapp | grep Image\n```",
+        "```\nkubectl snapshot restore deploy webapp\nkubectl describe deploy webapp | grep Image\n```"
+      ],
+      "answers": "B",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This option correctly uses `kubectl rollout` undo deploy webapp to revert the deployment to the previous revision. The command `kubectl describe` deploy webapp `| grep` Image then verifies that the image used by the deployment has indeed been changed back to the previous `version` (1.17.1 as specified in the question). `kubectl rollout` undo is the correct command for reverting deployments. The pipe (|) sends the output of the `describe` command to the `grep` command, which filters the output to only show lines containing \"Image\", allowing for easy verification of the image version.",
+      "themes": {
+        "resources": [
+          "deployment"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "50",
+      "question": "Create a busybox pod and add “sleep 3600” command",
+      "options": [
+        "```\nkubectl run busybox --image=busybox --restart=Never -- /bin/sh -shellRun \"sleep 3600\"\n```",
+        "```\nkubectl run busybox --image=busybox --restart=Never --run /bin/sh -c \"sleep 3600\"\n```",
+        "```\nkubectl run busybox --image=busybox --restart=Never -- /bin/sh -c \"sleep 3600\"\n```",
+        "```\nkubectl run busybox --image=busybox --restart=Never\n```"
+      ],
+      "answers": "C",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This command correctly creates a pod named 'busybox' using the 'busybox' image. The `--restart=Never` flag ensures that the pod will not be restarted if the container exits. The double dash `--` is crucial; it signals that everything after it should be treated as arguments to the container's entrypoint. `/bin/sh -c` \"sleep 3600\" executes the 'sleep 3600' command within the container's shell, causing the container to sleep for one hour (3600 seconds) and then exit. This is a common way to `run` a simple, long-running task in a pod.",
+      "themes": {
+        "resources": [
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "51",
+      "question": "Resume the `rollout` of the deployment",
+      "options": [
+        "```\nkubectl resume deploy webapp\n```",
+        "```\nkubectl rollout start deploy webapp\n```",
+        "```\nkubectl resume rollout deploy webapp\n```",
+        "```\nkubectl rollout resume deploy webapp\n```"
+      ],
+      "answers": "D",
+      "topic": "Workloads & Scheduling",
+      "explanation": "The `kubectl rollout` resume deploy webapp command is the correct way to resume a paused `rollout` of a deployment in Kubernetes. Rollouts can be paused to allow for inspection or manual intervention during updates. The `rollout` resume subcommand specifically restarts a `rollout` that has been paused using `kubectl rollout` pause. This command signals the Deployment controller to continue the `rollout` process, applying any pending changes to the ReplicaSets and Pods managed by the Deployment.",
+      "themes": {
+        "resources": [
+          "deployment"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "52",
+      "question": "Fix a node that shows as non-ready",
+      "options": [
+        "```\nKubectl list nodes // Check which node shows a not ready\nkubectl get nodes “node-name” // Login to the node which shows as not ready and check the process for kubelet, docker , kube-proxy. //\nsystemctl status kubelet (or) ps -aux | grep -i “processname” // If the process is not started, then start using\nsystemctl status kubelet / docker // Verif y ps -auxxww | grep -i “process-name”\nkubectl get nodes\n```",
+        "```\nKubectl get nodes // Check which node shows a not ready\nkubectl describe nodes “node-name” // Login to the node which shows as not ready and check the process for kubelet, docker , kube-proxy. //\nsystemctl status kubelet (or) ps -aux | grep -i “processname” // If the process is not started, then start using\nsystemctl start kubelet / docker // Verif y ps -auxxww | grep -i “process-name”\nkubectl get nodes\n```",
+        "```\n//Check which node shows a not ready\nkubectl describe nodes “node-name” // Login to the node which shows as not ready and check the\nsystemctl stop kubelet / docker // Verif y ps -auxxww | grep -i “process-name”\nkubectl get nodes\n```",
+        "```\nKubectl get nodes // Check which node shows a not ready\nkubectl describe nodes “node-name” // Login to the node which shows as not ready and check the process for kubelet, docker , kube-proxy. //\nsystemctl status kubelet (or) ps -aux | grep -i “processname” // If the process is not started, then start using\nsystemctl disable kubelet / docker // Verif y ps -auxxww | grep -i “process-name”\nkubectl get nodes\n```"
+      ],
+      "answers": "B",
+      "topic": "Troubleshooting",
+      "explanation": "Kubectl `get` nodes `//` Check which node shows a not ready `kubectl describe` nodes “node-name” `//` Login to the node which shows as not ready and check the process for kubelet, `docker` , kube-proxy. `// systemctl status kubelet` (or) `ps -aux | grep -i “processname” //` If the process is not started, then `start` using `systemctl start kubelet` / `docker //` Verif y `ps -auxxww | grep -i “process-name” kubectl get` nodes\n\nThis answer provides a reasonable approach to troubleshooting a non-ready node. First, it identifies the non-ready node using `kubectl get` nodes. Then, it uses `kubectl describe` nodes to gather more information about the node's status and any reported issues. Crucially, it suggests logging into the node and checking the status of critical Kubernetes components (kubelet, docker/containerd, kube-proxy) using `systemctl status` or ps. If these processes are not running, the answer correctly suggests starting them using `systemctl` start. Finally, it verifies the status and checks the node status again with `kubectl get` nodes. This is a standard and effective troubleshooting methodology.",
+      "themes": {
+        "resources": [
+          "node"
+        ],
+        "questionTypes": [
+          "troubleshooting"
+        ]
+      }
+    },
+    {
+      "id": "53",
+      "question": "List all the pods showing name and namespace with a json path expression",
+      "options": [
+        "```\nkubectl pods -o=jsonpath=\"{.items[*]['metadata.name', 'metadata.namespace']}\"\n```",
+        "```\nkubectl get pods -o=json=\"{.items[*]['metadata.name', 'metadata.namespace']}\"\n```",
+        "```\nkubectl get pods -o=jsonpath=\"{.items[*]['metadata.name', 'metadata.namespace']}\"\n```",
+        "```\nkubectl ls pods -o=jsonpath=\"{.items[*]['metadata.name', 'metadata.namespace']}\"\n```"
+      ],
+      "answers": "C",
+      "topic": "Troubleshooting",
+      "explanation": "This command correctly uses `kubectl get` pods to retrieve pod information and then filters the output using jsonpath. The `-o=jsonpath` option specifies that the output should be formatted using a JSONPath expression. The expression {.items[*]['metadata.name', 'metadata.namespace']} iterates through each item in the items array (which represents each pod) and extracts the metadata.name and metadata.namespace fields. This provides the desired output of pod names and their corresponding namespaces.",
+      "themes": {
+        "resources": [
+          "namespace",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "54",
+      "question": "Scale down the deployment to 1 replica",
+      "options": [
+        "```\nkubectl scale deployment webapp –replicas=1 //Verify\nkubectl get deploy\nkubectl get po,rs\n```",
+        "```\nkubectl up deployment webapp –replicas=1 //Verify\nkubectl get deploy\nkubectl get po,rs\n```",
+        "```\nkubectl update deployment webapp –replicas=1 //Verify\nkubectl get deploy\nkubectl get po,rs\n```",
+        "```\nkubectl deployment webapp –replicas=1 //Verify\nkubectl get deploy\nkubectl get po,rs\n```"
+      ],
+      "answers": "A",
+      "topic": "Workloads & Scheduling",
+      "explanation": "The `kubectl scale` command is the correct way to adjust the number of replicas in a deployment. The deployment keyword specifies that we are targeting a deployment resource. webapp is the name of the deployment to be scaled. The `--replicas=1` flag sets the desired number of replicas to 1. After executing the command, it's good practice to verify the change using `kubectl get` deploy to check the deployment's status and `kubectl get` po,rs to observe the pods and replica sets being managed by the deployment. This confirms that the deployment has been successfully scaled down to one replica.",
+      "themes": {
+        "resources": [
+          "deployment",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "55",
+      "question": "Create 5 `nginx` pods in which two of them is labeled `env=prod` and\n\nthree of them is labeled `env=dev`",
+      "options": [
+        "```\nkubectl run nginx-dev1 --image=nginx --restart=Never -- labels=env=dev kubectl run nginx-dev2 --image=nginx --restart=Never -- labels=env=dev kubectl run nginx-prod1 --image=nginx --restart=Never -- labels=env=prod kubectl run nginx-prod2 --image=nginx --restart=Never -- labels=env=prod\n```",
+        "```\nkubectl run nginx-dev1 --image=nginx --restart=Never -- labels=env=dev kubectl run nginx-dev2 --image=nginx --restart=Never -- labels=env=dev kubectl run nginx-dev3 --image=nginx --restart=Never -- labels=env=dev kubectl run nginx-prov1 --image=nginx --restart=Never -- labels=env=prov kubectl run nginx-prov2 --image=nginx --restart=Never -- labels=env=prov\n```",
+        "```\nkubectl run nginx-dev1,2,3 --image=nginx --restart=Never -- labels=env=dev kubectl run nginx-prod1 --image=nginx --restart=Never -- labels=env=prod kubectl run nginx-prod2 --image=nginx --restart=Never -- labels=env=prod\n```",
+        "```\nkubectl run nginx-dev1 --image=nginx --restart=Never -- labels=env=dev kubectl run nginx-dev2 --image=nginx --restart=Never -- labels=env=dev kubectl run nginx-dev3 --image=nginx --restart=Never -- labels=env=dev kubectl run nginx-prod1 --image=nginx --restart=Never -- labels=env=prod kubectl run nginx-prod2 --image=nginx --restart=Never -- labels=env=prod\n```"
+      ],
+      "answers": "D",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This option correctly creates five `nginx` pods with the specified labels. It uses the `kubectl` `run` command to create each pod individually, specifying the image as nginx, setting `restart=Never` to create a plain pod (not managed by a ReplicaSet), and assigning the appropriate label (`env=dev` or `env=prod`) using the `--labels` flag. Each pod is created with a unique name, and the labels are correctly applied.",
+      "themes": {
+        "resources": [
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "56",
+      "question": "Get list of all pods in all namespaces and write it to file “/opt/pods-list.yaml”",
+      "options": [
+        "```\nkubectl list po -n develop > /opt/pods-list.yaml\n```",
+        "```\nkubectl get po -n develop > /opt/pods-list.yaml\n```",
+        "```\nkubectl get po –all-namespaces > /opt/pods-list.yaml\n```",
+        "```\nkubectl set po -n develop > /opt/pods-list.yaml\n```"
+      ],
+      "answers": "C",
+      "topic": "Troubleshooting",
+      "explanation": "This command correctly retrieves all pods from all namespaces and redirects the output to the specified file. The `kubectl get` po command is used to retrieve pod information. The `--all-namespaces` flag ensures that pods from all namespaces are included in the output. Finally, `> /opt/pods-list.yaml` redirects the output to a file named \"pods-list.yaml\" in the `/opt` directory. This is a common task for inspecting the overall state of pods across the entire Kubernetes cluster, often used for debugging or auditing purposes.",
+      "themes": {
+        "resources": [
+          "namespace",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "57",
+      "question": "Create an `nginx` pod which loads the secret as environment variables",
+      "options": [
+        "```\n// create a yml file\nkubectl run nginx --image=nginx --restart=Never --dry-run -o yaml > nginx.yml // add env section below and create vim nginx.yaml run: nginx name: nginx spec: containers: - image: nginx name: nginx envFrom: - secretRef: name: my-secret restartPolicy: Never\nkubectl apply -f nginx.yaml //verify\nkubectl exec -it nginx – env\n```",
+        "```\n// create a yml file\nkubectl set nginx --image=nginx --restart=Never --dry-run -o yaml > nginx.yml // add env section below and create vim nginx.yaml apiVersion: v1 kind: Pod metadata: labels: run: nginx name: nginx spec: containers: - image: nginx name: nginx envFrom: - secretRef: name: my-secret restartPolicy: Never\nkubectl apply -f nginx.yaml //verify\nkubectl exec -it nginx – env\n```",
+        "```\n// create a yml file\nkubectl run nginx --image=nginx --restart=Never --dry-run -o yaml > nginx.yml // add env section below and create vim nginx.yaml apiVersion: v1 kind: Pod metadata: labels: run: nginx name: nginx spec: containers: - image: nginx name: nginx envFrom: - secretRef: name: my-secret restartPolicy: Never\nkubectl create -f nginx.yaml //verify\nkubectl exec -it nginx – env\n```",
+        "```\n// create a yml file\nkubectl run nginx --image=nginx --restart=Never --dry-run -o yaml > nginx.yml // add env section below and create vim nginx.yaml apiVersion: v1 kind: Pod metadata: labels: run: nginx name: nginx spec: containers: - image: nginx name: nginx envFrom: - secretRef: name: my-secret restartPolicy: Never\nkubectl apply -f nginx.yaml //verify\nkubectl exec -it nginx – env\n```"
+      ],
+      "answers": "D",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This answer correctly outlines the steps to create an `nginx` pod and load a secret as environment variables. First, it uses `kubectl` `run` with the `--dry-run` flag to generate a YAML file. Then, it modifies the YAML file to include the envFrom section within the container spec, referencing a secret named \"my-secret\". Finally, it applies the configuration using `kubectl` `apply` `-f` nginx.yaml. The envFrom field allows you to import all key-value pairs from a Secret or ConfigMap as environment variables into a container. The `kubectl exec` command is used to verify that the environment variables are correctly loaded into the pod.",
+      "themes": {
+        "resources": [
+          "secret",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "58",
+      "question": "Update the deployment with the image `version` 1.16.1 and verify the image and check the `rollout`\n\nhistory",
+      "options": [
+        "```\nkubectl put image deploy/webapp nginx=nginx:1.16.1 kubectl describe deploy webapp | grep Image\nkubectl rollout history deploy webapp\n```",
+        "```\nkubectl image deploy/webapp nginx=nginx:1.16.1 kubectl describe deploy webapp | grep Image\nkubectl rollout history deploy webapp\n```",
+        "```\nkubectl set image deploy/webapp nginx=nginx:1.16.1 kubectl describe deploy webapp | grep Image\nkubectl rollout history deploy webapp\n```",
+        "```\nkubectl apply image deploy/webapp nginx=nginx:1.16.1 kubectl describe deploy webapp | grep Image\nkubectl rollout history deploy webapp\n```"
+      ],
+      "answers": "C",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This option correctly uses the `kubectl` set image command to update the image of the deployment. The syntax deploy/webapp specifies the resource type (deployment) and name (webapp). `nginx=nginx:1.16.1` indicates that the container named \"nginx\" should have its image updated to \"nginx:1.16.1\". The `kubectl describe` deploy webapp `| grep` Image command then verifies the updated image. Finally, `kubectl rollout` history deploy webapp shows the `rollout` history, allowing you to track the changes made to the deployment over time. This is the correct sequence of commands to update a deployment's image, verify the change, and check the `rollout` history.",
+      "themes": {
+        "resources": [
+          "deployment"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "59",
+      "question": "Create a deployment called webapp with image `nginx` having 5 replicas in it, put the file in `/tmp`\n\ndirectory with named webapp.yaml",
+      "options": [
+        "```\napiVersion: apps/v1\nkind: Pod\nmetadata:\nlabels:\napp: webapp\nname: webapp\nspec:\nreplicas: 5\nselector:\nmatchLabels:\napp: webapp\ntemplate:\nmetadata:\nlabels:\napp: webapp\nspec:\ncontainers:\n- image: nginx\nname: nginx\nNote: Search \"deployment\" in kubernetes.io site , you will get the page https://kubernetes.io/docs/concepts/workloads/controllers/deplo yment/ // Verif y the Deployment kubectl get deploy webapp --show-labels // Output theYA ML file of the deployment webapp kubectl get deploy webapp -o yaml\n```",
+        "```\napiVersion: apps/v1\nkind: Deployment\nmetadata:\nlabels:\napp: webapp\nname: webapp\nspec:\nreplicas: 5\nselector:\nmatchLabels:\napp: webapp\ntemplate:\nmetadata:\nlabels:\napp: webapp\nspec:\ncontainers:\n- image: nginx\nname: nginx\nNote: Search \"deployment\" in kubernetes.io site , you will get the page https://kubernetes.io/docs/concepts/workloads/controllers/deplo yment/ // Verif y the Deployment kubectl get deploy webapp --show-labels // Output theYA ML file of the deployment webapp kubectl get deploy webapp -o yaml\n```",
+        "```\napiVersion: apps/v1\nkind: Deployment\nmetadata:\nlabels:\napp: xx\nname: xx\nspec:\nreplicas: 3\nselector:\nmatchLabels:\napp: webapp\ntemplate:\nmetadata:\nlabels:\napp: webapp\nspec:\ncontainers:\n- image: nginx\nname: nginx\nNote: Search \"deployment\" in kubernetes.io site , you will get the page https://kubernetes.io/docs/concepts/workloads/controllers/deplo yment/ // Verif y the Deployment kubectl get deploy webapp --show-labels // Output theYA ML file of the deployment webapp kubectl get deploy webapp -o yaml\n```",
+        "```\napiVersion: apps/v1\nkind: Deployment\nmetadata:\nlabels:\napp: webapp\nname: webapp\nspec:\nreplicas: 5\nselector:\nmatchLabels:\napp: webapp\ntemplate:\nmetadata:\nlabels:\nNote: Search \"deployment\" in kubernetes.io site , you will get the page https://kubernetes.io/docs/concepts/workloads/controllers/deplo yment/ // Verif y the Deployment kubectl get deploy webapp --show-labels\n```"
+      ],
+      "answers": "B",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This YAML defines a Kubernetes Deployment named \"webapp\" using the apps/v1 API version. It specifies 5 replicas, meaning Kubernetes will attempt to maintain 5 pods running at all times. The selector and template sections are crucial for the Deployment to manage the Pods. The selector uses matchLabels to identify the Pods it should control (those with the label app: webapp). The template defines the Pod specification, including the container image (nginx) and labels. This configuration ensures that the Deployment creates and manages Pods running the `nginx` image, labeled with app: webapp, and maintains the desired replica count of 5.",
+      "themes": {
+        "resources": [
+          "deployment",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "60",
+      "question": "Evict all existing pods from a node-1 and make the node unschedulable for new pods.",
+      "options": [
+        "```\nkubectl get nodes\nkubectl drain node-1 #It will evict pods running on node-1 to other nodes in the cluster\nkubectl cordon node-1 # New pods cannot be scheduled to the node // Verif y\nkubectl get no When you cordon a node, the status shows “SchedulingDisabled”\n```",
+        "```\nkubectl get nodes\nkubectl delete node-1 #It will evict pods running on node-1 to node // Verif y\nkubectl get no When you cordon a node, the status shows “SchedulingDisabled”\n```",
+        "```\nkubectl get nodes\nkubectl drain node-1 #It will evict pods running on node-1 to other nodes in the cluster // Verif y\nkubectl get no When you cordon a node, the status shows “SchedulingDisabled”\n```",
+        "```\nkubectl list nodes kubectl clear node-1 #It will evict pods running on node-1 to other nodes in the cluster\nkubectl cordon node-1 # New pods cannot be scheduled to the node // Verif y\nkubectl get no When you cordon a node, the status shows “SchedulingDisabled”\n```"
+      ],
+      "answers": "A",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This option correctly combines the `kubectl drain` and `kubectl cordon` commands to achieve the desired outcome. `kubectl drain node-1` safely evicts all pods from the node, respecting PodDisruptionBudgets (PDBs) where possible, and moves them to other available nodes. After draining, `kubectl cordon node-1` marks the node as unschedulable, preventing new pods from being scheduled onto it. The `kubectl get` nodes command is used to verify the status of the node after the `cordon` operation, confirming that it shows \"SchedulingDisabled\".",
+      "themes": {
+        "resources": [
+          "node",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "61",
+      "question": "Create a hostPath PersistentVolume named task-pv-volume with storage 10Gi, access modes\n\nReadWriteOnce, storageClassName manual, and volume at `/mnt/data` and verify",
+      "options": [
+        "```\nvim task-pv-volume.yaml apiVersion: v1 kind: PersistentVolume metadata: name: task-pv-volume labels: type: local spec: storageClassName: \"\" capacity: storage: 50Gi accessModes: - ReadWriteOnce hostPath: path: \"/mnt/data\"\nkubectl apply -f task-pv-volume.yaml //Verify\nkubectl get pv\n```",
+        "```\nvim task-pv-volume.yaml apiVersion: v1 kind: PersistentVolume metadata: name: task-pv-volume labels: type: local spec: storageClassName: \"\" capacity: storage: 10Gi accessModes: - ReadWriteOnce hostPath: path: \"/mnt/data\"\nkubectl apply -f task-pv-volume.yaml //Verify\nkubectl get pv\n```",
+        "```\nvim task-pv-volume.yaml apiVersion: v1 kind: PersistentVolume metadata: name: task-pv-volume labels: type: nfs spec: storageClassName: \"\" capacity: storage: 10Gi accessModes: - ReadWriteOnce hostPath: path: \"nfs:/mnt/data\"\nkubectl apply -f task-pv-volume.yaml //Verify\nkubectl get pv\n```",
+        "```\nkind: PersistentVolume\nmetadata:\nname: task-pv-volume\nlabels:\ntype: local\nspec:\nstorageClassName: \"\"\ncapacity:\nstorage: 5Gi\naccessModes: - ReadWriteOnce\nhostPath:\npath: \"/mnt/data\" kubectl apply -f task-pv-volume.yaml //Verify kubectl get pv\n```"
+      ],
+      "answers": "B",
+      "topic": "Storage",
+      "explanation": "ReadWriteOnce `hostPath: path: \"/mnt/data\" kubectl` `apply` `-f task-pv-volume.yaml //Verify kubectl get` pv\n\nThis answer correctly defines a PersistentVolume (PV) named task-pv-volume with the specified requirements. The YAML file includes the correct apiVersion, kind, metadata.name, spec.capacity.storage (10Gi), spec.accessModes (ReadWriteOnce), and spec.hostPath.path (/mnt/data). The storageClassName is set to \"\", which is appropriate for a manually provisioned PV. The `kubectl` `apply` command will create the PV, and `kubectl get` pv will verify its creation.",
+      "themes": {
+        "resources": [
+          "persistent-volume",
+          "volume"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "62",
+      "question": "Create a Pod `nginx` and specify a CPU request and a CPU limit of 0.5 and 1 respectively",
+      "options": [
+        "```\napiVersion: v1\nkind: Deploy\nmetadata:\nlabels:\nrun: nginx\nname: nginx\nspec:\ncontainers:\n- image: nginx\nname: nginx\nresources:\nrequests:\ncpu: \"0.5\"\nlimits:\ncpu: \"1\"\nrestartPolicy: Always kubectl apply -f nginx-pod.yaml // verify kubectl top pod\n```",
+        "```\napiVersion: v1\nkind: Pod\nmetadata:\nlabels:\nrun: nginx\nname: nginx\nspec:\ncontainers:\n- image: nginx\nname: nginx\nresources:\nrequests:\ncpu: \"0.5\"\nlimits:\ncpu: \"1\"\nrestartPolicy: Always kubectl apply -f nginx-pod.yaml // verify kubectl top pod\n```",
+        "```\napiVersion: v1\nkind: Pod\nmetadata:\nlabels:\nrun: nginx\nname: nginx\nspec:\ncontainers:\n- image: nginx\nname: nginx\nrestartPolicy: Always kubectl apply -f nginx-pod.yaml // verify kubectl top pod\n```",
+        "```\napiVersion: v1\nkind: Pod\nmetadata:\nlabels:\nrun: nginx\nname: nginx\nspec:\ncontainers:\n- image: nginx\nname: nginx\nresources:\nrequests:\ncpu: \"5.5\"\nlimits:\ncpu: \"7\"\nrestartPolicy: Always kubectl apply -f nginx-pod.yaml // verify kubectl top pod\n```"
+      ],
+      "answers": "B",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This is the correct answer because it defines a Pod named \"nginx\" with a container that has CPU resource requests set to 0.5 cores and CPU resource limits set to 1 core. The `kind:` Pod specifies that we are creating a Pod, and the resources section within the container definition allows us to define CPU requests and limits. The `kubectl` `apply` `-f nginx-pod.yaml` command will create the pod in the cluster. The `kubectl top` pod command can be used to verify resource usage.",
+      "themes": {
+        "resources": [
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "63",
+      "question": "Create a `nginx` pod with label `env=test` in engineering namespace\n\n```\nkubectl run nginx –image=nginx –restart=Never –labels=env=test –namespace=enginering –dryrun -o yaml > nginx-pod.yaml\nkubectl run nginx –image=nginx –restart=Never –labels=env=test –namespace=enginering –dryrun\n-o yaml | kubectl create -n enginering -f –\n```\n\nYAML File:",
+      "options": [
+        "```\napiVersion: v1\nkind: Pod\nmetadata:\nname: nginx\nnamespace: enginering\nlabels:\nenv: test\nspec:\ncontainers:\n- name: nginx\nimage: nginx\nimagePullPolicy: IfNotPresent\nrestartPolicy: Never kubectl set -f nginx-pod.yaml kubectl run nginx --image=busybox--restart=Never --labels=env=test --namespace=enginering --dryrun -o yaml > nginx-pod.yaml kubectl run nginx --image=busybox--restart=Never --labels=env=test --namespace=enginering --dryrun -o yaml | kubectl create -n enginering -f – YAML File:\n```",
+        "```\napiVersion: v1\nkind: Pod\nmetadata:\nname: busybox\nnamespace: enginering\nlabels:\nenv: test\nspec:\ncontainers:\n- name: nginx\nimage: nginx\nimagePullPolicy: IfNotPresent\nrestartPolicy: Never kubectl apply -f nginx-pod.yaml kubectl run nginx --image=nginx --restart=Never --labels=env=test --namespace=enginering --dryrun -o yaml > nginx-pod.yaml kubectl run nginx --image=nginx --restart=Never --labels=env=test --namespace=enginering --dryrun -o yaml | kubectl create -n enginering -f – YAML File:\n```",
+        "```\napiVersion: v1\nkind: Pod\nmetadata:\nname: nginx\nnamespace: enginering\nlabels:\nenv: test\nspec:\ncontainers:\n- name: nginx\nimage: nginx\nimagePullPolicy: IfNotPresent\nrestartPolicy: Never kubectl create -f nginx-pod.yaml kubectl run nginx --image=nginx --restart=Never --labels=env=test --namespace=engineering -- dry-run -o yaml > nginx-pod.yaml kubectl run nginx --image=nginx --restart=Never --labels=env=test --namespace=engineering --dryrun -o yaml | kubectl create -n engineering -f – YAML File:\n```",
+        "```\napiVersion: v1\nkind: Pod\nmetadata:\nname: nginx\nnamespace: engineering\nlabels:\nenv: test\nspec:\ncontainers:\n- name: nginx\nimage: nginx\nimagePullPolicy: IfNotPresent\nrestartPolicy: Never kubectl create -f nginx-pod.yaml\n```"
+      ],
+      "answers": "D",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This option correctly defines a Pod named \"nginx\" in the \"engineering\" namespace with the label \"`env=test`\". The YAML specifies the necessary fields for a Pod, including the API version, kind, metadata (name, namespace, labels), and the specification (spec) for the container. The container uses the \"nginx\" image and sets the restart policy to \"Never\", which is appropriate for a Pod that is not managed by a higher-level controller like a Deployment. Finally, the `kubectl create -f nginx-pod.yaml` command is used to create the pod from the yaml file.",
+      "themes": {
+        "resources": [
+          "namespace",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "64",
+      "question": "Create a configmap called myconfigmap with literal value\n\n`appname=myapp`",
+      "options": [
+        "```\nkubectl create cm myconfigmap --from-literal=appname=myapp // Verify\nkubectl get cm -o yaml (or)\nkubectl describe cm\n```",
+        "```\nkubectl apply cm myconfigmap --from-literal=appname=myapp // Verify\nkubectl get cm -o yaml (or)\nkubectl describe cm\n```",
+        "```\nkubectl create cm myconfigmap --appname=myapp // Verify\nkubectl get cm -o yaml (or)\nkubectl describe cm\n```",
+        "```\nkubectl create map myconfigmap --from-literal=appname=myapp // Verify (or)\nkubectl describe cm\n```"
+      ],
+      "answers": "A",
+      "topic": "Cluster Architecture, Installation & Configuration",
+      "explanation": "This is the correct answer because it uses the `kubectl create` cm command with the `--from-literal` flag to create a ConfigMap named myconfigmap with the key-value pair `appname=myapp`. The `kubectl create` cm command is specifically designed for creating ConfigMaps. The `--from-literal` option allows you to directly specify key-value pairs on the command line. The verification steps (`kubectl get` cm `-o` yaml or `kubectl describe` cm) are appropriate for confirming the ConfigMap's contents.",
+      "themes": {
+        "resources": [
+          "config-map"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "65",
+      "question": "Create a pod with environment variables as `var1=value1.Check` the environment variable in pod",
+      "options": [
+        "```\nkubectl run nginx --image=nginx --restart=Never --env=var1=value1 # then\nkubectl exec -it nginx -- env # or\nkubectl exec -it nginx -- sh -c 'echo $var1' # or\nkubectl describe po nginx | grep value1\n```",
+        "```\nkubectl run nginx --image=nginx --restart=Never --env=var1=value1 # then\nkubectl exec -it nginx -- env # or\nkubectl describe po nginx | grep value1\n```",
+        "```\nkubectl run nginx --image=busybox--restart=Never --env=var1=value1 # then\nkubectl exec -it nginx -- env\nkubectl run nginx --image=nginx --restart=Never # then\nkubectl exec -it nginx -- env\n```"
+      ],
+      "answers": "A",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This option correctly creates a pod named 'nginx' using the 'nginx' image, sets the environment variable 'var1' to 'value1', and then provides three valid methods to verify the environment variable. The first verification method, `kubectl exec -it nginx --` env, executes the 'env' command inside the pod, which lists all environment variables. The second method, `kubectl exec -it nginx --` sh `-c echo` $var1', executes a shell command inside the pod that prints the value of the 'var1' environment variable. The third method, `kubectl describe` po `nginx | grep` value1, describes the pod and then filters the output for the value of the environment variable. All three methods are valid for checking the environment variable.",
+      "themes": {
+        "resources": [
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "66",
+      "question": "List all the pods sorted by created timestamp",
+      "options": [
+        "```\nkubectl get pods--sort-by=.metadata.creationTimestamp\n```",
+        "```\nkubectl listpods--sort-by=.metadata.creationTimestamp\n```",
+        "```\nkubectl pods--sort-by=.metadata.creationTimestamp\n```",
+        "```\nkubectl ls pods--sort-by=.metadata.creationTimestamp\n```"
+      ],
+      "answers": "A",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This command correctly lists all pods in the current namespace, sorted by their creation timestamp. The `kubectl get` pods command retrieves the pod resources. The `--sort-by` flag allows you to specify a field to `sort` the results by. In this case, `.metadata.creationTimestamp` is used, which is the correct field within the pod's metadata that stores the timestamp of when the pod was created. This is a common task for administrators to quickly identify the oldest or newest pods in a cluster.",
+      "themes": {
+        "resources": [
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "67",
+      "question": "Change the label for one of the pod to `env=uat` and list all the pods to verify",
+      "options": [
+        "```\nkubectl taint pod/nginx-dev3 env=uat --overwrite\nkubectl get pods --show-labels\n```",
+        "```\nkubectl lab pod/nginx-dev3 env=uat --overwrite\nkubectl get pods --show-labels\n```",
+        "```\nkubectl label pod/nginx-dev3 env=prod--overwrite kubectl get pods --show-labels\n```",
+        "```\nkubectl label pod/nginx-dev3 env=uat --overwrite\nkubectl get pods --show-labels\n```"
+      ],
+      "answers": "D",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This is the correct answer because it uses the `kubectl` label command to change the label of the pod named nginx-dev3 to `env=uat`. The `--overwrite` flag is important because it allows the command to change the value of an existing label. Without this flag, the command would fail if the label already exists. After changing the label, the `kubectl get` pods `--show-labels` command is used to verify the change by displaying all pods and their associated labels.",
+      "themes": {
+        "resources": [
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "68",
+      "question": "List “nginx-dev” and “nginx-prod” pod and `delete` those pods",
+      "options": [
+        "```\nkubectl get pods -o wide\nkubectl delete po\nkubectl delete po “nginx-prod”\n```",
+        "```\nkubectl ls pods -o wide\nkubectl rm po “nginx-dev”\nkubectl rm po “nginx-prod”\n```",
+        "```\nkubectl get pods -o wide\nkubectl delete po “nginx-dev”\nkubectl delete po “nginx-prod”\n```",
+        "```\nkubectl get pods -o wide kubectl del po “nginx-dev” kubectl del po “nginx-prod”\n```"
+      ],
+      "answers": "C",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This option correctly lists the pods and then deletes the specified pods. `kubectl get` pods `-o` wide lists all pods in the current namespace with detailed information. `kubectl delete` po “nginx-dev” and `kubectl delete` po “nginx-prod” `delete` the pods named \"nginx-dev\" and \"nginx-prod\" respectively. This is the standard and correct way to list and `delete` pods using kubectl.",
+      "themes": {
+        "resources": [
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "69",
+      "question": "List all the pods sorted by name",
+      "options": [
+        "```\nkubectl ls pods --sort-by=.metadata.name\n```",
+        "```\nkubectl get pods --sort-by=.metadata.name\n```",
+        "```\nkubectl listpods --sort-by=.metadata.name\n```",
+        "```\nkubectl pods --sort-by=.metadata.name\n```"
+      ],
+      "answers": "B",
+      "topic": "Troubleshooting",
+      "explanation": "The `kubectl get` command is used to retrieve information about Kubernetes resources. The `--sort-by` flag allows you to `sort` the output based on a specified field. In this case, `.metadata.name` specifies that the pods should be sorted by their name. This is the correct syntax for sorting pods by name using kubectl.",
+      "themes": {
+        "resources": [
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "70",
+      "question": "Create an `nginx` pod and set an `env` value as ‘`var1=val1`’. Check the `env` value existence within the pod",
+      "options": [
+        "```\nkubectl nginx --image=nginx --restart=Never --env=var1=val1 # then\nkubectl -it nginx -- env\n```",
+        "```\nkubectl run nginx --restart=Never --image=nginx --env=var1 -it --ls – env\n```",
+        "```\nkubectl run nginx --image=nginx --restart=Never --env=var1=val1 # then\nkubectl exec -it nginx -- env # or\nkubectl exec -it nginx -- sh -c 'echo $var1' # or\nkubectl describe po nginx | grep val1 # or\nkubectl run nginx --restart=Never --image=nginx --env=var1=val1 -it --rm – env\n```",
+        "```\nkubectl run nginx --image=nginx --restart=Never --env=var1=val1 # then\nkubectl exec -it nginx -- env # or\nkubectl run nginx --restart=Never --image=nginx --env=var1=val1 -it --rm -- env\n```"
+      ],
+      "answers": "D",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This option correctly demonstrates how to create a pod with an environment variable and then verify its existence. The `kubectl` `run` command creates a pod named \"nginx\" using the \"nginx\" image, setting the restart policy to \"Never\" (meaning it won't be automatically restarted if it fails), and defining an environment variable \"var1\" with the value \"val1\". The `kubectl exec -it nginx -- env` command then executes the `env` command inside the \"nginx\" pod, which lists all environment variables, allowing you to verify that `\"var1=val1\"` is present. The alternative `kubectl` `run` `nginx --restart=Never --image=nginx --env=var1=val1 -it --rm -- env` also works. It creates a pod, executes 'env' inside it, and then immediately deletes the pod using `--rm`. This is useful for quick checks without leaving a persistent pod.",
+      "themes": {
+        "resources": [
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "71",
+      "question": "Get list of all the nodes with labels",
+      "options": [
+        "```\nkubectl get nodes --show-labels\n```",
+        "```\nkubectl nodes --show-labels\n```",
+        "```\nkubectl get pods--show-labels\n```",
+        "```\nkubectl ls nodes --show-labels\n```"
+      ],
+      "answers": "A",
+      "topic": "Cluster Architecture, Installation & Configuration",
+      "explanation": "The `kubectl get` nodes `--show-labels` command is the correct way to list all nodes in a Kubernetes cluster along with their associated labels. The `kubectl get` command is used to retrieve information about Kubernetes resources, and the `--show-labels` flag specifically instructs `kubectl` to include the labels in the output. This allows administrators to easily view the labels assigned to each node, which can be useful for node selection, scheduling, and other management tasks.",
+      "themes": {
+        "resources": [
+          "node",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "72",
+      "question": "Get list of persistent volumes and persistent volume claim in the cluster",
+      "options": [
+        "```\nkubectl get pv\nkubectl get pvc\n```",
+        "```\nkubectl get volume\nkubectl get volumec\n```",
+        "```\nkubectl get vp\nkubectl get vc\n```",
+        "```\nkubectl list pv\nkubectl list pvc\n```"
+      ],
+      "answers": "A",
+      "topic": "Storage",
+      "explanation": "This is the correct answer because `kubectl get` pv lists the Persistent Volumes in the cluster, and `kubectl get` pvc lists the Persistent Volume Claims. These are fundamental Kubernetes resources for managing persistent storage. Persistent Volumes (PVs) represent the actual storage resources in the cluster, while Persistent Volume Claims (PVCs) are requests for storage by users. The PVCs are bound to PVs to provide storage to pods.",
+      "themes": {
+        "resources": [
+          "persistent-volume-claim",
+          "persistent-volume",
+          "volume"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "73",
+      "question": "Update the deployment with the image `version` 1.17.4 and verify",
+      "options": [
+        "```\nkubectl image deploy/webapp nginx=nginx:1.17.4 //Verify\nkubectl describe deploy webapp | grep Image\nkubectl get deploy -o=jsonpath='{range.items [*]}{.[*]} {.metadata.name}{\"\\t\"}{.spec.template.spec.containers[*].i mage}{\"\\n\"}'\n```",
+        "```\nkubectl set image deploy/webapp nginx=nginx:1.17.4 //Verify\nkubectl describe deploy webapp | grep Image\nkubectl get deploy -o=jsonpath='{range.items [*]}{.[*]} {.metadata.name}{\"\\t\"}{.spec.template.spec.containers[*].i mage}{\"\\n\"}'\n```",
+        "```\nkubectl set image deploy/webapp nginx=nginx:1.17.4 //Verify\nkubectl describe deploy webapp | grep Image\nkubectl get deploy - {.metadata.name}{\"\\t\"}{.spec.template.spec.containers[*].i mage}{\"\\n\"}'\n```",
+        "```\nkubectl unset image deploy/webapp nginx=nginx:1.17.4 //Verify\nkubectl describe deploy webapp | grep Image\nkubectl get deploy -o=jsonpath='{range.items [*]}{.[*]} {.metadata.name}{\"\\t\"}{.spec.template.spec.containers[*].i mage}{\"\\n\"}'\n```"
+      ],
+      "answers": "B",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This option correctly uses the `kubectl` set image command to update the image of the 'nginx' container within the 'webapp' deployment to `version` 1.17.4. The command `kubectl` set image deploy/webapp `nginx=nginx:1.17.4` specifically targets the 'nginx' container inside the 'webapp' deployment and changes its image. The verification steps are also correct: `kubectl describe` deploy webapp `| grep` Image will show the image used by the deployment. `kubectl get` deploy -o=jsonpath='{range.items [*]}{.[*]} {.metadata.name}{\"\\t\"}{.spec.template.spec.containers[*].i mage}{\"\\n\"}' provides a more structured output of the deployment's image, making it easier to parse programmatically.",
+      "themes": {
+        "resources": [
+          "deployment"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "74",
+      "question": "Create a redis pod, and have it use a non-persistent storage\n\nNote: In exam, you will have access to kubernetes.io site,\n\nRefer : `https://kubernetes.io/docs/tasks/configure-pod-container/configurevolume-storage/`",
+      "options": [
+        "```\napiVersion: v1\nkind: Pod\nmetadata:\nname: redis\nspec:\ncontainers:\n- name: redis\nimage: redis\nvolumeMounts:\n- name: redis-storage\nmountPath: /data/redis\nports:\n- containerPort: 6379\nvolumes:\n- name: redis-storage\nemptyDir: {}\n```",
+        "```\napiVersion: v1\nkind: Deploy\nmetadata:\nname: redis\nspec:\ncontainers:\n- name: redis\nimage: redis\nvolumeMounts:\n- name: redis-storage\nmountPath: /data/redis\nports:\n- containerPort: 6379\nvolumes:\n- name: redis-storage\nemptyDir: {}\n```",
+        "```\napiVersion: v1\nkind: Pod\nmetadata:\nname: redis\nspec:\ncontainers:\n- name: redis\nimage: redis\nports:\n- containerPort: 6379\nvolumes:\n- name: redis-storage\nemptyDir: {}\n```",
+        "```\napiVersion: v1\nkind: Pod\nmetadata:\nname: redis\nspec:\ncontainers:\n- name: redis\nimage: redis\nvolumeMounts:\n- containerPort: 6379\nvolumes:\n- name: redis-storage\nemptyDir: {}\n```"
+      ],
+      "answers": "A",
+      "topic": "Storage",
+      "explanation": "A. This YAML defines a Pod named \"redis\" that runs a Redis container. It utilizes an emptyDir volume named \"redis-storage\". The emptyDir volume provides temporary storage that is tied to the lifecycle of the Pod. When the Pod is deleted, the data in the emptyDir is also deleted, fulfilling the requirement of non-persistent storage. The volumeMounts section correctly mounts the emptyDir volume to the `/data/redis` path within the container, where Redis will store its data.",
+      "themes": {
+        "resources": [
+          "volume",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "75",
+      "question": "Check the Image `version` of nginx-dev pod using jsonpath",
+      "options": [
+        "```\nkubectl list po nginx-dev -o jsonpath='{.spec.containers[].image}{\"\\n\"}'\n```",
+        "```\nkubect1 get po nginx-dev -o jsonpath='{.spec.pods[].image}{\"\\n\"}'\n```",
+        "```\nkubectl get po nginx-dev -o jsonpath='{.spec.containers[].image}{\"\\n\"}'\n```",
+        "```\nkubectl po nginx-dev -o jsonpath='{.spec.containers[].image}{\"\\n\"}'\n```"
+      ],
+      "answers": "C",
+      "topic": "Troubleshooting",
+      "explanation": "This command correctly retrieves the image name of the nginx-dev pod using `kubectl` and jsonpath. `kubectl get` po nginx-dev fetches the pod's information. The `-o jsonpath='{.spec.containers[].image}{\"\\n`\"}' option specifies that we want to extract the image name from the spec.containers array. The [] iterates through all containers in the pod (though in this case, we assume there's only one). .image specifies the image field. Finally, {\"\\n\"} adds a newline character for better readability.",
+      "themes": {
+        "resources": [
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "76",
+      "question": "Print all pod name and all image name and write it to a file\n\nname “/opt/pod-details.txt”",
+      "options": [
+        "```\nkubectl pods -o=custom-columns='Pod Name:metadata.name','Image:spec.containers[*].image' > /opt/pod-details.txt\n```",
+        "```\nkubectl get pods -o=custom-columns='Pod Name:metadata.name','Image:spec.containers[*].image' > /opt/pod-details.txt\n```",
+        "```\nkubectl list pods -o=custom-columns='Pod Name:metadata.name','Image:spec.containers[*].image' > /opt/pod-details.txt\n```",
+        "```\nkubectl list pods -o=custom-columns='Pod Name:metadata.name','Image:spec.containers[*].image' > /opt/pod-details.txt\n```"
+      ],
+      "answers": "B",
+      "topic": "Troubleshooting",
+      "explanation": "This command correctly retrieves the pod names and image names and writes them to the specified file. `kubectl get` pods is the correct command to retrieve information about pods. The `-o=custom-columns` option allows you to specify the columns you want to display. 'Pod Name:metadata.name' extracts the pod name from the metadata. 'Image:spec.containers[*].image' extracts the image name from each container within the pod. The `> /opt/pod-details.txt` redirects the output to the specified file.",
+      "themes": {
+        "resources": [
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "77",
+      "question": "Scale the deployment to 5 replicas",
+      "options": [
+        "```\nkubectl deployment scale webapp –replicas=5 //Verify\nkubectl get deploy\nkubectl get po,rs\n```",
+        "```\nkubectl scale deployment webapp –replicas=5 //Verify\nkubectl get deploy\nkubectl get po,rs\n```",
+        "```\nkubectl spec deployment webapp –replicas=5 //Verify\nkubectl get deploy\nkubectl get po,rs\n```",
+        "```\nkubectl spec deployment webapp –replica=5 //Verify\nkubectl get deploy\nkubectl get po,rs\n```"
+      ],
+      "answers": "B",
+      "topic": "Workloads & Scheduling",
+      "explanation": "The `kubectl scale` command is the correct way to `scale` a deployment in Kubernetes. The syntax `kubectl scale` deployment `--replicas=` directly modifies the replica count of the specified deployment. After executing this command, you can verify the change by using `kubectl get` deploy to check the updated replica count in the deployment's status and `kubectl get` po,rs to observe the creation of new pods and replica sets to match the desired scale.",
+      "themes": {
+        "resources": [
+          "deployment",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "78",
+      "question": "Create a Job with an image node which prints node `version` and\n\nverifies there is a pod created for this job",
+      "options": [
+        "```\nkubectl create job noneversion --image=node -- node -v\nkubectl get job -w\nkubectl get pod YAML File: apiVersion: batch/v1 kind: Job metadata: labels: job-name: noneversion name: noneversion spec: completions: 1 parallelism: 1 labels: job-name: nodeversion spec: containers: - command: - node - -v image: node imagePullPolicy: Always name: nodeversion restartPolicy: Never\n```",
+        "```\nkubectl create job nodeversion --image=node kubectl get job -w\nkubectl get pod YA ML File: apiVersion: batch/v1 kind: Job metadata: labels: job-name: nodeversion name: nodeversion spec: completions: 1 parallelism: 1 selector: matchLabels: job-name: nodeversion template: metadata: labels: job-name: nodeversion spec: containers: image: node imagePullPolicy: Always name: nodeversion restartPolicy: Never\n```",
+        "```\nkubectl apply job nodeversion --image=redis -- node -v\nkubectl get job -w\nkubectl get pod YAML File: apiVersion: batch/v1 kind: Job metadata: labels: job-name: nodeversion name: nodeversion spec: completions: 1 parallelism: 1 selector: matchLabels: job-name: nodeversion template: metadata: labels: job-name: nodeversion spec: containers: - command: - node - -v image: redis imagePullPolicy: Always name: nodeversion restartPolicy: Never\n```",
+        "```\nkubectl create job nodeversion --image=node -- node -v\nkubectl get job -w\nkubectl get pod YAML File: apiVersion: batch/v1 kind: Job metadata: labels: job-name: nodeversion name: nodeversion spec: completions: 1 parallelism: 1 selector: matchLabels: job-name: nodeversion template: metadata: labels: job-name: nodeversion spec: containers: - command: - node - -v image: node imagePullPolicy: Always name: nodeversion restartPolicy: Never\n```"
+      ],
+      "answers": "D",
+      "topic": "Workloads & Scheduling",
+      "explanation": "Option D is correct because it provides a valid YAML definition for a Kubernetes Job that uses the node image and executes the command node `-v` to print the Node.js version. The `kubectl create` job command is used to create a job, and the YAML file defines the job's specifications, including the image to use, the command to execute, and the restart policy. The `kubectl get` job `-w` and `kubectl get` pod commands are used to monitor the job's progress and verify that a pod is created for the job. The selector and matchLabels ensure the job controller correctly identifies and manages the pods it creates.",
+      "themes": {
+        "resources": [
+          "job",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "79",
+      "question": "Create a NetworkPolicy which denies all ingress traffic",
+      "options": [
+        "```\napiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\nname: default-allow\nspec:\npodSelector: {}\npolicyTypes: - Ingress\n```",
+        "```\napiVersion: networking.k8s.io/v1\nkind: Net\nmetadata:\nname: default-deny\nspec:\npodSelector: {}\npolicyTypes: - Ingress\n```",
+        "```\napiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\nname: default\nspec:\npodSelector: {}\npolicyTypes: - Ingress\n```",
+        "```\napiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\nname: default-deny\nspec:\npodSelector: {}\npolicyTypes: - Ingress\n```"
+      ],
+      "answers": "D",
+      "topic": "Services & Networking",
+      "explanation": "Ingress\n\nThis NetworkPolicy effectively denies all ingress traffic. The podSelector: {} selects all pods in the namespace. The policyTypes: `-` Ingress specifies that this policy applies to ingress traffic. Because there are no ingress rules defined under the spec, the default behavior is to `deny` all ingress traffic to the selected pods. This creates a default-deny ingress policy.",
+      "themes": {
+        "resources": [
+          "network-policy"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "80",
+      "question": "Get list of PVs and order by size and write to file – `/opt/pvlist.txt`",
+      "options": [
+        "```\nkubectl get pv --sort-by=.spec.capacity.storage > /opt/pvlist.txt\n```",
+        "```\nkubectl get volume --sort-by=.spec.capacity.storage > /opt/pvlist.txt\n```",
+        "```\nkubectl set pv --sort-by=.spec.capacity.storage > /opt/pvlist.txt\n```",
+        "```\nkubectl list pv --sort-by=.spec.capacity.storage > /opt/pvlist.txt\n```"
+      ],
+      "answers": "A",
+      "topic": "Storage",
+      "explanation": "This is the correct answer because it uses the correct `kubectl` command to retrieve Persistent Volumes (PVs) and `sort` them by their storage capacity. `kubectl get` pv retrieves the PV resources. The `--sort-by=.spec.capacity.storage` flag sorts the output based on the `.spec.capacity.storage` field, which specifies the storage capacity of the PV. Finally, `> /opt/pvlist.txt` redirects the sorted output to the specified file.",
+      "themes": {
+        "resources": [
+          "persistent-volume",
+          "volume"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "81",
+      "question": "Check the history of the specific revision of that deployment",
+      "options": [
+        "```\nkubectl history rollout deploy webapp --revision=3\n```",
+        "```\nkubectl rollout history deploy webapp --revision=3\n```",
+        "```\nkubectl history deploy webapp --revision=3\n```",
+        "```\nkubectl rollout history deploy webapp --revision=-1\n```"
+      ],
+      "answers": "B",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This command is the correct way to view the history of a specific revision of a deployment in Kubernetes. The `kubectl rollout` history command, combined with the deploy resource type and the deployment name (webapp), allows you to `inspect` the `rollout` history. The `--revision=3` flag specifies that you want to see the details of revision number 3.",
+      "themes": {
+        "resources": [
+          "deployment"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "82",
+      "question": "Check the image `version` in pod without the `describe` command",
+      "options": [
+        "```\nkubectl get po nginx -o jsonpath='{.spec.containers[].image}{\"\\n\"}'\n```",
+        "```\nkubectl get fromLocal nginx -o jsonpath='{.spec.containers[].image}{\"\\n\"}'\n```",
+        "```\nkubectl put po nginx -o jsonpath='{.spec.containers[].image}{\"\\n\"}'\n```",
+        "```\nkubectl list po nginx -o jsonpath='{.spec.containers[].image}{\"\\n\"}'\n```"
+      ],
+      "answers": "A",
+      "topic": "Troubleshooting",
+      "explanation": "This command correctly retrieves the image `version` of the container(s) within a pod named 'nginx' without using the `describe` command. `kubectl get` po `nginx` retrieves the pod information. The `-o jsonpath='{.spec.containers[].image}{\"\\n`\"}' option formats the output using JSONPath. .spec.containers[] iterates through all containers in the pod's specification. .image extracts the image name for each container. {\\\"\\n\\\"} adds a newline character after each image name for better readability.",
+      "themes": {
+        "resources": [
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "83",
+      "question": "List all the `events` sorted by timestamp and put them into file.log and verify",
+      "options": [
+        "```\nkubectl list events --sort-by=.metadata.creationTimestamp // putting them into file.log\nkubectl get events --sort-by=.metadata.creationTimestamp > test-file.log cat test-file.log\n```",
+        "```\nkubectl get events --sort-by=.metadata.creationTimestamp // putting them into file.log\nkubectl get events --sort-by=.metadata.creationTimestamp > test-file.log cat test-file.log\n```",
+        "```\nkubectl ls events --sort-by=.metadata.creationTimestamp // putting them into file.log kubectl ls events --sort-by=.metadata.creationTimestamp > test-file.log cat test-file.log\n```",
+        "```\nkubectl get events --sort-by=.metadata.creationTimestamp // putting them into file.log\nkubectl get events --sort-by=.metadata.creationTimestamp > cat test-file.log\n```"
+      ],
+      "answers": "B",
+      "topic": "Troubleshooting",
+      "explanation": "This option correctly uses the `kubectl get events` command with the `--sort-by=.metadata.creationTimestamp` flag to `sort` the `events` by their creation timestamp. The output of this command is then redirected to a file named test-file.log using the `>` operator. Finally, the `cat test-file.log` command is used to verify the contents of the file, confirming that the `events` have been sorted correctly and saved to the file.",
+      "themes": {
+        "resources": [
+          "events"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "84",
+      "question": "Set CPU and memory requests and limits for existing pod name\n\n“nginx-prod”.\n\nSet requests for CPU and Memory as 100m and 256Mi respectively\n\nSet limits for CPU and Memory as 200m and 512Mi respectively",
+      "options": [
+        "```\nkubectl get po\nkubectl set resources po nginx-prod -- limits=core=200m,memory=512Mi --requests=core=100m,memory=256Mi //Verify\nkubectl top po\nkubectl describe po nginx-prod\n```",
+        "```\nkubectl get po\nkubectl set resources po nginx-prod -- limits=cpu=200m,memory=512Mi --requests=cpu=100m,memory=256Mi //Verify\nkubectl top po\nkubectl describe po nginx-prod\n```",
+        "```\nkubectl list po\nkubectl set resources po nginx-prod -- limits=cpu=200m,memory=512Mi --requests=cpu=100m,memory=256Mi //Verify\nkubectl top po\nkubectl describe po nginx-prod\n```",
+        "```\nkubectl get po\nkubectl set resources po nginx-prod -- limits=cpu=500m,memory=212Mi --requests=cpu=300m,memory=256Mi //Verify\nkubectl top po\nkubectl describe po nginx-prod\n```"
+      ],
+      "answers": "B",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This command correctly sets the CPU and memory requests and limits for the existing pod \"nginx-prod\". `kubectl` set resources is the correct command to modify the resource requests and limits of a pod. The syntax --limits=cpu=200m,memory=512Mi correctly sets the CPU limit to 200 millicores and the memory limit to 512MiB. Similarly, --requests=cpu=100m,memory=256Mi correctly sets the CPU request to 100 millicores and the memory request to 256MiB. The `kubectl top` po command can be used to view resource utilization, and `kubectl describe` po nginx-prod will show the configured requests and limits.",
+      "themes": {
+        "resources": [
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "85",
+      "question": "Delete persistent volume and persistent volume claim",
+      "options": [
+        "```\nkubectl remove pvc task-pv-claim kubectl remove pv task-pv-volume // Verif y Kubectl get pv,pvc\n```",
+        "```\nkubectl clear pvc task-pv-claim kubectl clear pv task-pv-volume // Verif y Kubectl get pv,pvc\n```",
+        "```\nkubectl delete pvc task-pv-claim\nkubectl delete pv task-pv-volume // Verif y Kubectl get pv,pvc\n```",
+        "```\nkubectl rm pvc task-pv-claim\nkubectl rm pv task-pv-volume // Verif y Kubectl get pv,pvc\n```"
+      ],
+      "answers": "C",
+      "topic": "Storage",
+      "explanation": "This is the correct answer because `kubectl delete` is the command used to `delete` Kubernetes resources, including PersistentVolumes (PVs) and PersistentVolumeClaims (PVCs). The syntax `kubectl delete` pvc [pvc_name] deletes a PVC, and `kubectl delete` pv [pv_name] deletes a PV. After executing these commands, you can verify the deletion using `kubectl get` pv,pvc, which should no longer list the deleted resources.",
+      "themes": {
+        "resources": [
+          "persistent-volume-claim",
+          "persistent-volume",
+          "volume"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "86",
+      "question": "Create a `nginx` pod that will be deployed to node with the label\n\n`“gpu=true”`",
+      "options": [
+        "```\nkubectl run nginx --image=nginx --restart=Always --dry-run -o yaml > nodeselector-pod.yaml // add the nodeSelector like below and create the pod\nkubectl apply -f nodeselector-pod.yaml vim nodeselector-pod.yaml apiVersion: v1 kind: Pod metadata: name: nginx spec: nodeSelector: gpu: true yaml //Verify\nkubectl get no –show-labels\nkubectl get po\nkubectl describe po nginx | grep Node-Selectors\n```",
+        "```\nkubectl nginx --restart=Always --dry-run -o yaml > nodeselector-pod.yaml // add the nodeSelector like below and create the pod\nkubectl apply -f nodeselector-pod.yaml vim nodeselector-pod.yaml apiVersion: v1 kind: Pod metadata: name: nginx spec: nodeSelector: gpu: true yaml //Verify\nkubectl get no –show-labels\nkubectl get po\nkubectl describe po nginx | grep Node-Selectors\n```",
+        "```\nkubectl run nginx --image=nginx --restart=Always --dry-run -o yaml > nodeselector-pod.yaml // add the nodeSelector like below and create the pod\nkubectl apply -f nodeselector-pod.yaml vim nodeselector-pod.yaml apiVersion: v1 kind: Pod metadata: name: nginx spec: nodeSelector: gpu: true containers: - image: nginx name: nginx restartPolicy: Always\nkubectl apply -f nodeselector-pod.yaml //Verify\nkubectl get no –show-labels\nkubectl get po\nkubectl describe po nginx | grep Node-Selectors\n```",
+        "```\nkubectl exec nginx --image=nginx --restart=Always --dry-run -o yaml > nodeselector-pod.yaml // add the nodeSelector like below and create the pod\nkubectl apply -f nodeselector-pod.yaml vim nodeselector-pod.yaml apiVersion: v1 kind: Pod metadata: name: nginx spec: nodeSelector: gpu: true yaml //Verify\nkubectl get no –show-labels\nkubectl get po\nkubectl describe po nginx | grep Node-Selectors\n```"
+      ],
+      "answers": "A",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This option correctly outlines the steps to create an Nginx pod and schedule it on a node with the label \"`gpu=true`\". It uses `kubectl` `run` with the `--dry-run` flag to generate the YAML definition, then adds the nodeSelector to the pod specification. Finally, it applies the YAML file using `kubectl` apply. The verification steps are also correct, using `kubectl get` nodes `--show-labels` to check node labels, `kubectl get` pods to check pod status, and `kubectl describe` pod to confirm the node selector is applied.",
+      "themes": {
+        "resources": [
+          "node",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "87",
+      "question": "Clean the cluster by deleting deployment and hpa you just\n\ncreated",
+      "options": [
+        "```\nkubectl delete deploy webapp\n```",
+        "```\nkubectl delete hpa webapp\n```",
+        "```\nkubectl destroy deploy webapp\n```",
+        "```\nkubectl destroyhpa webapp\n```",
+        "```\nkubectl rm deploy webapp\n```",
+        "```\nkubectl rm hpa webapp\n```"
+      ],
+      "answers": "B",
+      "topic": "Workloads & Scheduling",
+      "explanation": "The command `kubectl delete` hpa webapp is the correct way to `delete` a Horizontal Pod Autoscaler (HPA) named \"webapp\" in Kubernetes. The `kubectl delete` command is used to remove resources from the cluster, and hpa specifies the resource type to be deleted. This command targets the HPA resource specifically.\n\nThe `kubectl` command does not use `rm` to remove resources. The correct subcommand is delete. This option is syntactically incorrect.\n\nThe `kubectl` command does not use `rm` to remove resources. The correct subcommand is delete. This option is syntactically incorrect.",
+      "themes": {
+        "resources": [
+          "horizontal-pod-autoscaler",
+          "deployment"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "88",
+      "question": "Apply the autoscaling to this deployment with minimum 10 and\n\nmaximum 20 replicas and target CPU of 85% and verify hpa is\n\ncreated and replicas are increased to 10 from 1",
+      "options": [
+        "```\nkubectl autoscale deploy webapp --min=40 --max=20 --cpu percent=85 kubectl get hpa\nkubectl get pod -l app=webapp\n```",
+        "```\nkubectl autoscale deploy webapp --min=10 --max=20 --cpu percent=85 kubectl get hpa\nkubectl get pod -l app=webapp\n```",
+        "```\nkubectl deploy autoscale webapp --min=10 --max=20 --cpu percent=85 kubectl get hpa\nkubectl get pod -l app=webapp\n```",
+        "```\nkubectl scale deploy webapp --min=10 --max=20 --cpu percent=85 kubectl get hpa\nkubectl get pod -l app=webapp\n```"
+      ],
+      "answers": "B",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This option correctly uses the `kubectl autoscale` command to create a Horizontal Pod Autoscaler (HPA) for the webapp deployment. The `--min=10` and `--max=20` flags set the minimum and maximum number of replicas, respectively. The `--cpu-percent=85` flag sets the target CPU utilization to 85%. The subsequent `kubectl get` hpa command verifies the HPA creation, and `kubectl get` pod `-l app=webapp` checks the number of replicas of the deployment, ensuring it scales to the minimum of 10.",
+      "themes": {
+        "resources": [
+          "horizontal-pod-autoscaler",
+          "deployment",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "89",
+      "question": "Create a busybox pod that runs the command “env” and save the output to “envpod” file",
+      "options": [
+        "```\nkubectl run busybox --image=easybox --restart=Never –-y-run -- env > envpod.yaml\n```",
+        "```\nkubectl run busybox --image=busybox --restart=Never –-y-run > envpod.yaml\n```",
+        "```\nkubectl run busybox --image=busybox --restart=Never –-rm -it -- env > envpod.yaml\n```",
+        "```\nkubectl run busybox --image=busybox --restart=Never –-y-run -- Env > envpod.yaml\n```"
+      ],
+      "answers": "C",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This command correctly creates a pod named `busybox` using the `busybox` image. The `--restart=Never` flag ensures that the pod will not be restarted if it fails. The `--rm` flag ensures that the pod is deleted after it completes. The `-it` flags allocate a pseudo-TTY and keep stdin open even if not attached. The `env` command is executed within the pod, and its output is redirected to a file named `envpod` using the `>` operator.",
+      "themes": {
+        "resources": [
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "90",
+      "question": "Watch the job that runs 10 times one by one and verify 10 pods are created and `delete` those after it’s completed",
+      "options": [
+        "```\nkubectl get jobs -all\nkubectl get po\nkubectl delete j hello-job-mu\n```",
+        "```\nkubectl list job -w\nkubectl list po\nkubectl delete job hello-job\n```",
+        "```\nkubectl get job -w\nkubectl get po kubectl remove job hello-job\n```",
+        "```\nkubectl get job -w\nkubectl get po\nkubectl delete job hello-job\n```"
+      ],
+      "answers": "D",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This option is correct because it provides the commands to watch the job, verify the pods, and then `delete` the job. `kubectl get` job `-w` watches the job status. `kubectl get` po retrieves the pods created by the job, allowing verification that 10 pods are created. Finally, `kubectl delete` job hello-job deletes the job named \"hello-job\". This sequence fulfills the requirements of the question.",
+      "themes": {
+        "resources": [
+          "job",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "91",
+      "question": "List all the pods sorted by name",
+      "options": [
+        "```\nkubectl set pods --sort-by=name\n```",
+        "```\nkubectl get pods --sort-by=name\n```",
+        "```\nkubectl get pods --sort-by=.metadata.name\n```",
+        "```\nkubectl list pods --sort-by=name\n```"
+      ],
+      "answers": "C",
+      "topic": "Troubleshooting",
+      "explanation": "This command correctly lists all pods sorted alphabetically by their names. The `kubectl get` pods command retrieves the list of pods in the current namespace. The `--sort-by` flag allows you to specify a field to `sort` the results by. In this case, `.metadata.name` specifies that the pods should be sorted based on their names, which are stored in the metadata.name field of each pod's object definition.",
+      "themes": {
+        "resources": [
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "92",
+      "question": "Create an `nginx` pod and load environment values from the above configmap “keyvalcfgmap” and `exec` into the pod and verify the environment variables and `delete` the pod",
+      "options": [
+        "```\nkubectl run nginx --image=busybox--restart=Always --dry-run -o yaml > nginx-pod.yml // edit the yml to below file and create vim nginx-pod.yml apiVersion: v1 kind: Pod metadata: labels: run: nginx name: nginx spec: containers: - image: busybox name: nginx envFrom: - configMapRef: name: keyvalcfgmap restartPolicy: Always\nkubectl apply -f nginx-pod.yml // verify\nkubectl exec -it nginx -- env\nkubectl delete po nginx\n```",
+        "```\nkubectl run nginx --image=nginx --restart=Always --dry-run -o yaml > nginx-pod.yml // edit the yml to below file and create vim nginx-pod.yml apiVersion: v1 kind: Pod metadata: labels: run: nginx name: nginx spec: containers: - image: nginx name: nginx envFrom: - configMapRef: name: keyvalcfgmap restartPolicy: Always\nkubectl apply -f nginx-pod.yml // verify\nkubectl exec -it nginx -- env\nkubectl delete po nginx\n```",
+        "```\nkubectl apply nginx --image=nginx --restart=Always --dry-run -o yaml > nginx-pod.yml // edit the yml to below file and create vim nginx-pod.yml apiVersion: v1 kind: Pod metadata: labels: run: nginx name: nginx spec: containers: - image: nginx name: nginx envFrom: - configMapRef: name: keyvalcfgmap restartPolicy: Always\nkubectl apply -f nginx-pod.yml // verify\nkubectl exec -it nginx -- env\nkubectl rm po nginx\n```",
+        "```\n// first run this command to save the pod yaml\nkubectl run nginx --image=nginx --restart=Always --dry-run -o yaml > nginx-pod.yml // edit the yml to below file and create vim nginx-pod.yml apiVersion: v1 name: nginx envFrom: - configMapRef: name: keyvalcfgmap restartPolicy: Always\nkubectl apply -f nginx-pod.yml // verify\nkubectl exec -it nginx -- env\nkubectl delete po nginx\n```"
+      ],
+      "answers": "B",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This option correctly outlines the steps to create an `nginx` pod, load environment variables from a ConfigMap, verify the variables, and then `delete` the pod. It uses `kubectl` `run` with `--dry-run` to generate a pod definition in YAML format. The YAML is then edited to include the envFrom section, referencing the keyvalcfgmap ConfigMap. `kubectl` `apply` creates the pod, `kubectl exec` verifies the environment variables, and `kubectl delete` removes the pod.",
+      "themes": {
+        "resources": [
+          "config-map",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "93",
+      "question": "Create a Cronjob with busybox image that prints date and hello\n\nfrom kubernetes cluster message for every minute",
+      "options": [
+        "```\napiVersion: batch/v1beta1\nkind: CronJob\nmetadata:\nname: date-job\nspec:\nschedule: \"*/1 * * * *\"\njobTemplate:\nspec:\ntemplate:\nspec:\ncontainers:\n- name: hello\nimage: busybox\nargs: - /bin/sh - -c - date; echo Hello from the Kubernetes cluster\nrestartPolicy: OnFailure kubectl apply -f date-job.yaml kubectl get cj date-job -o yaml\n```",
+        "```\napiVersion: batch/v1beta1\nkind: CronJob\nmetadata:\nname: date-job\nspec:\nschedule: \"*/1 * * * *\"\njobTemplate:\nspec:\ntemplate: - /bin/sh - -c - date; echo Hello from the Kubernetes cluster\nrestartPolicy: OnFailure kubectl apply -f date-job.yaml //Verify kubectl get cj date-job -o yaml\n```",
+        "```\napiVersion: batch/v1beta1\nkind: CronJob\nmetadata:\nname: date-job\nspec:\nschedule: \"* * * * */1\"\njobTemplate:\nspec:\ntemplate:\nspec:\ncontainers:\n- name: hello\nimage: busybox\nargs: - /bin/sh - -c - date; echo Hello from the Kubernetes cluster\nrestartPolicy: OnFailure kubectl apply -f date-job.yaml kubectl get cj date-job -o yaml\n```",
+        "```\napiVersion: batch/v1beta1\nkind: CronJob\nmetadata:\nname: date-job\nspec:\nschedule: \"* * * * *\"\njobTemplate:\nspec:\ntemplate:\nspec:\ncontainers:\n- name: hello\nimage: busybox\nargs: - /bin/sh - -c - date; echo Hello from the Kubernetes cluster\nrestartPolicy: OnFailure kubectl apply -f date-job.yaml kubectl get cj date-job -o yaml\n```"
+      ],
+      "answers": "A",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This YAML definition correctly defines a CronJob. The apiVersion and kind are correct for a CronJob. The metadata.name sets the name of the CronJob. The spec.schedule is set to \"*/1 * * * *\", which means the job will `run` every minute. The jobTemplate.spec.template.spec.containers defines the container that will be run. The image is set to busybox, and the args specify the command to `run` inside the container, which is date; `echo` Hello from the Kubernetes cluster. The restartPolicy is set to OnFailure, which means the container will be restarted if it fails. The `kubectl` `apply` `-f date-job.yaml` command creates the CronJob, and the `kubectl get` cj date-job `-o` yaml command verifies the CronJob.",
+      "themes": {
+        "resources": [
+          "cron-job",
+          "job"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "94",
+      "question": "Create an `nginx` pod and list the pod with different levels of verbosity",
+      "options": [
+        "```\n// create a pod\nkubectl run nginx --image=nginx --restart=Never --port=80 // List the pod with different verbosity\nkubectl get po nginx --verbose=7,8,9\n```",
+        "```\n// create a pod\nkubectl run nginx --image=nginx --restart=Never --port=80 // List the pod with different verbosity\nkubectl get po nginx --verb=7 kubectl get po nginx --verb=6 kubectl get po nginx --verb=9\n```",
+        "```\n// create a pod\nkubectl run nginx --image=nginx --restart=Never --port=80 // List the pod with different verbosity\nkubectl get po nginx --verbose\n```",
+        "```\n// create a pod\nkubectl run nginx --image=nginx --restart=Never --port=80 // List the pod with different verbosity\nkubectl get po nginx --v=7 kubectl get po nginx --v=8 kubectl get po nginx --v=9\n```"
+      ],
+      "answers": "D",
+      "topic": "Troubleshooting",
+      "explanation": "The `kubectl` command-line tool provides a `-v` or `--v` flag to control the verbosity of the output. This is useful for debugging and understanding what `kubectl` is doing behind the scenes. The verbosity level is an integer, with higher numbers indicating more detailed output. The command `kubectl get` po `nginx` -v=7, `kubectl get` po `nginx` -v=8, and `kubectl get` po `nginx -v=9` will each list the pod named \"nginx\" with different levels of verbosity, allowing you to see more detailed information about the request and response. The pod creation command is also correct, creating a simple `nginx` pod.",
+      "themes": {
+        "resources": [
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "95",
+      "question": "Check the history of deployment",
+      "options": [
+        "```\nkubectl roll history deployment webapp\n```",
+        "```\nkubectl history rollout deployment webapp\n```",
+        "```\nkubectl history deployment webapp\n```",
+        "```\nkubectl rollout history deployment webapp\n```"
+      ],
+      "answers": "D",
+      "topic": "Workloads & Scheduling",
+      "explanation": "The `kubectl rollout` history deployment webapp command is the correct way to view the revision history of a deployment named \"webapp\". This command displays the details of each revision, allowing you to track changes made to the deployment over time. This is crucial for understanding how the deployment has evolved and for potentially rolling back to a previous `version` if necessary. The `rollout` subcommand is specifically designed for managing deployments and their updates.",
+      "themes": {
+        "resources": [
+          "deployment"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "96",
+      "question": "List all service account and create a service account called “admin”",
+      "options": [
+        "```\nkubectl get sa\nkubectl get sa --all-namespaces\nkubectl create sa admin //Verify\nkubectl get sa admin -o yaml\n```",
+        "```\nkubectl get sa\nkubectl get sa --all-namespaces\nkubectl delete sa admin //Verify\nkubectl get sa admin -o yaml\n```",
+        "```\nkubectl get sa\nkubectl get sa --all-namespaces //Verify\nkubectl get sa admin -o yaml\n```",
+        "```\nkubectl list sa\nkubectl list sa --all-namespaces\nkubectl create sa admin //Verify\nkubectl get sa admin -o yaml\n```"
+      ],
+      "answers": "A",
+      "topic": "Cluster Architecture, Installation & Configuration",
+      "explanation": "This option correctly lists all service accounts in the current namespace and then lists all service accounts across all namespaces. It then creates a service account named \"admin\" in the current namespace. Finally, it verifies the creation of the service account by outputting its YAML definition. This is the correct sequence of commands to accomplish the task.",
+      "themes": {
+        "resources": [
+          "service-account",
+          "namespace"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "97",
+      "question": "Get the pods with labels `env=dev` and `env=prod` and output the labels as well",
+      "options": [
+        "```\nkubectl ls pods -l 'env in (dev,prod)' --show-labels\n```",
+        "```\nkubectl get pods -l 'env in (dev,prod)' --show-labels\n```",
+        "```\nkubectl get pods -l 'env between (dev,prod)' --show-labels\n```",
+        "```\nkubectl pods -l 'env in (dev,prod)' --show-labels\n```"
+      ],
+      "answers": "B",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This command correctly retrieves pods that have a label 'env' with a value of either 'dev' or 'prod', and then displays the labels associated with those pods. `kubectl get` pods is the correct command to retrieve pod information. The `-l env` in (dev,prod)' flag filters the pods based on the label 'env' having a value within the set 'dev' and 'prod'. The `--show-labels` flag ensures that the labels are included in the output.",
+      "themes": {
+        "resources": [
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "98",
+      "question": "List all configmap and secrets in the cluster in all namespace and write it to a file `/opt/configmapsecret`",
+      "options": [
+        "```\nkubectl get configmap,secrets --namespaces > /opt/configmap-secret // Verif y Cat /opt/configmap-secret\n```",
+        "```\nkubectl read configmap,secrets --all-namespaces > /opt/configmap-secret // Verif y Cat /opt/configmap-secret\n```",
+        "```\nkubectl get configmap,secrets --all> /opt/configmap-secret // Verif y Cat /opt/configmap-secret\n```",
+        "```\nkubectl get configmap,secrets --all-namespaces > /opt/configmap-secret // Verif y Cat /opt/configmap-secret\n```"
+      ],
+      "answers": "D",
+      "topic": "Troubleshooting",
+      "explanation": "This command correctly retrieves all ConfigMaps and Secrets from all namespaces in the cluster and redirects the output to the file `/opt/configmap-secret`. The `kubectl get` command is used to retrieve resources. Specifying configmap,secrets retrieves both types of resources. The `--all-namespaces` flag ensures that resources from all namespaces are included. The `>` operator redirects the output to the specified file.",
+      "themes": {
+        "resources": [
+          "config-map",
+          "secret",
+          "namespace"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "99",
+      "question": "Create an `nginx` pod with container Port 80 and it should only receive traffic only it checks the\n\nendpoint / on port 80 and verify and `delete` the pod.",
+      "options": [
+        "```\nkubectl run nginx --image=nginx --restart=Never --port=80 -- dry-run -o yaml > nginx-pod.yaml // add the readinessProbe section and create vim nginx-pod.yaml run: nginx name: nginx spec: containers: - image: nginx name: nginx ports: - containerPort: 60 readinessProbe: httpGet: path: / port: 60 restartPolicy: Never\nkubectl apply -f nginx-pod.yaml // verify\nkubectl describe pod nginx | grep -i readiness\nkubectl delete po nginx\n```",
+        "```\nkubectl run nginx --image=nginx --restart=Never --port=80 -- dry-run -o yaml > nginx-pod.yaml // add the readinessProbe section and create vim nginx-pod.yaml apiVersion: v1 kind: Pod metadata: labels: run: nginx name: nginx spec: containers: - image: nginx name: nginx ports: - containerPort: 80 readinessProbe: httpGet: path: / port: 80 restartPolicy: Never // verify\nkubectl describe pod nginx | grep -i readiness\nkubectl delete po nginx\n```",
+        "```\nkubectl run nginx --image=nginx --restart=Never --port=80 -- dry-run -o yaml > nginx-pod.yaml // add the readinessProbe section and create vim nginx-pod.yaml apiVersion: v1 kind: Pod metadata: labels: run: nginx name: nginx spec: containers: - image: nginx name: nginx ports: - containerPort: 80 readinessProbe: httpGet: path: / port: 80 restartPolicy: Never\nkubectl apply -f nginx-pod.yaml // verify\nkubectl describe pod nginx | grep -i readiness\nkubectl delete po nginx\n```",
+        "```\nkubectl run nginx --image=node--restart=Never --port=80 -- dry-run -o yaml > nginx-pod.yaml // add the readinessProbe section and create vim nginx-pod.yaml apiVersion: v1 kind: Pod metadata: labels: run: nginx name: node spec: containers: - image: nginx name: nginx ports: - containerPort: 80 readinessProbe: httpGet: path: / port: 80 restartPolicy: Never\nkubectl apply -f nginx-pod.yaml // verify\nkubectl describe pod nginx | grep -i readiness\nkubectl delete po nginx\n```"
+      ],
+      "answers": "C",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This answer correctly creates a pod definition file using `kubectl` `run` with the `--dry-run` and `-o` yaml flags to output the YAML configuration. It then adds a readinessProbe to the pod specification. The readinessProbe uses an HTTP GET request to check the / endpoint on port 80. The pod is created using `kubectl` apply, verified using `kubectl` describe, and then deleted using `kubectl` delete. This ensures that the pod only receives traffic when the readiness probe reports success, indicating that the `nginx` server is ready to handle requests.",
+      "themes": {
+        "resources": [
+          "probes",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    },
+    {
+      "id": "100",
+      "question": "Create a job named “hello-job” with the image busybox which echos “Hello I’m running job”",
+      "options": [
+        "```\nkubectl create job hello-job --image=busybox --dry-run -o yaml -- echo \"Hello I’m running job\" > hello-job.yaml\nkubectl create -f hello-job.yaml //Verify Job\nkubectl get job\nkubectl get po\nkubectl logs hello-job-*\n```",
+        "```\nkubectl create job hello-job --image=redis--dry-run -o yaml -- echo \"Hello I’m running job\" > hello-job.yaml\nkubectl create -f hello-job.yaml //Verify Job\nkubectl get po\nkubectl logs hello-job-*\n```",
+        "```\nkubectl create job hello-job --image=busybox --dry-run -o yaml -- echo \"Hello I’m running job\" > hello-job.yaml\nkubectl create -f hello-job.yaml //Verify Job\nkubectl get po\nkubectl logs hello-job-*\n```",
+        "```\nkubectl create job hello-job --image=busybox --dry-run -o yaml -- journactl > hello-job.yaml\nkubectl create -f hello-job.yaml //Verify Job\nkubectl get po\nkubectl logs hello-job-*\n```"
+      ],
+      "answers": "A",
+      "topic": "Workloads & Scheduling",
+      "explanation": "This option correctly creates a Job using kubectl. The `--dry-run -o` yaml flags generate the YAML definition of the Job without actually creating it. The output is redirected to a file named hello-job.yaml. The `kubectl create -f hello-job.yaml` command then creates the Job from the YAML file. Finally, the commands `kubectl get` job, `kubectl get` po, and `kubectl logs` hello-job-* are used to verify the job's creation, check the pod status, and view the logs, respectively. The `--` is crucial to separate the `kubectl` arguments from the command to be executed within the container.",
+      "themes": {
+        "resources": [
+          "job",
+          "pod"
+        ],
+        "questionTypes": [
+          "how-to"
+        ]
+      }
+    }
+  ]
+}

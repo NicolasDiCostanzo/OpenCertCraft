@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { texts } from '../../texts/en';
 import type { Question, QuestionAnswer } from '../../types';
-import { parseInlineSegments } from '../../utils/markdownImage';
 import Badge from '../ui/BaseBadge.vue';
 import Card from '../ui/BaseCard.vue';
+import RichText from '../ui/RichText.vue';
 import QuestionOptionsList from '../quiz/QuestionOptionsList.vue';
 import SecondaryButton from '../ui/SecondaryButton.vue';
 
@@ -18,10 +18,6 @@ const emit = defineEmits<{
   'toggle-flag': [questionId: string]
 }>()
 
-function renderSegments(text: string) {
-  return parseInlineSegments(text)
-}
-
 </script>
 
 <template>
@@ -35,12 +31,9 @@ function renderSegments(text: string) {
           </Badge>
         </template>
       </div>
-      <p class="detail-panel__question">
-        <template v-for="(segment, i) in renderSegments(question.question)" :key="i">
-          <img v-if="segment.type === 'image'" :src="segment.value" :alt="segment.alt" class="inline-image" />
-          <template v-else>{{ segment.value }}</template>
-        </template>
-      </p>
+      <div class="detail-panel__question">
+        <RichText :text="question.question" />
+      </div>
       <QuestionOptionsList
         class="detail-options"
         :question="question"
@@ -62,7 +55,8 @@ function renderSegments(text: string) {
         </p>
       </div>
       <div v-if="question.explanation" class="detail-panel__explanation">
-        <strong>{{ texts.explanation }}:</strong> {{ question.explanation }}
+        <strong>{{ texts.explanation }}:</strong>
+        <RichText :text="question.explanation" />
       </div>
       <SecondaryButton size="md" @click="emit('toggle-flag', question.id)">
         {{ flagged ? texts.unflag : texts.flag }}

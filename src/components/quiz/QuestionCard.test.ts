@@ -56,4 +56,24 @@ describe('QuestionCard', () => {
     const wrapper = mountCard(makeQuestion(), ['B'], false)
     expect(wrapper.find('.feedback').exists()).toBe(false)
   })
+
+  it('renders fenced commands in the explanation as code blocks', () => {
+    const question = makeQuestion({
+      answers: 'A',
+      explanation: '```\nkubectl get pods\nkubectl scale deployment webapp --replicas=5\n```\n\nThis scales the deployment.',
+    })
+    const wrapper = mountCard(question, ['B'], true)
+    const blocks = wrapper.findAll('.feedback pre')
+    expect(blocks).toHaveLength(1)
+    expect(blocks[0].text()).toContain('kubectl scale deployment webapp --replicas=5')
+    expect(wrapper.find('.feedback').text()).not.toContain('```')
+  })
+
+  it('keeps line breaks between explanation paragraphs intact', () => {
+    const question = makeQuestion({ answers: 'A', explanation: 'First reason.\n\nSecond reason.' })
+    const wrapper = mountCard(question, ['B'], true)
+    const text = wrapper.find('.feedback-explanation .rich-text__text')
+    expect(text.exists()).toBe(true)
+    expect(text.text()).toBe('First reason.\n\nSecond reason.')
+  })
 })
