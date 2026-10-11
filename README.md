@@ -75,14 +75,7 @@ Defaults to stack `sam-app` (the stack `samconfig.toml` deploys to); override wi
 
 ## Adding a new certification
 
-There is no in-app upload. Adding a cert is a **data change, not a code change** — a question bundle plus one manifest entry, because all exam-specific content lives in JSON and the app adapts to whatever taxonomy a cert declares.
-
-1. **Open an issue** requesting the certification.
-2. If you already have the questions formatted, attach the JSON per [`schema-reference.md`](./docs/certifications/schema-reference.md).
-3. Otherwise, hand [`adding-a-certification.md`](./docs/certifications/adding-a-certification.md) to any LLM together with your raw questions (e.g. an ExamTopics `.txt` dump) and it returns the formatted bundle and manifest entry. Attach the result to the issue, or open a PR adding `src/assets/<CODE> questions.json` plus an entry in `src/assets/cert-manifest.json`.
-4. A maintainer reviews and merges. Certs are discovered at build time, so it goes live on the next deploy.
-
-Then run `npm run test:certs` — the authoritative validity check. It fails on a malformed bundle, a missing or mismatched manifest entry, a question count that disagrees with the file, and theme problems (a tag a question uses but the registry doesn't declare, a declared value no question uses, an untagged question, sibling certs whose theme groups are named differently). Schema validation alone won't catch a bad theme, because an undeclared tag is only a *warning* there — and it surfaces to the user as an empty filter result.
+If you wish to add a new certification, open a new issue and give it the name of the certification. If you know where to find good, reliable questions, please attach a link to this issue. If not, I won't rest until I find some.
 
 ## Documentation
 
@@ -91,31 +84,6 @@ Then run `npm run test:certs` — the authoritative validity check. It fails on 
 | [`docs/certifications/adding-a-certification.md`](./docs/certifications/adding-a-certification.md) | How to convert a raw exam dump into a cert-bundle JSON + its manifest entry, with a strict "never guess" rule |
 | [`docs/certifications/schema-reference.md`](./docs/certifications/schema-reference.md) | Normative cert-bundle + user-progress schema (every field, scoring rules) |
 | [`AGENTS.md`](./AGENTS.md) | Context file for any AI coding agent: stack, commands, architecture rules, testing philosophy, conventions |
-
-## Project layout
-
-```
-.
-├── AGENTS.md                 # Context file for any AI coding agent
-├── template.yaml             # Optional AWS backend (SAM): Cognito, API GW, Lambdas, DynamoDB, S3+CloudFront
-├── docs/
-│   ├── certifications/       # How to add a cert + the normative schema
-│   └── presentation/         # Architecture overview, presentation notes
-├── e2e/                      # Playwright end-to-end specs
-├── index.html                # Vite entry
-├── vite.config.ts
-└── src/
-    ├── brand.ts              # App name
-    ├── types.ts              # Shared TypeScript interfaces (the schema source of truth in code)
-    ├── router/               # Hash-history router + guard
-    ├── views/                # Route-level components (selector, configure, session, review, history, auth)
-    ├── stores/               # Pinia: progress, quiz history, session, account, preferences
-    ├── composables/          # Quiz loader, account, sync, theme mode
-    ├── utils/                # Schema validator, scoring, sampling, filters
-    ├── components/           # UI (badges, pills, quiz components)
-    ├── assets/               # Built-in cert bundles + cert-manifest.json
-    └── lambda/               # Backend pull/push handlers (not bundled into the frontend)
-```
 
 ## Testing
 
@@ -129,7 +97,7 @@ npm run test && npm run test:e2e
 
 ## Contributing
 
-Issues and pull requests are welcome — especially [question corrections](#question-accuracy) and new certification banks. You don't need to touch application code to contribute a cert; see [Adding a new certification](#adding-a-new-certification).
+Issues and pull requests are welcome — especially [question corrections](#question-accuracy) and new certification banks.
 
 ## License
 
