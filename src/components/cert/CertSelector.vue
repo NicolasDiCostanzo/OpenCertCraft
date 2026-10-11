@@ -13,6 +13,7 @@ watch(
   (groups) => {
     openIds.value = new Set(groups.map((group) => group.familyId))
   },
+  { immediate: true },
 )
 
 function onToggle(familyId: string, event: Event) {

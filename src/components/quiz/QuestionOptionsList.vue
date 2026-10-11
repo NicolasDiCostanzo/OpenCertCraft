@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { Question } from '../../types'
-import { parseInlineSegments } from '../../utils/markdownImage'
+import RichText from '../ui/RichText.vue'
 
 const props = withDefaults(defineProps<{
   question: Question
@@ -38,10 +38,6 @@ function letterClass(letter: string): string {
   if (props.selected.includes(letter)) return 'option--incorrect'
   return 'option--missed'
 }
-
-function renderSegments(text: string) {
-  return parseInlineSegments(text)
-}
 </script>
 
 <template>
@@ -62,12 +58,9 @@ function renderSegments(text: string) {
         @change="emit('toggle', letterFor(i))"
       />
       <span class="option-letter">{{ letterFor(i) }}</span>
-      <span class="option-text">
-        <template v-for="(segment, j) in renderSegments(option)" :key="j">
-          <img v-if="segment.type === 'image'" :src="segment.value" :alt="segment.alt" class="inline-image" />
-          <template v-else>{{ segment.value }}</template>
-        </template>
-      </span>
+      <div class="option-text">
+        <RichText :text="option" />
+      </div>
     </label>
   </div>
 </template>
@@ -142,6 +135,8 @@ function renderSegments(text: string) {
 }
 
 .option-text {
+  flex: 1;
+  min-width: 0;
   color: var(--text);
   text-align: left;
 }

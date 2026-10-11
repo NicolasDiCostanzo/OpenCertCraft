@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import { texts } from '../../texts/en';
 import type { Question } from '../../types';
-import { parseInlineSegments } from '../../utils/markdownImage';
+import RichText from '../ui/RichText.vue';
 import QuestionOptionsList from './QuestionOptionsList.vue';
 
 const props = defineProps<{
@@ -34,10 +34,6 @@ function isCorrectLetter(letter: string): boolean {
   return expected.includes(letter)
 }
 
-function renderSegments(text: string) {
-  return parseInlineSegments(text)
-}
-
 const isCorrect = computed(() => props.selected.length > 0 && props.selected.every((l) => isCorrectLetter(l)) && props.selected.length === (Array.isArray(props.question.answers) ? props.question.answers.length : 1))
 
 const displayAnswer = computed(() => {
@@ -48,12 +44,9 @@ const displayAnswer = computed(() => {
 
 <template>
   <div class="question">
-    <p class="question-text">
-      <template v-for="(segment, i) in renderSegments(question.question)" :key="i">
-        <img v-if="segment.type === 'image'" :src="segment.value" :alt="segment.alt" class="inline-image" />
-        <template v-else>{{ segment.value }}</template>
-      </template>
-    </p>
+    <div class="question-text">
+      <RichText :text="question.question" />
+    </div>
 
     <ul v-if="question.promptImages?.length" class="prompt-images">
       <li v-for="(img, i) in question.promptImages" :key="i">
@@ -73,14 +66,15 @@ const displayAnswer = computed(() => {
 
     <div v-if="reveal" class="feedback" :class="isCorrect ? 'feedback--correct' : 'feedback--incorrect'">
       <span class="feedback-badge">{{ isCorrect ? texts.correct : texts.incorrect }}</span>
-      <p v-if="!isCorrect || question.explanation" class="feedback-explanation">
+      <div v-if="!isCorrect || question.explanation" class="feedback-explanation">
         <template v-if="!isCorrect">
           <strong>{{ texts.correctAnswer }}:</strong> {{ displayAnswer }}<br />
         </template>
         <template v-if="question.explanation">
-          <strong>{{ texts.explanation }}:</strong> {{ question.explanation }}
+          <strong>{{ texts.explanation }}:</strong>
+          <RichText :text="question.explanation" />
         </template>
-      </p>
+      </div>
     </div>
   </div>
 </template>
