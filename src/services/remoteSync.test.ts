@@ -33,6 +33,7 @@ describe('remote sync adapter', () => {
     const payload = {
       progress: { format: 'quiz-progress', version: 1, exportedAt: '', byExamCode: {} },
       history: null,
+      favorites: null,
     }
     fetchMock.mockResolvedValue(new Response(JSON.stringify(payload), { status: 200 }))
 
@@ -61,7 +62,7 @@ describe('remote sync adapter', () => {
     fetchAuthSessionMock.mockResolvedValue({ tokens: { accessToken: 'token-1' } })
     fetchMock.mockResolvedValue(new Response('', { status: 200 }))
 
-    const payload = { progress: null, history: null }
+    const payload = { progress: null, history: null, favorites: null }
     await expect(adapter.push(payload)).resolves.toBeUndefined()
     expect(fetchMock).toHaveBeenCalledWith('https://sync.example.com/sync', {
       method: 'PUT',
@@ -84,7 +85,7 @@ describe('remote sync adapter', () => {
       })
     })
 
-    const payload = { progress: null, history: null }
+    const payload = { progress: null, history: null, favorites: null }
     const pushPromise = adapter.push(payload, undefined, controller.signal)
 
     await vi.waitFor(() => expect(fetchMock).toHaveBeenCalled())

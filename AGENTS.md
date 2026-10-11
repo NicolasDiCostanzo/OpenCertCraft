@@ -46,6 +46,7 @@ src/
   router/index.ts           Hash-history router; route guard redirects unknown :certCode to home
   views/                    Route-level components: CertSelectorView, QuizConfigureView, QuizSessionView, QuizReviewView
   stores/userProgress.ts    Pinia store: per-question progress keyed by exam code; export/import with merge
+  stores/userFavorites.ts  Pinia store: favorited exam codes; export/import with merge; synced like progress/history
   composables/useQuizLoader.ts  Lazy per-cert bundle loading (import.meta.glob + cert-manifest.json) + validation
   utils/schemaValidator.ts  Pure cert-bundle validator (+ isQuestionAnswerable); has tests
   utils/markdownImage.ts    Per-option inline image rendering helper

@@ -9,6 +9,7 @@ import { useAccount } from '../composables/useAccount';
 import { useQuizLoader } from '../composables/useQuizLoader';
 import { isAuthAvailable, isSyncConfigured } from '../config';
 import { useQuizHistoryStore } from '../stores/quizHistory';
+import { useUserFavoritesStore } from '../stores/userFavorites';
 import { useUserProgressStore } from '../stores/userProgress';
 import { texts } from '../texts/en';
 
@@ -20,8 +21,12 @@ import { texts } from '../texts/en';
   const { groupedCerts } = useQuizLoader()
   const historyStore = useQuizHistoryStore();
   const progressStore = useUserProgressStore();
+  const favoritesStore = useUserFavoritesStore();
   const hasLocalData = computed(
-    () => historyStore.entries.length > 0 || Object.keys(progressStore.byExamCode).length > 0,
+    () =>
+      historyStore.entries.length > 0 ||
+      Object.keys(progressStore.byExamCode).length > 0 ||
+      favoritesStore.certCodes.length > 0,
   )
 
   function openSignIn() {

@@ -21,6 +21,7 @@ const event = (body: unknown) => ({
 
 const validProgress = { format: 'quiz-progress', version: 1, exportedAt: 'now', byExamCode: {} }
 const validHistory = { format: 'quiz-history', version: 1, exportedAt: 'now', entries: [] }
+const validFavorites = { format: 'quiz-favorites', version: 1, exportedAt: 'now', certCodes: ['DVA-C02'] }
 const validQuestionProgress = { questionId: 'q1', attempts: 1, timesCorrect: 1, timesWrong: 0, flagged: false, lastSeenAt: 1 }
 const validHistoryEntry = {
   id: 'h1',
@@ -69,11 +70,31 @@ describe('push handler payload validation', () => {
     expect(send).not.toHaveBeenCalled()
   })
 
+  it.each([
+    ['missing certCodes', { ...validFavorites, certCodes: undefined }],
+    ['certCodes not an array', { ...validFavorites, certCodes: {} }],
+    ['a non-string cert code', { ...validFavorites, certCodes: [1] }],
+    ['wrong format', { ...validFavorites, format: 'other' }],
+    ['unsupported version', { ...validFavorites, version: 2 }],
+  ])('rejects a favorites document with %s', async (_label, favorites) => {
+    const result = await handler(event({ favorites }))
+
+    expect(result.statusCode).toBe(400)
+    expect(send).not.toHaveBeenCalled()
+  })
+
   it('accepts a payload with valid progress and history documents', async () => {
     const progress = { ...validProgress, byExamCode: { 'DVA-C02': { q1: validQuestionProgress } } }
     const history = { ...validHistory, entries: [validHistoryEntry] }
 
     const result = await handler(event({ progress, history }))
+
+    expect(result.statusCode).toBe(200)
+    expect(send).toHaveBeenCalledOnce()
+  })
+
+  it('accepts a payload with a valid favorites document', async () => {
+    const result = await handler(event({ favorites: validFavorites }))
 
     expect(result.statusCode).toBe(200)
     expect(send).toHaveBeenCalledOnce()

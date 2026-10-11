@@ -1,6 +1,6 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { DynamoDBDocumentClient, TransactWriteCommand } from '@aws-sdk/lib-dynamodb'
-import { validateHistoryExportFile, validateProgressExportFile } from '../../utils/syncPayloadValidator'
+import { validateFavoritesExportFile, validateHistoryExportFile, validateProgressExportFile } from '../../utils/syncPayloadValidator'
 
 const client = new DynamoDBClient({})
 const docClient = DynamoDBDocumentClient.from(client)
@@ -9,6 +9,7 @@ const tableName = process.env.TABLE_NAME!
 interface SyncPayload {
   progress: unknown
   history: unknown
+  favorites: unknown
 }
 
 interface PutTransactItem {
@@ -28,7 +29,7 @@ function itemExceedsMaxSize(item: Record<string, unknown>): boolean {
 }
 
 function recordCommand(
-  kind: 'PROGRESS' | 'HISTORY',
+  kind: 'PROGRESS' | 'HISTORY' | 'FAVORITES',
   payload: unknown,
   pk: string,
   timestamp: string,
@@ -85,6 +86,13 @@ export const handler = async (event: {
       body: JSON.stringify({ message: 'Invalid history document' }),
     }
   }
+  if ('favorites' in payload && payload.favorites !== null && validateFavoritesExportFile(payload.favorites).length > 0) {
+    return {
+      statusCode: 400,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: 'Invalid favorites document' }),
+    }
+  }
 
   const pk = `SYNC#${userId}`
   const timestamp = now()
@@ -95,6 +103,9 @@ export const handler = async (event: {
   }
   if ('history' in payload) {
     commands.push(recordCommand('HISTORY', payload.history, pk, timestamp))
+  }
+  if ('favorites' in payload) {
+    commands.push(recordCommand('FAVORITES', payload.favorites, pk, timestamp))
   }
 
   for (const command of commands) {

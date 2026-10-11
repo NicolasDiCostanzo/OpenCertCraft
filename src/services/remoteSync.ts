@@ -1,11 +1,6 @@
 import { awsConfig, isSyncConfigured } from '../config'
-import type { HistoryExportFile, ProgressExportFile } from '../types'
-import { validateHistoryExportFile, validateProgressExportFile } from '../utils/syncPayloadValidator'
-
-export interface RemoteSyncPayload {
-  progress: ProgressExportFile | null
-  history: HistoryExportFile | null
-}
+import type { RemoteSyncPayload } from '../types'
+import { validateFavoritesExportFile, validateHistoryExportFile, validateProgressExportFile } from '../utils/syncPayloadValidator'
 
 export class InvalidPullPayload extends Error {
   constructor(message: string) {
@@ -52,7 +47,11 @@ function validatePullPayload(value: unknown): RemoteSyncPayload | null {
     const errors = validateHistoryExportFile(v.history)
     if (errors.length > 0) throw new InvalidPullPayload(`sync pull failed: ${errors[0]}`)
   }
-  return v as unknown as RemoteSyncPayload
+  if (v.favorites !== null && v.favorites !== undefined) {
+    const errors = validateFavoritesExportFile(v.favorites)
+    if (errors.length > 0) throw new InvalidPullPayload(`sync pull failed: ${errors[0]}`)
+  }
+  return { progress: v.progress ?? null, history: v.history ?? null, favorites: v.favorites ?? null } as unknown as RemoteSyncPayload
 }
 
 function createRemoteSyncAdapter(apiUrl: string): RemoteSyncAdapter {
