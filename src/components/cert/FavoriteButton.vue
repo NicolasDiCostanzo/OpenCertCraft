@@ -19,7 +19,6 @@ function onClick(event: Event) {
     class="favorite-btn"
     :class="{ 'favorite-btn--active': active }"
     :aria-label="active ? `${texts.favoriteRemove}: ${certName}` : `${texts.favoriteAdd}: ${certName}`"
-    :aria-pressed="active"
     @click="onClick"
   >
     <IconHeart :filled="active" />
