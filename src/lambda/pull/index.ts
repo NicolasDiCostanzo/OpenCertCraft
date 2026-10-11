@@ -8,6 +8,7 @@ const tableName = process.env.TABLE_NAME!
 interface SyncResponse {
   progress: unknown
   history: unknown
+  favorites: unknown
 }
 
 export const handler = async (event: {
@@ -35,10 +36,11 @@ export const handler = async (event: {
     }
   }
 
-  const response: SyncResponse = { progress: null, history: null }
+  const response: SyncResponse = { progress: null, history: null, favorites: null }
   for (const item of result.Items ?? []) {
     if (item.SK === 'PROGRESS') response.progress = item.data
     if (item.SK === 'HISTORY') response.history = item.data
+    if (item.SK === 'FAVORITES') response.favorites = item.data
   }
 
   return {

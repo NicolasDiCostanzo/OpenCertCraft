@@ -36,7 +36,7 @@ describe('pull handler', () => {
     const result = await handler(event)
 
     expect(result.statusCode).toBe(200)
-    expect(JSON.parse(result.body)).toEqual({ progress: null, history: null })
+    expect(JSON.parse(result.body)).toEqual({ progress: null, history: null, favorites: null })
   })
 
   it('queries with strong consistency so a pull right after a push never reads a stale/missing item', async () => {
@@ -47,17 +47,22 @@ describe('pull handler', () => {
     expect(send.mock.calls[0][0].input).toMatchObject({ ConsistentRead: true })
   })
 
-  it('maps the PROGRESS and HISTORY items to their fields', async () => {
+  it('maps the PROGRESS, HISTORY and FAVORITES items to their fields', async () => {
     send.mockResolvedValue({
       Items: [
         { PK: 'SYNC#user-1', SK: 'PROGRESS', data: { byExamCode: {} } },
         { PK: 'SYNC#user-1', SK: 'HISTORY', data: { entries: [] } },
+        { PK: 'SYNC#user-1', SK: 'FAVORITES', data: { certCodes: ['DVA-C02'] } },
       ],
     })
 
     const result = await handler(event)
 
-    expect(JSON.parse(result.body)).toEqual({ progress: { byExamCode: {} }, history: { entries: [] } })
+    expect(JSON.parse(result.body)).toEqual({
+      progress: { byExamCode: {} },
+      history: { entries: [] },
+      favorites: { certCodes: ['DVA-C02'] },
+    })
   })
 
   it('returns 500 instead of throwing when DynamoDB is unavailable', async () => {

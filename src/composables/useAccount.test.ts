@@ -2,12 +2,12 @@ import { createPinia, setActivePinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { createApp } from 'vue'
-import type { RemoteSyncPayload } from '../services/remoteSync'
 import { useQuizHistoryStore } from '../stores/quizHistory'
 import { useUserAccountStore } from '../stores/userAccount'
+import { useUserFavoritesStore } from '../stores/userFavorites'
 import { useUserProgressStore } from '../stores/userProgress'
 import { texts } from '../texts/en'
-import type { AuthUser } from '../types'
+import type { AuthUser, RemoteSyncPayload } from '../types'
 
 const pushRoute = vi.fn()
 vi.mock('vue-router', () => ({
@@ -69,6 +69,7 @@ function makePayload(): RemoteSyncPayload {
       },
     },
     history: { format: 'quiz-history', version: 1, exportedAt, entries: [historyEntry] },
+    favorites: { format: 'quiz-favorites', version: 1, exportedAt, certCodes: ['DVA-C02'] },
   }
 }
 
@@ -89,6 +90,8 @@ function seedDeviceData() {
     flags: ['qDev'],
     result: { percentCorrect: 0, passed: false, timesCorrect: 0, totalAnswered: 1 },
   })
+  const favoritesStore = useUserFavoritesStore()
+  favoritesStore.certCodes.push('DVA-C02')
 }
 
 beforeEach(async () => {
@@ -128,8 +131,10 @@ describe('useAccount sign-in', () => {
     expect(progressStore.byExamCode['DVA-C02']?.qDev).toBeUndefined()
     expect(useQuizHistoryStore().entries).toEqual([historyEntry])
 
+    expect(useUserFavoritesStore().certCodes).toEqual(['DVA-C02'])
     expect(account.guestProgress).not.toBeNull()
     expect(account.guestHistory?.entries.map((e) => e.id)).toEqual(['hDev'])
+    expect(account.guestFavorites?.certCodes).toEqual(['DVA-C02'])
     expect(pushRoute).toHaveBeenCalledWith({ name: 'cert-selector' })
   })
 
@@ -648,10 +653,13 @@ describe('useAccount push serialization', () => {
 describe('useAccount session ends', () => {
   it('signing out restores the guest snapshot captured at sign-in', async () => {
     seedDeviceData()
+    useUserFavoritesStore().certCodes.push('SAA-C03')
     vi.mocked(auth.signIn).mockResolvedValue(USER)
     adapter.pull.mockResolvedValue(makePayload())
     const { signIn, signOut } = useAccount()
     await signIn('dev@example.com', 'Passw0rd!')
+
+    expect(useUserFavoritesStore().certCodes).toEqual(['DVA-C02'])
 
     await signOut()
 
@@ -659,6 +667,7 @@ describe('useAccount session ends', () => {
     expect(progressStore.byExamCode['DVA-C02']?.qDev?.attempts).toBe(3)
     expect(progressStore.byExamCode['DVA-C02']?.q1).toBeUndefined()
     expect(useQuizHistoryStore().entries.map((e) => e.id)).toEqual(['hDev'])
+    expect(useUserFavoritesStore().certCodes).toEqual(['DVA-C02', 'SAA-C03'])
     expect(useUserAccountStore().guestProgress).toBeNull()
   })
 
@@ -675,6 +684,7 @@ describe('useAccount session ends', () => {
 
     expect(useUserProgressStore().byExamCode).toEqual({})
     expect(useQuizHistoryStore().entries).toEqual([])
+    expect(useUserFavoritesStore().certCodes).toEqual([])
   })
 
   it('signing out clears the account state and returns to the welcome screen', async () => {
@@ -918,6 +928,7 @@ describe('useAccount session restore on load', () => {
     account.stashGuest(
       { format: 'quiz-progress', version: 1, exportedAt: '', byExamCode: {} },
       { format: 'quiz-history', version: 1, exportedAt: '', entries: [] },
+      { format: 'quiz-favorites', version: 1, exportedAt: '', certCodes: [] },
     )
     vi.mocked(auth.restoreSession).mockResolvedValue(USER)
     adapter.pull.mockResolvedValue(makePayload())

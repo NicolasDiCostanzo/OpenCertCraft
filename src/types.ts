@@ -78,6 +78,19 @@ export interface HistoryExportFile {
   entries: QuizHistoryEntry[]
 }
 
+export interface FavoritesExportFile {
+  format: 'quiz-favorites'
+  version: number
+  exportedAt: string
+  certCodes: string[]
+}
+
+export interface RemoteSyncPayload {
+  progress: ProgressExportFile | null
+  history: HistoryExportFile | null
+  favorites: FavoritesExportFile | null
+}
+
 export type QuizMode = 'preparation' | 'exam'
 export type AccountMode = 'account' | 'local'
 export type ReplayMode = 'all' | 'wrong' | 'flagged' | 'unattempted'
