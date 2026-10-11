@@ -33,8 +33,8 @@ import ExternalLink from './ExternalLink.vue'
     }
   }
 
-  function goToWelcome() {
-    router.push({ name: 'welcome' })
+  function goToSignIn() {
+    router.push({ name: 'auth', query: { mode: 'signin' } })
   }
 </script>
 
@@ -59,7 +59,7 @@ import ExternalLink from './ExternalLink.vue'
         <SecondaryButton size="sm" :disabled="signOutPending" @click="handleSignOut">{{ texts.signOut }}
         </SecondaryButton>
       </div>
-      <SecondaryButton v-else-if="account.accountMode === 'local'" size="sm" @click="goToWelcome">
+      <SecondaryButton v-else-if="account.accountMode === 'local'" size="sm" @click="goToSignIn">
         {{ texts.signIn }}
       </SecondaryButton>
       <button type="button" class="theme-switch" role="switch" :aria-checked="preferences.dark"
