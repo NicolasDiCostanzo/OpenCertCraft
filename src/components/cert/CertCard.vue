@@ -25,29 +25,31 @@ function toggleFavorite() {
 </script>
 
 <template>
-  <Card
-    :as="RouterLink"
-    :to="{ name: 'quiz-dashboard', params: { certCode: cert.exam.code } }"
-    padding="lg"
-    bg="bg"
-    shadow
-    hoverable
-    class="cert-card"
-  >
+  <div class="cert-card">
+    <Card
+      :as="RouterLink"
+      :to="{ name: 'quiz-dashboard', params: { certCode: cert.exam.code } }"
+      padding="lg"
+      bg="bg"
+      shadow
+      hoverable
+      class="cert-card__link"
+    >
+      <h2>{{ cert.exam.name }}</h2>
+      <CertCodeBadge :code="cert.exam.code" />
+      <ExamFacts :exam="cert.exam">
+        <CertFact :label="texts.questionBankLabel" :value="String(cert.questionCount)" />
+      </ExamFacts>
+      <p v-if="cert.exam.instructions" class="cert-instructions">{{ cert.exam.instructions }}</p>
+      <p class="cert-cta">{{ texts.viewDashboardCta }}</p>
+    </Card>
     <FavoriteButton
       class="cert-card__favorite"
       :active="isFavorite"
       :cert-name="cert.exam.name"
       @toggle="toggleFavorite"
     />
-    <h2>{{ cert.exam.name }}</h2>
-    <CertCodeBadge :code="cert.exam.code" />
-    <ExamFacts :exam="cert.exam">
-      <CertFact :label="texts.questionBankLabel" :value="String(cert.questionCount)" />
-    </ExamFacts>
-    <p v-if="cert.exam.instructions" class="cert-instructions">{{ cert.exam.instructions }}</p>
-    <p class="cert-cta">{{ texts.viewDashboardCta }}</p>
-  </Card>
+  </div>
 </template>
 
 <style scoped>
@@ -55,8 +57,18 @@ function toggleFavorite() {
   position: relative;
   display: flex;
   flex-direction: column;
+}
+
+.cert-card__link {
+  display: flex;
+  flex-direction: column;
   gap: 12px;
+  flex: 1;
   text-decoration: none;
+}
+
+.cert-card__link h2 {
+  padding-right: 32px;
 }
 
 .cert-card__favorite {
