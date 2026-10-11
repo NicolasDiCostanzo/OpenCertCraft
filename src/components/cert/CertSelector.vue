@@ -1,17 +1,36 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
+import { useUserFavoritesStore } from '../../stores/userFavorites';
 import { texts } from '../../texts/en';
-import type { CertFamilyGroup } from '../../types';
+import type { CertBundleMeta, CertFamilyGroup } from '../../types';
 import CertCard from './CertCard.vue';
+
+const FAVORITES_ID = 'favorites'
 
 const props = defineProps<{ groups: CertFamilyGroup[] }>()
 
-const openIds = ref<Set<string>>(new Set())
+const favoritesStore = useUserFavoritesStore()
+
+const favoritesGroup = computed<CertFamilyGroup>(() => {
+  const byCode = new Map(props.groups.flatMap((group) => group.certs).map((cert) => [cert.exam.code, cert]))
+  const certs = favoritesStore.certCodes
+    .map((code) => byCode.get(code))
+    .filter((cert): cert is CertBundleMeta => cert !== undefined)
+  return { familyId: FAVORITES_ID, label: texts.favorites, certs }
+})
+
+function defaultOpenIds(): Set<string> {
+  return favoritesGroup.value.certs.length > 0 ? new Set([FAVORITES_ID]) : new Set()
+}
+
+const openIds = ref<Set<string>>(defaultOpenIds())
+
+const sections = computed<CertFamilyGroup[]>(() => [favoritesGroup.value, ...props.groups])
 
 watch(
   () => props.groups,
   () => {
-    openIds.value = new Set()
+    openIds.value = defaultOpenIds()
   },
   { immediate: true },
 )
@@ -25,7 +44,7 @@ function onToggle(familyId: string, event: Event) {
 }
 
 function expandAll() {
-  openIds.value = new Set(props.groups.map((group) => group.familyId))
+  openIds.value = new Set([FAVORITES_ID, ...props.groups.map((group) => group.familyId)])
 }
 
 function collapseAll() {
@@ -50,19 +69,26 @@ function collapseAll() {
       </button>
     </div>
     <details
-      v-for="group in groups"
-      :key="group.familyId"
+      v-for="section in sections"
+      :key="section.familyId"
       class="cert-family"
-      :open="openIds.has(group.familyId)"
-      @toggle="onToggle(group.familyId, $event)"
+      :class="{ 'cert-family--favorites': section.familyId === FAVORITES_ID }"
+      :open="openIds.has(section.familyId)"
+      @toggle="onToggle(section.familyId, $event)"
     >
       <summary class="cert-family__summary">
         <span class="cert-family__chevron" aria-hidden="true">▼</span>
-        <span class="cert-family__title">{{ group.label }}</span>
-        <span class="cert-family__count">{{ texts.familyCertCount(group.certs.length) }}</span>
+        <span v-if="section.familyId === FAVORITES_ID" class="cert-family__title">
+          {{ section.label }}
+        </span>
+        <span v-else class="cert-family__title">{{ section.label }}</span>
+        <span class="cert-family__count">{{ texts.familyCertCount(section.certs.length) }}</span>
       </summary>
       <div class="cert-grid">
-        <CertCard v-for="cert in group.certs" :key="cert.exam.code" :cert="cert" />
+        <p v-if="section.certs.length === 0 && section.familyId === FAVORITES_ID" class="cert-grid__empty">
+          {{ texts.favoriteEmptyState }}
+        </p>
+        <CertCard v-for="cert in section.certs" :key="cert.exam.code" :cert="cert" />
       </div>
     </details>
   </div>
@@ -149,6 +175,14 @@ h1 {
   margin: 0;
   font-size: 1.25rem;
   color: var(--text-h);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cert-family__heart {
+  width: 18px;
+  height: 18px;
 }
 
 .cert-family__count {
@@ -164,5 +198,12 @@ h1 {
   width: 100%;
   padding: 0 20px 20px;
   box-sizing: border-box;
+}
+
+.cert-grid__empty {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 4px 0;
+  color: var(--text);
 }
 </style>

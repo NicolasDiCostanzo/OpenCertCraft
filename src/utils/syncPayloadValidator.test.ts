@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { validateHistoryExportFile, validateProgressExportFile } from './syncPayloadValidator'
+import { validateFavoritesExportFile, validateHistoryExportFile, validateProgressExportFile } from './syncPayloadValidator'
 
 const validQuestionProgress = { questionId: 'q1', attempts: 1, timesCorrect: 1, timesWrong: 0, flagged: false, lastSeenAt: 1 }
 const validHistoryEntry = {
@@ -16,6 +16,7 @@ const validHistoryEntry = {
 
 const validProgress = { format: 'quiz-progress', version: 1, exportedAt: 'now', byExamCode: {} }
 const validHistory = { format: 'quiz-history', version: 1, exportedAt: 'now', entries: [] }
+const validFavorites = { format: 'quiz-favorites', version: 1, exportedAt: 'now', certCodes: [] }
 
 describe('validateProgressExportFile', () => {
   it('accepts a well-formed progress document', () => {
@@ -86,5 +87,29 @@ describe('validateHistoryExportFile', () => {
     ],
   ])('rejects a document where %s', (_label, value, expectedErrors) => {
     expect(validateHistoryExportFile(value)).toEqual(expectedErrors)
+  })
+})
+
+describe('validateFavoritesExportFile', () => {
+  it('accepts a well-formed favorites document', () => {
+    expect(validateFavoritesExportFile(validFavorites)).toEqual([])
+  })
+
+  it('accepts a document listing several certification codes', () => {
+    const favorites = { ...validFavorites, certCodes: ['DVA-C02', 'SAA-C03'] }
+    expect(validateFavoritesExportFile(favorites)).toEqual([])
+  })
+
+  it.each([
+    ['the value is not an object', 'nope', ['invalid favorites document']],
+    ['the value is an array', [], ['invalid favorites document']],
+    ['format is wrong', { ...validFavorites, format: 'other' }, ['invalid favorites.format']],
+    ['version is not a safe integer', { ...validFavorites, version: 1.5 }, ['invalid favorites.version']],
+    ['version is a different supported-looking integer', { ...validFavorites, version: 2 }, ['invalid favorites.version']],
+    ['exportedAt is not a string', { ...validFavorites, exportedAt: 1 }, ['invalid favorites.exportedAt']],
+    ['certCodes is not an array', { ...validFavorites, certCodes: 'nope' }, ['invalid favorites.certCodes']],
+    ['certCodes holds a non-string code', { ...validFavorites, certCodes: [1] }, ['invalid favorites.certCodes']],
+  ])('rejects a document where %s', (_label, value, expectedErrors) => {
+    expect(validateFavoritesExportFile(value)).toEqual(expectedErrors)
   })
 })

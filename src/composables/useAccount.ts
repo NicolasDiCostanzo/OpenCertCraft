@@ -5,6 +5,7 @@ import type { RemoteSyncPayload } from '../services/remoteSync'
 import { getSyncAdapter, InvalidPullPayload } from '../services/remoteSync'
 import { useQuizHistoryStore } from '../stores/quizHistory'
 import { useUserAccountStore } from '../stores/userAccount'
+import { useUserFavoritesStore } from '../stores/userFavorites'
 import { useUserProgressStore } from '../stores/userProgress'
 import { texts } from '../texts/en'
 import type { AuthUser } from '../types'
@@ -14,6 +15,8 @@ const PROGRESS_FORMAT = 'quiz-progress'
 const PROGRESS_VERSION = 1
 const HISTORY_FORMAT = 'quiz-history'
 const HISTORY_VERSION = 1
+const FAVORITES_FORMAT = 'quiz-favorites'
+const FAVORITES_VERSION = 1
 
 const FLAG_TOGGLE_DEBOUNCE_MS = 400
 
@@ -37,6 +40,7 @@ export function useAccount() {
   const account = useUserAccountStore()
   const progressStore = useUserProgressStore()
   const historyStore = useQuizHistoryStore()
+  const favoritesStore = useUserFavoritesStore()
   const sync = getSyncAdapter()
 
   // False when a pulled document doesn't match the format/version this build expects:
@@ -48,6 +52,8 @@ export function useAccount() {
     if (progress && (progress.format !== PROGRESS_FORMAT || progress.version !== PROGRESS_VERSION)) return false
     const history = payload?.history
     if (history && (history.format !== HISTORY_FORMAT || history.version !== HISTORY_VERSION)) return false
+    const favorites = payload?.favorites
+    if (favorites && (favorites.format !== FAVORITES_FORMAT || favorites.version !== FAVORITES_VERSION)) return false
     return true
   }
 
@@ -55,6 +61,7 @@ export function useAccount() {
     if (!isSupportedPayload(payload)) return false
     progressStore.replaceAll(payload?.progress ? payload.progress.byExamCode : {})
     historyStore.replaceAll(payload?.history ? payload.history.entries : [])
+    favoritesStore.replaceAll(payload?.favorites ? payload.favorites.certCodes : [])
     return true
   }
 
@@ -84,6 +91,7 @@ export function useAccount() {
     const payload = {
       progress: progressStore.exportProgress(),
       history: historyStore.exportHistory(),
+      favorites: favoritesStore.exportFavorites(),
     }
     const next = pendingPush
       .catch(() => undefined)
@@ -134,12 +142,14 @@ export function useAccount() {
     }
     if (remote?.progress) progressStore.importProgress(remote.progress)
     if (remote?.history) historyStore.importHistory(remote.history)
+    if (remote?.favorites) favoritesStore.importFavorites(remote.favorites)
     const controller = new AbortController()
     activePushAbort = controller
     const attemptPush = sync.push(
       {
         progress: progressStore.exportProgress(),
         history: historyStore.exportHistory(),
+        favorites: favoritesStore.exportFavorites(),
       },
       () => authAttempt === attempt,
       controller.signal,
@@ -170,7 +180,11 @@ export function useAccount() {
     account.user = user
     account.accountMode = 'account'
     if (!wasSignedIn) {
-      account.stashGuest(progressStore.exportProgress(), historyStore.exportHistory())
+      account.stashGuest(
+        progressStore.exportProgress(),
+        historyStore.exportHistory(),
+        favoritesStore.exportFavorites(),
+      )
     }
     const ok =
       options.migrateGuest && !wasSignedIn
@@ -194,6 +208,7 @@ export function useAccount() {
         const guest = account.takeGuestSnapshot()
         progressStore.replaceAll(guest.progress?.byExamCode ?? {})
         historyStore.replaceAll(guest.history?.entries ?? [])
+        favoritesStore.replaceAll(guest.favorites?.certCodes ?? [])
         account.accountMode = null
         account.user = null
       }
@@ -306,6 +321,11 @@ export function useAccount() {
         historyStore.replaceAll(guest.history.entries)
       } else {
         historyStore.replaceAll([])
+      }
+      if (guest.favorites) {
+        favoritesStore.replaceAll(guest.favorites.certCodes)
+      } else {
+        favoritesStore.replaceAll([])
       }
     }
     account.user = null

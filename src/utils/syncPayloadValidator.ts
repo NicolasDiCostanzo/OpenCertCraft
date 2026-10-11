@@ -1,5 +1,6 @@
 const PROGRESS_VERSION = 1
 const HISTORY_VERSION = 1
+const FAVORITES_VERSION = 1
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
@@ -78,6 +79,20 @@ export function validateHistoryExportFile(value: unknown): string[] {
     value.entries.forEach((entry, index) => {
       if (!isValidHistoryEntry(entry)) errors.push(`invalid history.entries[${index}]`)
     })
+  }
+  return errors
+}
+
+export function validateFavoritesExportFile(value: unknown): string[] {
+  if (!isPlainObject(value)) return ['invalid favorites document']
+  const errors: string[] = []
+  if (value.format !== 'quiz-favorites') errors.push('invalid favorites.format')
+  if (value.version !== FAVORITES_VERSION) errors.push('invalid favorites.version')
+  if (typeof value.exportedAt !== 'string') errors.push('invalid favorites.exportedAt')
+  if (!Array.isArray(value.certCodes)) {
+    errors.push('invalid favorites.certCodes')
+  } else if (!value.certCodes.every((code) => typeof code === 'string')) {
+    errors.push('invalid favorites.certCodes')
   }
   return errors
 }

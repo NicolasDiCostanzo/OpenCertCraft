@@ -2,7 +2,7 @@ import { createPinia, setActivePinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { createApp, nextTick } from 'vue'
-import type { HistoryExportFile, ProgressExportFile } from '../types'
+import type { FavoritesExportFile, HistoryExportFile, ProgressExportFile } from '../types'
 import { useUserAccountStore } from './userAccount'
 
 function createTestPinia() {
@@ -46,14 +46,17 @@ describe('userAccount store', () => {
     const store = useUserAccountStore()
     const progress = { format: 'quiz-progress', version: 1, exportedAt: 'now', byExamCode: {} } as ProgressExportFile
     const history = { format: 'quiz-history', version: 1, exportedAt: 'now', entries: [] } as HistoryExportFile
+    const favorites = { format: 'quiz-favorites', version: 1, exportedAt: 'now', certCodes: [] } as FavoritesExportFile
 
-    store.stashGuest(progress, history)
+    store.stashGuest(progress, history, favorites)
     const snapshot = store.takeGuestSnapshot()
 
     expect(snapshot.progress).toStrictEqual(progress)
     expect(snapshot.history).toStrictEqual(history)
+    expect(snapshot.favorites).toStrictEqual(favorites)
     expect(store.guestProgress).toBeNull()
     expect(store.guestHistory).toBeNull()
+    expect(store.guestFavorites).toBeNull()
   })
 
   it('takeGuestSnapshot returns nulls when nothing was stashed', () => {
@@ -61,6 +64,7 @@ describe('userAccount store', () => {
 
     expect(snapshot.progress).toBeNull()
     expect(snapshot.history).toBeNull()
+    expect(snapshot.favorites).toBeNull()
   })
 
   it('preserves the complete guest history snapshot without truncation', () => {
@@ -78,8 +82,9 @@ describe('userAccount store', () => {
       result: { percentCorrect: 100, passed: true, timesCorrect: 1, totalAnswered: 1 },
     }))
     const history = { format: 'quiz-history', version: 1, exportedAt: 'now', entries } as HistoryExportFile
+    const favorites = { format: 'quiz-favorites', version: 1, exportedAt: 'now', certCodes: [] } as FavoritesExportFile
 
-    store.stashGuest(progress, history)
+    store.stashGuest(progress, history, favorites)
 
     expect(store.guestHistory?.entries).toHaveLength(60)
     expect(store.guestHistory?.entries.map((e) => e.id)).toEqual(entries.map((e) => e.id))

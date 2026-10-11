@@ -6,6 +6,7 @@ import { createApp } from 'vue'
 import { createMemoryHistory, createRouter } from 'vue-router'
 import { useQuizHistoryStore } from '../stores/quizHistory'
 import { useUserAccountStore } from '../stores/userAccount'
+import { useUserFavoritesStore } from '../stores/userFavorites'
 import { useUserProgressStore } from '../stores/userProgress'
 import { texts } from '../texts/en'
 import WelcomeView from './WelcomeView.vue'
@@ -45,6 +46,7 @@ beforeEach(() => {
   account.user = null
   useUserProgressStore().replaceAll({})
   useQuizHistoryStore().replaceAll([])
+  useUserFavoritesStore().replaceAll([])
 })
 
 describe('WelcomeView', () => {
@@ -113,5 +115,12 @@ describe('WelcomeView', () => {
     const wrapper = mountWelcome()
 
     expect(wrapper.text()).not.toContain(texts.welcomeUploadDataCta)
+  })
+
+  it('offers the upload option when the device only has favorites', () => {
+    useUserFavoritesStore().certCodes.push('DVA-C02')
+    const wrapper = mountWelcome()
+
+    expect(wrapper.text()).toContain(texts.welcomeUploadDataCta)
   })
 })
