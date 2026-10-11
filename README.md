@@ -1,5 +1,11 @@
 # OpenCertCraft
 
+<p align="center">
+  <img src="public/logos/favicon.svg" alt="airy" width="96" height="96" />
+</p>
+
+<p align="center"><em>A free quiz app to practice certification exams — <strong>highly customizable</strong> quizzes, and <strong>no account, fully local by default</strong> (sync is optional), with built-in question banks for several IT certifications.</em></p>
+
 [![CI](https://github.com/NicolasDiCostanzo/opencertcraft/actions/workflows/ci.yml/badge.svg)](https://github.com/NicolasDiCostanzo/opencertcraft/actions/workflows/ci.yml)
 [![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL%203.0-blue.svg)](./LICENSE)
 
