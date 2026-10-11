@@ -1,11 +1,16 @@
 import { flushPromises, mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import App from './App.vue'
 import { router } from './router'
 import { useUserAccountStore } from './stores/userAccount'
 import { useUserPreferencesStore } from './stores/userPreferences'
 import { texts } from './texts/en'
+
+vi.mock('./config', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('./config')>()),
+  isAuthAvailable: () => true,
+}))
 
 beforeEach(() => {
   setActivePinia(createPinia())
@@ -66,14 +71,15 @@ describe('app title link', () => {
     expect(wrapper.find('.app-title').attributes('href')).toBe('/')
   })
 
-  it('offers a way back to the welcome page in local mode', async () => {
+  it('routes the sign-in shortcut straight to the auth page in local mode', async () => {
     useUserAccountStore().accountMode = 'local'
     wrapper = mount(App, { global: { plugins: [router] } })
 
     await wrapper.findAll('button').find((b) => b.text() === texts.signIn)!.trigger('click')
     await flushPromises()
 
-    expect(router.currentRoute.value.path).toBe('/')
+    expect(router.currentRoute.value.name).toBe('auth')
+    expect(router.currentRoute.value.query.mode).toBe('signin')
   })
 
   it('hides the sign-in shortcut for a signed-in account', () => {
