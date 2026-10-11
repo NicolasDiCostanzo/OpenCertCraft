@@ -1,11 +1,14 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { texts } from '../../texts/en'
 import type { ExamInfo } from '../../types'
-import { formatPassingScore } from '../../utils/examDisplay'
+import { areWeightsUniform, formatPassingScore } from '../../utils/examDisplay'
 import CertFact from './CertFact.vue'
 import WeightPill from './WeightPill.vue'
 
-defineProps<{ exam: ExamInfo }>()
+const props = defineProps<{ exam: ExamInfo }>()
+
+const showWeights = computed(() => !(props.exam.weights && areWeightsUniform(props.exam.weights)))
 </script>
 
 <template>
@@ -17,7 +20,8 @@ defineProps<{ exam: ExamInfo }>()
       <CertFact :label="texts.passingScoreLabel" :value="formatPassingScore(exam.passingScore)" />
     </dl>
     <ul v-if="exam.weights" class="exam-facts-weights">
-      <WeightPill v-for="(weight, topic) in exam.weights" :key="topic" :topic="topic" :weight="weight" />
+      <WeightPill v-for="(weight, topic) in exam.weights" :key="topic" :topic="topic" :weight="weight"
+        :show-weight="showWeights" />
     </ul>
   </div>
 </template>
