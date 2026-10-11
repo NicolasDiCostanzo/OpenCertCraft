@@ -10,8 +10,8 @@ const openIds = ref<Set<string>>(new Set())
 
 watch(
   () => props.groups,
-  (groups) => {
-    openIds.value = new Set(groups.map((group) => group.familyId))
+  () => {
+    openIds.value = new Set()
   },
   { immediate: true },
 )
