@@ -109,6 +109,7 @@ describe('validateFavoritesExportFile', () => {
     ['exportedAt is not a string', { ...validFavorites, exportedAt: 1 }, ['invalid favorites.exportedAt']],
     ['certCodes is not an array', { ...validFavorites, certCodes: 'nope' }, ['invalid favorites.certCodes']],
     ['certCodes holds a non-string code', { ...validFavorites, certCodes: [1] }, ['invalid favorites.certCodes']],
+    ['certCodes holds duplicate codes', { ...validFavorites, certCodes: ['DVA-C02', 'DVA-C02'] }, ['invalid favorites.certCodes']],
   ])('rejects a document where %s', (_label, value, expectedErrors) => {
     expect(validateFavoritesExportFile(value)).toEqual(expectedErrors)
   })

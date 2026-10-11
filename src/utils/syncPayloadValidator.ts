@@ -93,6 +93,8 @@ export function validateFavoritesExportFile(value: unknown): string[] {
     errors.push('invalid favorites.certCodes')
   } else if (!value.certCodes.every((code) => typeof code === 'string')) {
     errors.push('invalid favorites.certCodes')
+  } else if (new Set(value.certCodes).size !== value.certCodes.length) {
+    errors.push('invalid favorites.certCodes')
   }
   return errors
 }

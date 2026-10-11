@@ -2,13 +2,12 @@ import { createPinia, setActivePinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { createApp } from 'vue'
-import type { RemoteSyncPayload } from '../services/remoteSync'
 import { useQuizHistoryStore } from '../stores/quizHistory'
 import { useUserAccountStore } from '../stores/userAccount'
 import { useUserFavoritesStore } from '../stores/userFavorites'
 import { useUserProgressStore } from '../stores/userProgress'
 import { texts } from '../texts/en'
-import type { AuthUser } from '../types'
+import type { AuthUser, RemoteSyncPayload } from '../types'
 
 const pushRoute = vi.fn()
 vi.mock('vue-router', () => ({

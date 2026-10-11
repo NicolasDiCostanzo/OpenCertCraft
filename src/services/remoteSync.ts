@@ -1,12 +1,6 @@
 import { awsConfig, isSyncConfigured } from '../config'
-import type { FavoritesExportFile, HistoryExportFile, ProgressExportFile } from '../types'
+import type { RemoteSyncPayload } from '../types'
 import { validateFavoritesExportFile, validateHistoryExportFile, validateProgressExportFile } from '../utils/syncPayloadValidator'
-
-export interface RemoteSyncPayload {
-  progress: ProgressExportFile | null
-  history: HistoryExportFile | null
-  favorites: FavoritesExportFile | null
-}
 
 export class InvalidPullPayload extends Error {
   constructor(message: string) {
