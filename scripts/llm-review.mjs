@@ -10,6 +10,7 @@ const DEFAULT_MODEL = 'claude-haiku-4-5-20251001';
 const FETCH_TIMEOUT_MS = 30000;
 const MAX_GUIDE_CHARS = 60000;
 const MAX_BUNDLE_CHARS = 20000;
+const MAX_PDF_BYTES = 20 * 1024 * 1024;
 
 function stripHtml(html) {
   return html
@@ -23,6 +24,30 @@ function stripHtml(html) {
     .replace(/[ \t]+/g, ' ')
     .replace(/\n{3,}/g, '\n\n')
     .trim();
+}
+
+async function readAllBytes(response, maxBytes) {
+  const reader = response.body?.getReader();
+  if (!reader) return new Uint8Array(0);
+  const chunks = [];
+  let total = 0;
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    total += value.byteLength;
+    if (total > maxBytes) {
+      await reader.cancel().catch(() => undefined);
+      return undefined;
+    }
+    chunks.push(value);
+  }
+  const merged = new Uint8Array(total);
+  let offset = 0;
+  for (const chunk of chunks) {
+    merged.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  return merged;
 }
 
 async function fetchGuideText(url) {
@@ -39,8 +64,11 @@ async function fetchGuideText(url) {
     }
     const contentType = response.headers.get('content-type') ?? '';
     if (contentType.includes('pdf') || url.toLowerCase().endsWith('.pdf')) {
-      await response.body?.cancel().catch(() => undefined);
-      return { ok: false, reason: 'PDF_GUIDE', contentType };
+      const bytes = await readAllBytes(response, MAX_PDF_BYTES);
+      if (bytes === undefined) return { ok: false, reason: 'PDF_TOO_LARGE' };
+      if (bytes.length < 4) return { ok: false, reason: 'EMPTY_PAGE' };
+      if (!(bytes[0] === 0x25 && bytes[1] === 0x50 && bytes[2] === 0x44 && bytes[3] === 0x46)) return { ok: false, reason: 'NOT_PDF' };
+      return { ok: true, pdf: Buffer.from(bytes).toString('base64') };
     }
     const reader = response.body?.getReader();
     if (!reader) return { ok: false, reason: 'EMPTY_PAGE' };
@@ -71,15 +99,12 @@ async function fetchSourcesFor(cert, guide) {
   const attempts = [];
   for (const url of urls) {
     const result = await fetchGuideText(url);
-    if (result.ok) return { status: 'ok', url, text: result.text };
+    if (result.ok) return { status: 'ok', url, text: result.text, pdf: result.pdf };
     attempts.push(`${url} (${result.reason})`);
   }
-  const pdfOnly = attempts.every((attempt) => attempt.includes('PDF_GUIDE'));
   return {
-    status: pdfOnly ? 'pdf-only' : 'fetch-failed',
-    note: pdfOnly
-      ? 'All guide URLs are PDFs, which this runner cannot parse — human pass needed, or add PDF text extraction.'
-      : `Could not fetch any guide URL: ${attempts.join('; ')}.`,
+    status: 'fetch-failed',
+    note: `Could not fetch any guide URL: ${attempts.join('; ')}.`,
   };
 }
 
@@ -114,14 +139,14 @@ function buildPrompt(cert, guideUrl, guideText, bundleText) {
   ].join('\n');
 }
 
-async function callAnthropic(prompt, model, apiKey) {
+async function callAnthropic(content, model, apiKey) {
   const response = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: { 'content-type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
     body: JSON.stringify({
       model,
       max_tokens: 1500,
-      messages: [{ role: 'user', content: prompt }],
+      messages: [{ role: 'user', content }],
     }),
   });
   if (!response.ok) throw new Error(`Anthropic API HTTP ${response.status}: ${(await response.text()).slice(0, 300)}`);
@@ -243,7 +268,15 @@ async function main() {
     let verdict = { new_domains: [], removed_domains: [], renamed: [], notes: [] };
     if (!flags.noLlm) {
       try {
-        verdict = normalizeVerdict(await callAnthropic(buildPrompt(cert, fetched.url, fetched.text, bundle.text), model, apiKey));
+        const guideText = fetched.pdf ? 'Attached as a PDF document in this message — read the attached document for the guide contents.' : fetched.text;
+        const prompt = buildPrompt(cert, fetched.url, guideText, bundle.text);
+        const content = fetched.pdf
+          ? [
+              { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: fetched.pdf } },
+              { type: 'text', text: prompt },
+            ]
+          : prompt;
+        verdict = normalizeVerdict(await callAnthropic(content, model, apiKey));
       } catch (error) {
         skipped.push({ cert, note: `LLM review failed (${error.message}); guide fetched OK — retry or review manually.` });
         continue;
