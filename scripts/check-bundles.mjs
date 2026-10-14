@@ -252,11 +252,15 @@ function checkManifest(manifest, files, issues) {
     issues.push({ cert: 'manifest', code: 'MANIFEST_SHAPE', severity: 'error', message: 'cert-manifest.json must be an array.' });
     return [];
   }
-  const manifestFiles = manifest.map((entry) => entry.file).sort();
+  const entries = manifest.filter(isPlainObject);
+  if (entries.length !== manifest.length) {
+    issues.push({ cert: 'manifest', code: 'MANIFEST_ENTRY_SHAPE', severity: 'error', message: 'cert-manifest.json entries must be objects.' });
+  }
+  const manifestFiles = entries.map((entry) => entry.file).sort();
   if (manifestFiles.join(',') !== files.join(',')) {
     issues.push({ cert: 'manifest', code: 'MANIFEST_FILES', severity: 'error', message: `Manifest lists [${manifestFiles.join(', ')}] but bundle files are [${files.join(', ')}].` });
   }
-  return manifest;
+  return entries;
 }
 
 function checkFamilyTaxonomy(bundles, familyByCode, issues) {
@@ -408,8 +412,8 @@ function main() {
     issues.push({ cert: 'manifest', code: 'MANIFEST_UNREADABLE', severity: 'error', message: `Cannot parse cert-manifest.json: ${error.message}` });
     manifest = [];
   }
-  checkManifest(manifest, bundleFiles.map(({ file }) => file).sort(), issues);
-  const manifestByFile = new Map(manifest.map((entry) => [entry.file, entry]));
+  const validManifest = checkManifest(manifest, bundleFiles.map(({ file }) => file).sort(), issues);
+  const manifestByFile = new Map(validManifest.map((entry) => [entry.file, entry]));
   const perBundle = [];
   const summaries = [];
   const poolSummary = [];

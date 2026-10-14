@@ -213,7 +213,18 @@ async function main() {
     return;
   }
   const sources = JSON.parse(readFileSync(SOURCES_PATH, 'utf-8'));
-  const internal = flags.internal ? JSON.parse(readFileSync(flags.internal, 'utf-8')) : { issues: [] };
+  let internal = { issues: [] };
+  if (flags.internal) {
+    try {
+      const parsed = JSON.parse(readFileSync(flags.internal, 'utf-8'));
+      if (!parsed || typeof parsed !== 'object' || (parsed.issues !== undefined && !Array.isArray(parsed.issues))) {
+        throw new Error('Internal report must be a JSON object with an "issues" array.');
+      }
+      internal = { issues: parsed.issues ?? [] };
+    } catch (error) {
+      internal = { issues: [{ cert: 'internal-report', code: 'INTERNAL_REPORT_UNREADABLE', severity: 'error', message: `Cannot parse internal report: ${error.message}` }] };
+    }
+  }
   const external = [];
   const skipped = [];
   const snapshots = [];
