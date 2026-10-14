@@ -245,7 +245,18 @@ async function main() {
       if (!parsed || typeof parsed !== 'object' || (parsed.issues !== undefined && !Array.isArray(parsed.issues))) {
         throw new Error('Internal report must be a JSON object with an "issues" array.');
       }
-      internal = { issues: parsed.issues ?? [] };
+      const issues = parsed.issues ?? [];
+      const isIssue = (issue) =>
+        issue !== null &&
+        typeof issue === 'object' &&
+        typeof issue.cert === 'string' &&
+        typeof issue.code === 'string' &&
+        typeof issue.severity === 'string' &&
+        typeof issue.message === 'string';
+      if (!issues.every(isIssue)) {
+        throw new Error('Each internal issue must be an object with string cert, code, severity, and message fields.');
+      }
+      internal = { issues };
     } catch (error) {
       internal = { issues: [{ cert: 'internal-report', code: 'INTERNAL_REPORT_UNREADABLE', severity: 'error', message: `Cannot parse internal report: ${error.message}` }] };
     }
