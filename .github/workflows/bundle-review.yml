@@ -1,0 +1,64 @@
+name: Weekly bundle review
+
+on:
+  schedule:
+    - cron: '0 3 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check schedule
+        id: schedule
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]] || (( 10#$(date -u +%d) <= 7 )); then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        if: steps.schedule.outputs.run == 'true'
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        if: steps.schedule.outputs.run == 'true'
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        if: steps.schedule.outputs.run == 'true'
+        run: npm ci
+      - name: Internal bundle check
+        if: steps.schedule.outputs.run == 'true'
+        run: npm run check:bundles --silent -- --json > internal-report.json || true
+      - name: External LLM review
+        if: steps.schedule.outputs.run == 'true'
+        run: node scripts/llm-review.mjs --internal internal-report.json --out weekly-report.md --write-snapshot .llm-snapshots || node scripts/llm-review.mjs --internal internal-report.json --out weekly-report.md --write-snapshot .llm-snapshots --no-llm
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          LLM_MODEL: claude-haiku-4-5-20251001
+      - name: Ensure report exists
+        if: steps.schedule.outputs.run == 'true'
+        run: test -s weekly-report.md || echo -e '# Weekly bundle review\n\nNo report was generated. See workflow logs.' > weekly-report.md
+      - name: Stage snapshots
+        if: steps.schedule.outputs.run == 'true'
+        run: git add -f .bundle-snapshots .llm-snapshots 2>/dev/null || true
+      - name: Open review PR
+        if: steps.schedule.outputs.run == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore: weekly cert-bundle review'
+          title: 'chore: weekly cert-bundle review'
+          body-path: weekly-report.md
+          branch: bot/weekly-bundle-review
+          delete-branch: true
+          labels: cert-content
+          add-paths: |
+            .bundle-snapshots
+            .llm-snapshots
