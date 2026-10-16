@@ -40,4 +40,9 @@ playwright-report/
 # personal doc
 docs/presentation
 
+.bundle-snapshots/
+.llm-snapshots/
+internal-report.json
+weekly-report.md
+
 .claude

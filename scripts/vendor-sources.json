@@ -1,0 +1,66 @@
+{
+  "$schemaComment": "Official vendor exam-outline sources for the weekly LLM bundle review. Each entry lists the canonical guide URL(s) for that cert. Entries with guide:null have no stable official URL yet — the review script skips them gracefully instead of failing; add a URL here when the vendor publishes one.",
+  "DVA-C02": {
+    "vendor": "AWS",
+    "guide": [
+      "https://docs.aws.amazon.com/pdfs/aws-certification/latest/developer-associate-02/developer-associate-02.pdf"
+    ]
+  },
+  "CLF-C02": {
+    "vendor": "AWS",
+    "guide": [
+      "https://docs.aws.amazon.com/pdfs/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.pdf"
+    ]
+  },
+  "CKA": {
+    "vendor": "CNCF",
+    "guide": [
+      "https://github.com/cncf/curriculum/tree/master/cka"
+    ]
+  },
+  "GCP-ACE": {
+    "vendor": "Google Cloud",
+    "guide": [
+      "https://services.google.com/fh/files/misc/associate_cloud_engineer_exam_guide_english.pdf"
+    ]
+  },
+  "CCA-F": {
+    "vendor": "Anthropic",
+    "guide": [
+      "https://everpath-course-content.s3-accelerate.amazonaws.com/instructor%2F8lsy243ftffjjy1cx9lm3o2bw%2Fpublic%2F1773274827%2FClaude+Certified+Architect+%E2%80%93+Foundations+Certification+Exam+Guide.pdf"
+    ]
+  },
+  "CCDV-F": {
+    "vendor": "Anthropic",
+    "guide": [
+      "https://everpath-course-content.s3-accelerate.amazonaws.com/instructor%2F6nizmqk8tpzpfjvt6qmmav7rh%2Fpublic%2F1783542875%2FClaude+Certified+Developer+%E2%80%93+Foundations+Exam+Guide.pdf"
+    ]
+  },
+  "SCW-SA": {
+    "vendor": "Scaleway",
+    "guide": [
+      "https://www-uploads.scaleway.com/Scaleway_Solution_Architect_Exam_Guide_c7f2faad64.pdf"
+    ]
+  },
+  "SCW-FND": {
+    "vendor": "Scaleway",
+    "guide": [
+      "https://www-uploads.scaleway.com/Scaleway_Foundations_Exam_Guide_d0b0e70a59.pdf"
+    ]
+  },
+  "CCAO-F": {
+    "vendor": "Anthropic",
+    "guide": null,
+    "note": "No stable official exam-guide URL found; hosted on Skilljar behind access request."
+  },
+  "CCAR-P": {
+    "vendor": "Anthropic",
+    "guide": null,
+    "note": "No stable official exam-guide URL found."
+  },
+  "SCW-SEC": {
+    "vendor": "Scaleway",
+    "guide": null,
+    "note": "No official exam-guide URL found."
+  }
+}
