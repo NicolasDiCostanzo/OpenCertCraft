@@ -140,15 +140,23 @@ function buildPrompt(cert, guideUrl, guideText, bundleText) {
 }
 
 async function callAnthropic(content, model, apiKey) {
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'content-type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
-    body: JSON.stringify({
-      model,
-      max_tokens: 1500,
-      messages: [{ role: 'user', content }],
-    }),
-  });
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+  let response;
+  try {
+    response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      signal: controller.signal,
+      headers: { 'content-type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
+      body: JSON.stringify({
+        model,
+        max_tokens: 1500,
+        messages: [{ role: 'user', content }],
+      }),
+    });
+  } finally {
+    clearTimeout(timer);
+  }
   if (!response.ok) throw new Error(`Anthropic API HTTP ${response.status}: ${(await response.text()).slice(0, 300)}`);
   const body = await response.json();
   const text = (body.content ?? []).filter((block) => block.type === 'text').map((block) => block.text).join('');
