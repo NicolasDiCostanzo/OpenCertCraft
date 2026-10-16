@@ -199,11 +199,12 @@ function checkQuestions(questions, exam, themes, cert, issues) {
         }
       }
     } else {
-      untagged.push(raw.id);
+      // deferred: only count untagged questions that remain in the valid pool
     }
     if (broken) return;
     valid.push({ ...raw, themes: raw.themes ?? {} });
     if (!isQuestionAnswerable(raw)) unanswerable.push(raw.id);
+    if (raw.themes === undefined) untagged.push(raw.id);
   });
   if (unanswerable.length > 0) {
     issues.push({ cert, code: 'QUESTIONS_UNANSWERABLE', severity: 'warning', message: `${unanswerable.length} question(s) have no non-empty options and are excluded from quizzes: ${unanswerable.slice(0, 10).join(', ')}${unanswerable.length > 10 ? ` (+${unanswerable.length - 10} more)` : ''}.` });
