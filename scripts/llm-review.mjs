@@ -168,10 +168,12 @@ async function callAnthropic(content, model, apiKey) {
 
 function normalizeVerdict(raw) {
   const pick = (value) => (Array.isArray(value) ? value.filter((entry) => entry && typeof entry.name === 'string') : []);
+  const pickRenamed = (value) =>
+    Array.isArray(value) ? value.filter((entry) => entry && typeof entry.from === 'string' && typeof entry.to === 'string') : [];
   return {
     new_domains: pick(raw?.new_domains).map((entry) => ({ name: entry.name, quote: typeof entry.quote === 'string' ? entry.quote.slice(0, 200) : '' })),
     removed_domains: pick(raw?.removed_domains).map((entry) => ({ name: entry.name, quote: typeof entry.quote === 'string' ? entry.quote.slice(0, 200) : '' })),
-    renamed: pick(raw?.renamed).filter((entry) => typeof entry.from === 'string' && typeof entry.to === 'string'),
+    renamed: pickRenamed(raw?.renamed).map((entry) => ({ from: entry.from, to: entry.to, quote: typeof entry.quote === 'string' ? entry.quote.slice(0, 200) : '' })),
     notes: Array.isArray(raw?.notes) ? raw.notes.filter((note) => typeof note === 'string').slice(0, 10) : [],
   };
 }
