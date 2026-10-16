@@ -264,16 +264,26 @@ async function main() {
   const external = [];
   const skipped = [];
   const snapshots = [];
+  let strictSkipCount = 0;
   for (const cert of Object.keys(sources).sort()) {
     if (cert.startsWith('$')) continue;
-    const bundle = summarizeBundleStructure(cert);
+    let bundle;
+    try {
+      bundle = summarizeBundleStructure(cert);
+    } catch (error) {
+      skipped.push({ cert, note: `Bundle unreadable (${error.message})` });
+      strictSkipCount += 1;
+      continue;
+    }
     if (bundle.error) {
       skipped.push({ cert, note: bundle.error });
+      strictSkipCount += 1;
       continue;
     }
     const fetched = await fetchSourcesFor(cert, sources[cert].guide);
     if (fetched.status !== 'ok') {
       skipped.push({ cert, note: `${fetched.note} Bundle topics: ${(bundle.topics ?? []).join(', ') || 'none'}.` });
+      if (fetched.status !== 'no-source') strictSkipCount += 1;
       continue;
     }
     let verdict = { new_domains: [], removed_domains: [], renamed: [], notes: [] };
@@ -290,6 +300,7 @@ async function main() {
         verdict = normalizeVerdict(await callAnthropic(content, model, apiKey));
       } catch (error) {
         skipped.push({ cert, note: `LLM review failed (${error.message}); guide fetched OK — retry or review manually.` });
+        strictSkipCount += 1;
         continue;
       }
     }
@@ -307,7 +318,7 @@ async function main() {
   const findingCount =
     external.filter((row) => row.verdict.new_domains.length + row.verdict.removed_domains.length + row.verdict.renamed.length > 0).length +
     (internal.issues ?? []).filter((issue) => issue.severity === 'error').length;
-  process.exitCode = flags.strict && (findingCount > 0 || skipped.length > 0) ? 1 : 0;
+  process.exitCode = flags.strict && (findingCount > 0 || strictSkipCount > 0) ? 1 : 0;
 }
 
 main().catch((error) => {
