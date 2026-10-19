@@ -35,7 +35,7 @@
     "vue-router": "^5.3.1"
   },
   "devDependencies": {
-    "@aws-sdk/client-dynamodb": "^3.1149.0",
+    "@aws-sdk/client-dynamodb": "^3.1152.0",
     "@aws-sdk/lib-dynamodb": "^3.1145.0",
     "@playwright/test": "^1.63.0",
     "@types/node": "^26.6.1",
