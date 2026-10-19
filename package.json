@@ -47,7 +47,7 @@
     "eslint": "^10.12.0",
     "eslint-plugin-vue": "^10.10.0",
     "husky": "^9.1.7",
-    "jsdom": "^30.1.1",
+    "jsdom": "^30.1.3",
     "knip": "^6.35.1",
     "purgecss": "^8.0.0",
     "typescript": "~6.0.2",
