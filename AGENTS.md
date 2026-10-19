@@ -119,6 +119,17 @@ Explain changes briefly and clearly. The user will ask for more detail if needed
 - Source files are kept **comment-free**: design rationale lives in `AGENTS.md` and `docs/` — don't add explanatory comments to code, put new rationale in the docs instead.
 - Branch naming follows `feat/…` style; commits go through Husky hooks.
 
+## PurgeCSS
+
+Production builds (`vite build`) run purgecss on CSS requests in a Vite `transform` hook with `enforce: 'pre'` (`vite.config.ts`, implementation in `src/vite/purgecss.ts`). It scans the repository `index.html` and supported source files under `src`, so class references in those files affect purging. Dev builds are untouched.
+
+- Vue scoped styles (`[data-v-*]`) stay working: every `data-v-*` attribute found in a CSS asset is auto-safelisted as a dynamic attribute, while classes inside scoped rules are still purged.
+- Classes assembled at runtime (`btn--${size}`, `badge--${variant}`, `welcome-card--${variant}`) are invisible to the static extractor and are safelisted by prefix in `src/vite/purgecss.ts`. Add prefixes there when new dynamic class families are introduced.
+- Custom properties (`--brand`, …) are kept by default (`variables` off).
+- To keep a selector purgecss would otherwise drop, use the `/* purgecss ignore */`, `/* purgecss start ignore */` / `/* purgecss end ignore */`, or `/* purgecss ignore next */` CSS annotations.
+
+Verify after CSS changes with `npm run build` and inspect `dist/assets/*.css`.
+
 ## First session
 
 This file is the entry point — it carries the stack, commands, architecture rules, testing philosophy, and conventions. Read it, then follow the routing table below for the task at hand.
