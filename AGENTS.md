@@ -121,7 +121,7 @@ Explain changes briefly and clearly. The user will ask for more detail if needed
 
 ## PurgeCSS
 
-Production builds (`vite build`) run purgecss over the emitted CSS via a Vite `generateBundle` post plugin (`vite.config.ts`, implementation in `src/vite/purgecss.ts`). The content it scans is the built `index.html` plus all JS chunks, so only selectors present in templates survive. Dev builds are untouched.
+Production builds (`vite build`) run purgecss on CSS requests in a Vite `transform` hook with `enforce: 'pre'` (`vite.config.ts`, implementation in `src/vite/purgecss.ts`). It scans the repository `index.html` and supported source files under `src`, so class references in those files affect purging. Dev builds are untouched.
 
 - Vue scoped styles (`[data-v-*]`) stay working: every `data-v-*` attribute found in a CSS asset is auto-safelisted as a dynamic attribute, while classes inside scoped rules are still purged.
 - Classes assembled at runtime (`btn--${size}`, `badge--${variant}`, `welcome-card--${variant}`) are invisible to the static extractor and are safelisted by prefix in `src/vite/purgecss.ts`. Add prefixes there when new dynamic class families are introduced.
