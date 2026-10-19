@@ -1,7 +1,5 @@
 import { PurgeCSS } from 'purgecss'
 
-// Classes assembled at runtime (`btn--${size}`, `badge--${variant}` …) never
-// appear literally in templates, so purgecss's static extractor misses them.
 const DYNAMIC_CLASS_PREFIXES = [/^btn--/, /^badge--/, /^welcome-card--/]
 
 const purgeSafelist = {
