@@ -168,5 +168,73 @@
       }
     },
     "questionCount": 100
+  },
+  {
+    "file": "SCW-SA questions.json",
+    "exam": {
+      "name": "Scaleway Professional: Solution Architect",
+      "code": "SCW-SA",
+      "totalQuestions": 60,
+      "timeLimitMinutes": 60,
+      "passingScore": {
+        "passingScore": 70
+      },
+      "weights": {
+        "Core Ecosystem Knowledge": 12.5,
+        "Modern Deployment & Cloud native approach": 12.5,
+        "Resilience & Availability": 12.5,
+        "Scalability & elasticity": 12.5,
+        "Security architecture": 12.5,
+        "Sovereignty architecture": 12.5,
+        "Standard architecture patterns": 12.5,
+        "Sustainability architecture": 12.5
+      }
+    },
+    "questionCount": 117
+  },
+  {
+    "file": "SCW-FND questions.json",
+    "exam": {
+      "name": "Scaleway Foundations",
+      "code": "SCW-FND",
+      "totalQuestions": 50,
+      "timeLimitMinutes": 60,
+      "passingScore": {
+        "passingScore": 70
+      },
+      "weights": {
+        "Bare Metal": 10.0,
+        "Compute": 10.0,
+        "Introduction to the Scaleway Ecosystem": 10.0,
+        "Kubernetes": 10.0,
+        "Managed Databases": 10.0,
+        "Networking": 10.0,
+        "Observability": 10.0,
+        "Security & Identity": 10.0,
+        "Serverless": 10.0,
+        "Storage": 10.0
+      }
+    },
+    "questionCount": 96
+  },
+  {
+    "file": "SCW-SEC questions.json",
+    "exam": {
+      "name": "Scaleway Associate: Security and Identity",
+      "code": "SCW-SEC",
+      "totalQuestions": 50,
+      "timeLimitMinutes": 60,
+      "passingScore": {
+        "passingScore": 70
+      },
+      "weights": {
+        "Manage Your Organization & Projects": 20.0,
+        "Manage access to encrypted data with Object Storage": 20.0,
+        "Manage access to your Organization's resources": 20.0,
+        "Monitor your resources and immediately detect unauthorized activity": 20.0,
+        "Share and encrypt sensitive data": 20.0
+      }
+    },
+    "questionCount": 92
   }
 ]
