@@ -1,0 +1,2230 @@
+{
+    "version": 2,
+    "exam": {
+        "name": "Scaleway Associate: Security and Identity",
+        "code": "SCW-SEC",
+        "totalQuestions": 50,
+        "timeLimitMinutes": 60,
+        "passingScore": {
+            "passingScore": 70
+        },
+        "weights": {
+            "Manage Your Organization & Projects": 20.0,
+            "Manage access to encrypted data with Object Storage": 20.0,
+            "Manage access to your Organization's resources": 20.0,
+            "Monitor your resources and immediately detect unauthorized activity": 20.0,
+            "Share and encrypt sensitive data": 20.0
+        }
+    },
+    "themes": {
+        "services": [
+            "audit-trail",
+            "billing",
+            "cockpit",
+            "console",
+            "iam",
+            "instances",
+            "kapsule",
+            "key-manager",
+            "object-storage",
+            "organization",
+            "project",
+            "secret-manager",
+            "serverless-database"
+        ],
+        "concepts": [
+            "access-management",
+            "alerting",
+            "api-keys",
+            "billing",
+            "data-durability",
+            "encryption",
+            "networking",
+            "observability",
+            "quotas",
+            "regions-availability-zones",
+            "resource-organization",
+            "secrets-management"
+        ],
+        "questionTypes": [
+            "multi-choice",
+            "single-choice",
+            "true-false",
+            "yes-no"
+        ]
+    },
+    "questions": [
+        {
+            "id": "1",
+            "question": "Does Scaleway support managing Secret Manager through Terraform?",
+            "options": [
+                "Yes",
+                "No"
+            ],
+            "answers": "A",
+            "topic": "Share and encrypt sensitive data",
+            "themes": {
+                "services": [
+                    "secret-manager"
+                ],
+                "concepts": [
+                    "secrets-management"
+                ],
+                "questionTypes": [
+                    "yes-no"
+                ]
+            }
+        },
+        {
+            "id": "2",
+            "question": "Can a short-lived policy be attached to an existing secret after creation?",
+            "options": [
+                "Yes",
+                "No"
+            ],
+            "answers": "B",
+            "topic": "Share and encrypt sensitive data",
+            "themes": {
+                "services": [
+                    "secret-manager"
+                ],
+                "concepts": [
+                    "secrets-management"
+                ],
+                "questionTypes": [
+                    "yes-no"
+                ]
+            }
+        },
+        {
+            "id": "3",
+            "question": "Should KMS keys be applied directly to encrypt large data sets?",
+            "options": [
+                "No, wrap them with a Data Encryption Key handled by KMS",
+                "Yes, definitely"
+            ],
+            "answers": "A",
+            "topic": "Share and encrypt sensitive data",
+            "themes": {
+                "services": [
+                    "key-manager"
+                ],
+                "concepts": [
+                    "encryption"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "4",
+            "question": "Among metrics, logs, and traces, which primarily records error events across a resource's lifetime?",
+            "options": [
+                "Logs",
+                "Metrics",
+                "Traces"
+            ],
+            "answers": "A",
+            "topic": "Monitor your resources and immediately detect unauthorized activity",
+            "themes": {
+                "services": [
+                    "cockpit"
+                ],
+                "concepts": [
+                    "observability"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "5",
+            "question": "What is the maximum Time-to-Live permitted for a short-lived policy?",
+            "options": [
+                "One month",
+                "One year",
+                "24 hours"
+            ],
+            "answers": "B",
+            "topic": "Share and encrypt sensitive data",
+            "themes": {
+                "services": [
+                    "secret-manager"
+                ],
+                "concepts": [
+                    "secrets-management"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "6",
+            "question": "How are Scaleway quotas most frequently defined?",
+            "options": [
+                "Per individual user",
+                "Shared across all users of an Organization",
+                "Per Project"
+            ],
+            "answers": "B",
+            "topic": "Manage Your Organization & Projects",
+            "themes": {
+                "services": [
+                    "organization"
+                ],
+                "concepts": [
+                    "quotas"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "7",
+            "question": "Which portion of an API key carries the highest sensitivity?",
+            "options": [
+                "Secret portion",
+                "Both portions equally",
+                "Access portion"
+            ],
+            "answers": "A",
+            "topic": "Manage access to your Organization's resources",
+            "themes": {
+                "services": [
+                    "iam"
+                ],
+                "concepts": [
+                    "api-keys"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "8",
+            "question": "Do API keys receive the permissions assigned to their bearer's policy?",
+            "options": [
+                "Yes",
+                "No"
+            ],
+            "answers": "A",
+            "topic": "Manage access to your Organization's resources",
+            "themes": {
+                "services": [
+                    "iam"
+                ],
+                "concepts": [
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "yes-no"
+                ]
+            }
+        },
+        {
+            "id": "9",
+            "question": "Can an IAM rule scope be set at both Project and Organization levels?",
+            "options": [
+                "Project level",
+                "Organization level",
+                "Both"
+            ],
+            "answers": "C",
+            "topic": "Manage access to your Organization's resources",
+            "themes": {
+                "services": [
+                    "iam"
+                ],
+                "concepts": [
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "10",
+            "question": "True or false: losing an encryption key means permanent loss of all data encrypted with it.",
+            "options": [
+                "True",
+                "False"
+            ],
+            "answers": "A",
+            "topic": "Share and encrypt sensitive data",
+            "themes": {
+                "services": [
+                    "key-manager"
+                ],
+                "concepts": [
+                    "encryption"
+                ],
+                "questionTypes": [
+                    "true-false"
+                ]
+            }
+        },
+        {
+            "id": "11",
+            "question": "What are two ways to increase Organization quotas?",
+            "options": [
+                "Select the plus button next to the product",
+                "Verify your payment method",
+                "Verify your identity"
+            ],
+            "answers": [
+                "B",
+                "C"
+            ],
+            "topic": "Manage Your Organization & Projects",
+            "themes": {
+                "services": [
+                    "organization"
+                ],
+                "concepts": [
+                    "quotas"
+                ],
+                "questionTypes": [
+                    "multi-choice"
+                ]
+            }
+        },
+        {
+            "id": "12",
+            "question": "True or false: Cockpit only collects, stores, and analyzes data about Scaleway resources.",
+            "options": [
+                "True",
+                "False"
+            ],
+            "answers": "B",
+            "topic": "Monitor your resources and immediately detect unauthorized activity",
+            "themes": {
+                "services": [
+                    "cockpit"
+                ],
+                "concepts": [
+                    "observability"
+                ],
+                "questionTypes": [
+                    "true-false"
+                ]
+            }
+        },
+        {
+            "id": "13",
+            "question": "If an API key will be used long-term, which bearer type should you choose?",
+            "options": [
+                "A user",
+                "An application"
+            ],
+            "answers": "B",
+            "topic": "Manage access to your Organization's resources",
+            "themes": {
+                "services": [
+                    "iam"
+                ],
+                "concepts": [
+                    "api-keys"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "14",
+            "question": "Can a Member own an Organization?",
+            "options": [
+                "Yes, if they have the permission",
+                "No, not in any circumstance"
+            ],
+            "answers": "B",
+            "topic": "Manage Your Organization & Projects",
+            "themes": {
+                "services": [
+                    "organization"
+                ],
+                "concepts": [
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "15",
+            "question": "Does Object Storage apply SSE-C encryption to stored objects?",
+            "options": [
+                "Yes",
+                "No"
+            ],
+            "answers": "A",
+            "topic": "Manage access to encrypted data with Object Storage",
+            "themes": {
+                "services": [
+                    "object-storage"
+                ],
+                "concepts": [
+                    "encryption"
+                ],
+                "questionTypes": [
+                    "yes-no"
+                ]
+            }
+        },
+        {
+            "id": "16",
+            "question": "Are there any costs associated with using IAM?",
+            "options": [
+                "Yes, IAM costs 10 euros per Project",
+                "No, IAM is free",
+                "Yes, IAM costs 10 euros per month"
+            ],
+            "answers": "B",
+            "topic": "Manage access to your Organization's resources",
+            "themes": {
+                "services": [
+                    "iam"
+                ],
+                "concepts": [
+                    "billing"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "17",
+            "question": "If an IAM policy denies an action but a bucket policy permits it, can the user perform the action?",
+            "options": [
+                "Yes",
+                "No"
+            ],
+            "answers": "B",
+            "topic": "Manage access to encrypted data with Object Storage",
+            "themes": {
+                "services": [
+                    "iam",
+                    "object-storage"
+                ],
+                "concepts": [
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "yes-no"
+                ]
+            }
+        },
+        {
+            "id": "18",
+            "question": "After enabling the alert manager, are preconfigured alerts active by default for all Regions?",
+            "options": [
+                "True",
+                "False"
+            ],
+            "answers": "B",
+            "topic": "Monitor your resources and immediately detect unauthorized activity",
+            "themes": {
+                "services": [
+                    "cockpit"
+                ],
+                "concepts": [
+                    "alerting"
+                ],
+                "questionTypes": [
+                    "true-false"
+                ]
+            }
+        },
+        {
+            "id": "19",
+            "question": "Which plane is accessed when connecting to an Instance via SSH?",
+            "options": [
+                "Control plane",
+                "Data plane"
+            ],
+            "answers": "B",
+            "topic": "Manage access to your Organization's resources",
+            "themes": {
+                "services": [
+                    "instances"
+                ],
+                "concepts": [
+                    "networking"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "20",
+            "question": "True or false: an API key can be used across several Organizations.",
+            "options": [
+                "True",
+                "False"
+            ],
+            "answers": "B",
+            "topic": "Manage access to your Organization's resources",
+            "themes": {
+                "services": [
+                    "iam"
+                ],
+                "concepts": [
+                    "api-keys"
+                ],
+                "questionTypes": [
+                    "true-false"
+                ]
+            }
+        },
+        {
+            "id": "21",
+            "question": "Is it possible to move a resource from one Project to another?",
+            "options": [
+                "Yes",
+                "No"
+            ],
+            "answers": "B",
+            "topic": "Manage Your Organization & Projects",
+            "themes": {
+                "services": [
+                    "project"
+                ],
+                "concepts": [
+                    "resource-organization"
+                ],
+                "questionTypes": [
+                    "yes-no"
+                ]
+            }
+        },
+        {
+            "id": "22",
+            "question": "Can Key Manager store secrets?",
+            "options": [
+                "Yes",
+                "No"
+            ],
+            "answers": "B",
+            "topic": "Share and encrypt sensitive data",
+            "themes": {
+                "services": [
+                    "key-manager"
+                ],
+                "concepts": [
+                    "encryption"
+                ],
+                "questionTypes": [
+                    "yes-no"
+                ]
+            }
+        },
+        {
+            "id": "23",
+            "question": "What is the first step when adding a resource via the console?",
+            "options": [
+                "Configure the resource",
+                "Select the Project where the resource should be added",
+                "Choose an Availability Zone"
+            ],
+            "answers": "B",
+            "topic": "Manage Your Organization & Projects",
+            "themes": {
+                "services": [
+                    "console",
+                    "project"
+                ],
+                "concepts": [
+                    "resource-organization"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "24",
+            "question": "Is the Scaleway alert manager active or inactive by default?",
+            "options": [
+                "Inactive",
+                "Active"
+            ],
+            "answers": "A",
+            "topic": "Monitor your resources and immediately detect unauthorized activity",
+            "themes": {
+                "services": [
+                    "cockpit"
+                ],
+                "concepts": [
+                    "alerting"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "25",
+            "question": "Does Object Storage integrate compute solutions?",
+            "options": [
+                "Yes",
+                "No"
+            ],
+            "answers": "B",
+            "topic": "Manage access to encrypted data with Object Storage",
+            "themes": {
+                "services": [
+                    "object-storage"
+                ],
+                "concepts": [
+                    "data-durability"
+                ],
+                "questionTypes": [
+                    "yes-no"
+                ]
+            }
+        },
+        {
+            "id": "26",
+            "question": "Are applications linked to a user?",
+            "options": [
+                "Yes",
+                "No"
+            ],
+            "answers": "B",
+            "topic": "Manage access to your Organization's resources",
+            "themes": {
+                "services": [
+                    "iam"
+                ],
+                "concepts": [
+                    "api-keys"
+                ],
+                "questionTypes": [
+                    "yes-no"
+                ]
+            }
+        },
+        {
+            "id": "27",
+            "question": "How many Projects for two separate environments and two separate product teams per environment?",
+            "options": [
+                "4",
+                "2",
+                "8"
+            ],
+            "answers": "A",
+            "topic": "Manage Your Organization & Projects",
+            "themes": {
+                "services": [
+                    "project"
+                ],
+                "concepts": [
+                    "resource-organization"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "28",
+            "question": "What happens when a user is removed from a group?",
+            "options": [
+                "The user can no longer access the Organization",
+                "The user no longer has the permissions they formerly had as a group member"
+            ],
+            "answers": "B",
+            "topic": "Manage access to your Organization's resources",
+            "themes": {
+                "services": [
+                    "iam"
+                ],
+                "concepts": [
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "29",
+            "question": "What is the best tool to monitor metrics of a Scaleway Instance?",
+            "options": [
+                "Cockpit",
+                "Grafana",
+                "Audit Trail"
+            ],
+            "answers": "A",
+            "topic": "Monitor your resources and immediately detect unauthorized activity",
+            "themes": {
+                "services": [
+                    "cockpit"
+                ],
+                "concepts": [
+                    "observability"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "30",
+            "question": "Which products work with IAM?",
+            "options": [
+                "Instances, Serverless Jobs, and Virtual Private Networks",
+                "Instances, Managed Databases, and Kubernetes Kapsule",
+                "All Scaleway products"
+            ],
+            "answers": "C",
+            "topic": "Manage access to your Organization's resources",
+            "themes": {
+                "services": [
+                    "iam"
+                ],
+                "concepts": [
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "31",
+            "question": "Are bucket policies always required to secure bucket access?",
+            "options": [
+                "Yes",
+                "No"
+            ],
+            "answers": "B",
+            "topic": "Manage access to encrypted data with Object Storage",
+            "themes": {
+                "services": [
+                    "object-storage"
+                ],
+                "concepts": [
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "yes-no"
+                ]
+            }
+        },
+        {
+            "id": "32",
+            "question": "Can Prometheus push metrics to Cockpit?",
+            "options": [
+                "Yes",
+                "No"
+            ],
+            "answers": "A",
+            "topic": "Monitor your resources and immediately detect unauthorized activity",
+            "themes": {
+                "services": [
+                    "cockpit"
+                ],
+                "concepts": [
+                    "observability"
+                ],
+                "questionTypes": [
+                    "yes-no"
+                ]
+            }
+        },
+        {
+            "id": "33",
+            "question": "At what level is Cockpit data scoped?",
+            "options": [
+                "Project level",
+                "Organization level"
+            ],
+            "answers": "A",
+            "topic": "Monitor your resources and immediately detect unauthorized activity",
+            "themes": {
+                "services": [
+                    "cockpit"
+                ],
+                "concepts": [
+                    "observability"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "34",
+            "question": "True or false: a Kubernetes cluster can be monitored directly from its dashboard.",
+            "options": [
+                "True",
+                "False"
+            ],
+            "answers": "A",
+            "topic": "Monitor your resources and immediately detect unauthorized activity",
+            "themes": {
+                "services": [
+                    "cockpit",
+                    "kapsule"
+                ],
+                "concepts": [
+                    "observability"
+                ],
+                "questionTypes": [
+                    "true-false"
+                ]
+            }
+        },
+        {
+            "id": "35",
+            "question": "What is the term for the target of an IAM policy?",
+            "options": [
+                "User",
+                "Principal",
+                "Application",
+                "Owner"
+            ],
+            "answers": "B",
+            "topic": "Manage access to your Organization's resources",
+            "themes": {
+                "services": [
+                    "iam"
+                ],
+                "concepts": [
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "36",
+            "question": "Can resources from different AZs and Regions be grouped within the same Project?",
+            "options": [
+                "Yes",
+                "No"
+            ],
+            "answers": "A",
+            "topic": "Manage Your Organization & Projects",
+            "themes": {
+                "services": [
+                    "project"
+                ],
+                "concepts": [
+                    "regions-availability-zones"
+                ],
+                "questionTypes": [
+                    "yes-no"
+                ]
+            }
+        },
+        {
+            "id": "37",
+            "question": "In Secret Manager, what is the maximum size for a secret?",
+            "options": [
+                "64 KB",
+                "24 KB",
+                "48 KB"
+            ],
+            "answers": "A",
+            "topic": "Share and encrypt sensitive data",
+            "themes": {
+                "services": [
+                    "secret-manager"
+                ],
+                "concepts": [
+                    "secrets-management"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "38",
+            "question": "What is the best way to get notified when billing consumption rises?",
+            "options": [
+                "Manually export invoices and check totals at month end",
+                "Enable CPU usage alerts in Cockpit or Grafana",
+                "Create a read-only IAM user",
+                "Activate Billing Alerts in the Billing section"
+            ],
+            "answers": "D",
+            "topic": "Manage Your Organization & Projects",
+            "themes": {
+                "services": [
+                    "billing"
+                ],
+                "concepts": [
+                    "billing"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "39",
+            "question": "By default, how many Projects can an Organization support?",
+            "options": [
+                "25",
+                "50",
+                "100"
+            ],
+            "answers": "A",
+            "topic": "Manage Your Organization & Projects",
+            "themes": {
+                "services": [
+                    "organization"
+                ],
+                "concepts": [
+                    "quotas"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "40",
+            "question": "True or false: API permissions convert directly to Serverless SQL database roles (reader, writer, admin).",
+            "options": [
+                "True",
+                "False"
+            ],
+            "answers": "A",
+            "topic": "Manage access to your Organization's resources",
+            "themes": {
+                "services": [
+                    "iam",
+                    "serverless-database"
+                ],
+                "concepts": [
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "true-false"
+                ]
+            }
+        },
+        {
+            "id": "41",
+            "question": "What is the purpose of an Organization alias?",
+            "options": [
+                "It replaces the Organization ID on invoices",
+                "It is an easier-to-remember alternative to the Organization ID for Member login",
+                "It is a prefix added to every Project name",
+                "It is the username of the Organization Owner"
+            ],
+            "answers": "B",
+            "topic": "Manage Your Organization & Projects",
+            "themes": {
+                "services": [
+                    "organization"
+                ],
+                "concepts": [
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "An alias identifies the Organization during Member login, as an alternative to the Organization ID."
+        },
+        {
+            "id": "42",
+            "question": "When an Organization Owner leaves, how is ownership transferred?",
+            "options": [
+                "Promote a Member to Owner with an IAM policy",
+                "Add a second Owner to the Organization",
+                "Change the email address registered on the Owner account",
+                "Create a new Organization and move all Projects into it"
+            ],
+            "answers": "C",
+            "topic": "Manage Your Organization & Projects",
+            "themes": {
+                "services": [
+                    "organization"
+                ],
+                "concepts": [
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "An Organization has a single Owner and a Member cannot be promoted to Owner; ownership is transferred by changing the email address of the Owner account."
+        },
+        {
+            "id": "43",
+            "question": "Which two statements about deleting a Project are true?",
+            "options": [
+                "A Project can only be deleted once all its resources are deleted",
+                "Deleting a Project moves its resources to the default Project",
+                "The default Project cannot be deleted",
+                "Only Scaleway Support can delete a Project"
+            ],
+            "answers": [
+                "A",
+                "C"
+            ],
+            "topic": "Manage Your Organization & Projects",
+            "themes": {
+                "services": [
+                    "project"
+                ],
+                "concepts": [
+                    "resource-organization"
+                ],
+                "questionTypes": [
+                    "multi-choice"
+                ]
+            },
+            "explanation": "Only empty Projects can be deleted, and the default Project cannot be deleted."
+        },
+        {
+            "id": "44",
+            "question": "Which two features are managed at the Organization level rather than Project level?",
+            "options": [
+                "Instances",
+                "Billing",
+                "Object Storage buckets",
+                "IAM"
+            ],
+            "answers": [
+                "B",
+                "D"
+            ],
+            "topic": "Manage Your Organization & Projects",
+            "themes": {
+                "services": [
+                    "organization",
+                    "billing",
+                    "iam"
+                ],
+                "concepts": [
+                    "resource-organization",
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "multi-choice"
+                ]
+            },
+            "explanation": "Billing, IAM, support and abuse tickets and Project management are managed at Organization level, while resources such as Instances and buckets belong to Projects."
+        },
+        {
+            "id": "45",
+            "question": "Which two benefits does grouping resources into separate Projects provide?",
+            "options": [
+                "Resources can be moved freely between Projects at any time",
+                "IAM access rights can be defined separately per Project",
+                "Resource usage is easier to track on invoices",
+                "Each Project has its own Owner account"
+            ],
+            "answers": [
+                "B",
+                "C"
+            ],
+            "topic": "Manage Your Organization & Projects",
+            "themes": {
+                "services": [
+                    "project",
+                    "iam",
+                    "billing"
+                ],
+                "concepts": [
+                    "resource-organization",
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "multi-choice"
+                ]
+            },
+            "explanation": "Grouping resources into Projects lets you define custom IAM access rights per Project and makes it easier to track resource usage on your invoices."
+        },
+        {
+            "id": "46",
+            "question": "At what granularity do Organization quotas apply?",
+            "options": [
+                "Per product and product type, e.g., an Instance type",
+                "As a single total number of resources for the whole Organization",
+                "Per IAM user",
+                "Per Project"
+            ],
+            "answers": "A",
+            "topic": "Manage Your Organization & Projects",
+            "themes": {
+                "services": [
+                    "organization"
+                ],
+                "concepts": [
+                    "quotas"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Quotas are limits on the number of resources an Organization can use, and they apply per product and product type."
+        },
+        {
+            "id": "47",
+            "question": "Where can Organization quotas be viewed in the Scaleway console?",
+            "options": [
+                "In the Policies tab of the IAM dashboard",
+                "In the Invoices tab of the Billing section",
+                "In the Quotas tab of the Organization dashboard",
+                "In the Data sources tab of Cockpit"
+            ],
+            "answers": "C",
+            "topic": "Manage Your Organization & Projects",
+            "themes": {
+                "services": [
+                    "organization",
+                    "console"
+                ],
+                "concepts": [
+                    "quotas"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Organization quotas are listed in the Quotas tab of the Organization dashboard, where they can be filtered by product and location."
+        },
+        {
+            "id": "48",
+            "question": "Which CLI command creates a Project?",
+            "options": [
+                "scw iam project create",
+                "scw organization project add",
+                "scw project create",
+                "scw account project create"
+            ],
+            "answers": "D",
+            "topic": "Manage Your Organization & Projects",
+            "themes": {
+                "services": [
+                    "project"
+                ],
+                "concepts": [
+                    "resource-organization"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Projects are managed with the scw account project commands (create, get, list, update, delete)."
+        },
+        {
+            "id": "49",
+            "question": "What is automatically created when you create a Scaleway account?",
+            "options": [
+                "An Organization with no Project",
+                "A Project with no Organization",
+                "An Owner-led Organization with a default Project",
+                "An IAM application with a full-access API key"
+            ],
+            "answers": "C",
+            "topic": "Manage Your Organization & Projects",
+            "themes": {
+                "services": [
+                    "organization",
+                    "project"
+                ],
+                "concepts": [
+                    "resource-organization"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "An Organization is created automatically with you as Owner, and each Organization comes with a default Project."
+        },
+        {
+            "id": "50",
+            "question": "What does an IAM rule consist of?",
+            "options": [
+                "A principal and an API key",
+                "A user and a group",
+                "A scope with one or more permission sets",
+                "A Project and a secret key"
+            ],
+            "answers": "C",
+            "topic": "Manage access to your Organization's resources",
+            "themes": {
+                "services": [
+                    "iam"
+                ],
+                "concepts": [
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "A rule is made of a scope (Project or Organization level) and one or more permission sets, with optional conditions."
+        },
+        {
+            "id": "51",
+            "question": "Can an IAM rule explicitly deny access to specific actions or resources?",
+            "options": [
+                "Yes",
+                "No"
+            ],
+            "answers": "B",
+            "topic": "Manage access to your Organization's resources",
+            "themes": {
+                "services": [
+                    "iam"
+                ],
+                "concepts": [
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "yes-no"
+                ]
+            },
+            "explanation": "Rules can only give access; the default for anyone other than the Owner is zero permissions beyond those granted by attached policies."
+        },
+        {
+            "id": "52",
+            "question": "A newly created IAM Member has no policy attached. What can they do?",
+            "options": [
+                "Nothing beyond what attached policies grant",
+                "Read all resources but not modify them",
+                "Access resources of the default Project only",
+                "Everything except billing and IAM"
+            ],
+            "answers": "A",
+            "topic": "Manage access to your Organization's resources",
+            "themes": {
+                "services": [
+                    "iam"
+                ],
+                "concepts": [
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Apart from the Owner, a user starts with zero permissions other than those defined by the policies attached to them."
+        },
+        {
+            "id": "53",
+            "question": "Policy A allows app access Mondays only; Policy B with same principal allows Tuesdays only. When is access possible?",
+            "options": [
+                "Mondays only, first policy wins",
+                "Tuesdays only, last policy wins",
+                "Never, conditions conflict",
+                "Both Mondays and Tuesdays"
+            ],
+            "answers": "D",
+            "topic": "Manage access to your Organization's resources",
+            "themes": {
+                "services": [
+                    "iam"
+                ],
+                "concepts": [
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "IAM policies have no priority and do not compete: a single policy with met conditions allows the action, so access is granted on both days."
+        },
+        {
+            "id": "54",
+            "question": "Which two attributes can an IAM request-level condition evaluate?",
+            "options": [
+                "The IP address of the request",
+                "The CPU load of the targeted Instance",
+                "The time of the request",
+                "The MFA status of the caller"
+            ],
+            "answers": [
+                "A",
+                "C"
+            ],
+            "topic": "Manage access to your Organization's resources",
+            "themes": {
+                "services": [
+                    "iam"
+                ],
+                "concepts": [
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "multi-choice"
+                ]
+            },
+            "explanation": "Request-level conditions are written in CEL and use the request IP address, user agent and time."
+        },
+        {
+            "id": "55",
+            "question": "Which statement about API key generation is accurate?",
+            "options": [
+                "An Owner can create keys for any IAM user",
+                "You can create keys for your own user, not other human users",
+                "API keys only for IAM applications",
+                "API keys only via CLI"
+            ],
+            "answers": "B",
+            "topic": "Manage access to your Organization's resources",
+            "themes": {
+                "services": [
+                    "iam"
+                ],
+                "concepts": [
+                    "api-keys"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "API keys can be generated for your own user or for an IAM application, but not for other human IAM users, whatever your permissions."
+        },
+        {
+            "id": "56",
+            "question": "After setting max API key duration at Organization level, what happens to existing keys?",
+            "options": [
+                "They are revoked immediately",
+                "Their expiration is shortened to the new maximum",
+                "They are disabled until renewed",
+                "They are not affected; applies to new keys only"
+            ],
+            "answers": "D",
+            "topic": "Manage access to your Organization's resources",
+            "themes": {
+                "services": [
+                    "iam"
+                ],
+                "concepts": [
+                    "api-keys"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Setting or changing the maximum duration does not retroactively affect existing API keys, and the expiration date of an existing key cannot be modified."
+        },
+        {
+            "id": "57",
+            "question": "Which two measures help limit the impact of a leaked API key?",
+            "options": [
+                "Share a single API key among all team members",
+                "Enforce maximum duration for API keys",
+                "Store secret key in the source repository",
+                "Rotate API keys regularly"
+            ],
+            "answers": [
+                "B",
+                "D"
+            ],
+            "topic": "Manage access to your Organization's resources",
+            "themes": {
+                "services": [
+                    "iam"
+                ],
+                "concepts": [
+                    "api-keys",
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "multi-choice"
+                ]
+            },
+            "explanation": "Limiting credential lifetime reduces the risk of leaked credentials remaining valid, and rotating keys is a documented good practice."
+        },
+        {
+            "id": "58",
+            "question": "MFA enforced in Organization, Member hasn't enabled it when grace period ends. What happens?",
+            "options": [
+                "Member is removed from Organization",
+                "MFA is disabled for that Member",
+                "Member's account is locked until unlocked by Owner",
+                "Member keeps read-only access"
+            ],
+            "answers": "C",
+            "topic": "Manage access to your Organization's resources",
+            "themes": {
+                "services": [
+                    "iam"
+                ],
+                "concepts": [
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Members who do not comply with the enforced security requirements before the grace period ends are automatically locked and must be manually unlocked."
+        },
+        {
+            "id": "59",
+            "question": "When a Member is locked, do their API keys keep their permissions?",
+            "options": [
+                "Yes",
+                "No"
+            ],
+            "answers": "B",
+            "topic": "Manage access to your Organization's resources",
+            "themes": {
+                "services": [
+                    "iam"
+                ],
+                "concepts": [
+                    "api-keys",
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "yes-no"
+                ]
+            },
+            "explanation": "API keys attached to a Member lose their permissions when the Member is locked."
+        },
+        {
+            "id": "60",
+            "question": "What does Scaleway create automatically in IAM when you create a Kubernetes Kapsule cluster?",
+            "options": [
+                "An IAM group containing cluster nodes as applications, with a policy attached",
+                "A new Organization dedicated to the cluster",
+                "An API key for each Project user",
+                "A policy granting AllProductsFullAccess to the cluster creator"
+            ],
+            "answers": "A",
+            "topic": "Manage access to your Organization's resources",
+            "themes": {
+                "services": [
+                    "iam",
+                    "kapsule"
+                ],
+                "concepts": [
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Creating a cluster generates a group of node applications and a default policy with that group as principal, which can be deleted but not edited."
+        },
+        {
+            "id": "61",
+            "question": "You want a user and application to receive identical permissions through one policy. What should you do?",
+            "options": [
+                "Attach the policy to both separately",
+                "Give the application the user's API key",
+                "Use the AllApps principal",
+                "Add both to an IAM group and attach the policy"
+            ],
+            "answers": "D",
+            "topic": "Manage access to your Organization's resources",
+            "themes": {
+                "services": [
+                    "iam"
+                ],
+                "concepts": [
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "A policy can be attached to only one principal, so a group lets one policy apply to several users and applications."
+        },
+        {
+            "id": "62",
+            "question": "Which CLI command creates an API key for an IAM application?",
+            "options": [
+                "scw iam application key add",
+                "scw iam api-key create application-id=...",
+                "scw account api-key create application=...",
+                "scw secret api-key create application-id=..."
+            ],
+            "answers": "B",
+            "topic": "Manage access to your Organization's resources",
+            "themes": {
+                "services": [
+                    "iam"
+                ],
+                "concepts": [
+                    "api-keys"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "scw iam api-key create takes an application-id or a user-id, and an optional default-project-id for Object Storage."
+        },
+        {
+            "id": "63",
+            "question": "A secret in Secret Manager must hold a new database password. How do you store the new value?",
+            "options": [
+                "Edit the existing version",
+                "Create a new version",
+                "Change the secret type",
+                "Move the secret to another region"
+            ],
+            "answers": "B",
+            "topic": "Share and encrypt sensitive data",
+            "themes": {
+                "services": [
+                    "secret-manager"
+                ],
+                "concepts": [
+                    "secrets-management"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "A secret is a logical container of immutable versions, so a new value is stored by adding a version."
+        },
+        {
+            "id": "64",
+            "question": "What happens when you delete a secret from the Scaleway console?",
+            "options": [
+                "Scheduled deletion with a pending period",
+                "Permanently deleted immediately",
+                "Only the latest version is deleted",
+                "Disabled but kept indefinitely"
+            ],
+            "answers": "A",
+            "topic": "Share and encrypt sensitive data",
+            "themes": {
+                "services": [
+                    "secret-manager"
+                ],
+                "concepts": [
+                    "secrets-management"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Deleting a secret schedules its deletion, with a pending period during which it can be recovered before permanent deletion."
+        },
+        {
+            "id": "65",
+            "question": "Which two actions can an ephemeral policy apply to an expired secret version?",
+            "options": [
+                "Rotate automatically",
+                "Disable",
+                "Move region",
+                "Delete"
+            ],
+            "answers": [
+                "B",
+                "D"
+            ],
+            "topic": "Share and encrypt sensitive data",
+            "themes": {
+                "services": [
+                    "secret-manager"
+                ],
+                "concepts": [
+                    "secrets-management"
+                ],
+                "questionTypes": [
+                    "multi-choice"
+                ]
+            },
+            "explanation": "An ephemeral policy lets you choose whether expired versions are disabled or deleted."
+        },
+        {
+            "id": "66",
+            "question": "In Scaleway's External Secrets tutorial on Kapsule, what does an External Secret do?",
+            "options": [
+                "It creates a Kubernetes Secret from a Scaleway secret",
+                "It encrypts data at rest",
+                "It rotates API keys automatically",
+                "It monitors audit events"
+            ],
+            "answers": "A",
+            "topic": "Share and encrypt sensitive data",
+            "themes": {
+                "services": [
+                    "secret-manager",
+                    "kapsule"
+                ],
+                "concepts": [
+                    "secrets-management"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "An ExternalSecret specifies which secret to fetch from Secret Manager, and External Secrets creates a Kubernetes Secret containing it, whereas the Secret Manager CSI provider mounts secrets into pods without creating Kubernetes Secrets."
+        },
+        {
+            "id": "67",
+            "question": "Which CLI command returns the value of a secret version?",
+            "options": [
+                "scw secret version get",
+                "scw secret value read",
+                "scw secret access",
+                "scw secret version access"
+            ],
+            "answers": "D",
+            "topic": "Share and encrypt sensitive data",
+            "themes": {
+                "services": [
+                    "secret-manager"
+                ],
+                "concepts": [
+                    "secrets-management"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "scw secret version access returns the sensitive data of a version, whereas scw secret secret get returns only metadata."
+        },
+        {
+            "id": "68",
+            "question": "In the Scaleway Go SDK, which Secret Manager API method returns the value of a secret version?",
+            "options": [
+                "GetSecretValue",
+                "ReadSecret",
+                "DecryptSecretVersion",
+                "AccessSecretVersion"
+            ],
+            "answers": "D",
+            "topic": "Share and encrypt sensitive data",
+            "themes": {
+                "services": [
+                    "secret-manager"
+                ],
+                "concepts": [
+                    "secrets-management"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "The secret package of the Scaleway Go SDK exposes AccessSecretVersion and AccessSecretVersionByPath to read version data."
+        },
+        {
+            "id": "69",
+            "question": "A dedicated application pulls secrets with External Secrets on Kapsule. Which two configurations apply?",
+            "options": [
+                "Use a SecretStore resource",
+                "Use a ClusterSecretStore resource",
+                "Reference the secret in a Kubernetes Secret",
+                "Use an IAM policy with Secret Manager access"
+            ],
+            "answers": [
+                "A",
+                "D"
+            ],
+            "topic": "Share and encrypt sensitive data",
+            "themes": {
+                "services": [
+                    "secret-manager",
+                    "iam",
+                    "kapsule"
+                ],
+                "concepts": [
+                    "secrets-management",
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "multi-choice"
+                ]
+            },
+            "explanation": "The documented minimum permission sets for an application using External Secrets are SecretManagerReadOnly and SecretManagerSecretAccess."
+        },
+        {
+            "id": "70",
+            "question": "Key Manager generates a data encryption key (DEK) for your application. How should you handle it?",
+            "options": [
+                "Store plaintext next to data",
+                "Store only ciphertext, discard plaintext",
+                "Rely on Key Manager to store the DEK",
+                "Reuse the same DEK"
+            ],
+            "answers": "B",
+            "topic": "Share and encrypt sensitive data",
+            "themes": {
+                "services": [
+                    "key-manager"
+                ],
+                "concepts": [
+                    "encryption"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Key Manager does not store DEKs; you should keep only their ciphertext, never store the plaintext and delete it after use."
+        },
+        {
+            "id": "71",
+            "question": "After rotating a symmetric Key Manager key, can previously encrypted data still be decrypted?",
+            "options": [
+                "Yes",
+                "No"
+            ],
+            "answers": "A",
+            "topic": "Share and encrypt sensitive data",
+            "themes": {
+                "services": [
+                    "key-manager"
+                ],
+                "concepts": [
+                    "encryption"
+                ],
+                "questionTypes": [
+                    "yes-no"
+                ]
+            },
+            "explanation": "Data encrypted with former key versions remains decipherable with the former version as long as the key is not deleted."
+        },
+        {
+            "id": "72",
+            "question": "Which statements describe Key Manager advantages over storing encryption keys in application code?",
+            "options": [
+                "Keys can be exported in plaintext",
+                "Cryptographic operations happen inside Key Manager, keys never leave",
+                "No permission separation between encrypt and decrypt",
+                "Separate encrypt and decrypt permissions"
+            ],
+            "answers": [
+                "B",
+                "D"
+            ],
+            "topic": "Share and encrypt sensitive data",
+            "themes": {
+                "services": [
+                    "key-manager",
+                    "secret-manager"
+                ],
+                "concepts": [
+                    "encryption",
+                    "secrets-management"
+                ],
+                "questionTypes": [
+                    "multi-choice"
+                ]
+            },
+            "explanation": "Key Manager keeps keys non-extractable and performs the operations itself, and it allows separate encrypt and decrypt authorizations."
+        },
+        {
+            "id": "73",
+            "question": "What is the main benefit of using data encryption keys (DEKs) when encrypting data?",
+            "options": [
+                "DEKs are stored in plaintext with the data",
+                "KEKs can be rotated without re-encrypting the data",
+                "DEKs eliminate the need for a KEK",
+                "DEKs are smaller than KEKs"
+            ],
+            "answers": "B",
+            "topic": "Share and encrypt sensitive data",
+            "themes": {
+                "services": [
+                    "key-manager"
+                ],
+                "concepts": [
+                    "encryption"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Because data is encrypted by a DEK, rotating the key encryption key requires re-encrypting only the DEK and not the data."
+        },
+        {
+            "id": "74",
+            "question": "Which statuses can an Audit Trail event have?",
+            "options": [
+                "Success, attempted, failed",
+                "Success only",
+                "Failed only",
+                "Pending only"
+            ],
+            "answers": "A",
+            "topic": "Monitor your resources and immediately detect unauthorized activity",
+            "themes": {
+                "services": [
+                    "audit-trail"
+                ],
+                "concepts": [
+                    "observability"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "An Audit Trail status is the API response to the action: Successful when the request was executed, Forbidden when permission was denied."
+        },
+        {
+            "id": "75",
+            "question": "Which two IAM permission sets let you use Audit Trail?",
+            "options": [
+                "Read only",
+                "AuditTrailReadOnlyAccess",
+                "AuditTrailFullAccess",
+                "Write only"
+            ],
+            "answers": [
+                "B",
+                "C"
+            ],
+            "topic": "Monitor your resources and immediately detect unauthorized activity",
+            "themes": {
+                "services": [
+                    "audit-trail",
+                    "iam"
+                ],
+                "concepts": [
+                    "access-management",
+                    "observability"
+                ],
+                "questionTypes": [
+                    "multi-choice"
+                ]
+            },
+            "explanation": "Audit Trail requires the AuditTrailReadOnly or OrganizationManager permission set, scoped at Organization level."
+        },
+        {
+            "id": "76",
+            "question": "Where can Audit Trail events be exported for long-term retention?",
+            "options": [
+                "To a Cloud Storage bucket",
+                "To an Object Storage bucket",
+                "To a Managed Database",
+                "To a Serverless Container"
+            ],
+            "answers": "B",
+            "topic": "Monitor your resources and immediately detect unauthorized activity",
+            "themes": {
+                "services": [
+                    "audit-trail",
+                    "object-storage"
+                ],
+                "concepts": [
+                    "observability",
+                    "data-durability"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Audit Trail exports upload event logs to an Object Storage bucket of your choice."
+        },
+        {
+            "id": "77",
+            "question": "Which question is best answered with Audit Trail?",
+            "options": [
+                "Who deleted a bucket and when?",
+                "What is the CPU usage of an Instance?",
+                "How much does Object Storage cost?",
+                "Which IAM policies exist?"
+            ],
+            "answers": "A",
+            "topic": "Monitor your resources and immediately detect unauthorized activity",
+            "themes": {
+                "services": [
+                    "audit-trail"
+                ],
+                "concepts": [
+                    "observability"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Audit Trail records the identity of the principal, the date, the source IP address, the API method used and the status of the request."
+        },
+        {
+            "id": "78",
+            "question": "Can you modify thresholds of Scaleway preconfigured alerts in Cockpit?",
+            "options": [
+                "Yes",
+                "No"
+            ],
+            "answers": "B",
+            "topic": "Monitor your resources and immediately detect unauthorized activity",
+            "themes": {
+                "services": [
+                    "cockpit"
+                ],
+                "concepts": [
+                    "alerting"
+                ],
+                "questionTypes": [
+                    "yes-no"
+                ]
+            },
+            "explanation": "Preconfigured alerts come with default thresholds and evaluation durations that cannot be modified."
+        },
+        {
+            "id": "79",
+            "question": "You want to send your own application metrics to Cockpit. Which two statements apply?",
+            "options": [
+                "Use the Scaleway API to push metrics",
+                "Use Prometheus remote write",
+                "Use the Cockpit data source in Grafana",
+                "Use the Scaleway CLI to send metrics"
+            ],
+            "answers": [
+                "A",
+                "B"
+            ],
+            "topic": "Monitor your resources and immediately detect unauthorized activity",
+            "themes": {
+                "services": [
+                    "cockpit"
+                ],
+                "concepts": [
+                    "observability"
+                ],
+                "questionTypes": [
+                    "multi-choice"
+                ]
+            },
+            "explanation": "Scaleway data sources are read-only, so custom data needs a custom data source, and a token with the Push permission authenticates the sending."
+        },
+        {
+            "id": "80",
+            "question": "What happens when you reduce the retention period of a Cockpit data source?",
+            "options": [
+                "The data source is temporarily paused",
+                "Older data is kept but marked as archived",
+                "Data older than the new period is deleted",
+                "No change to existing data"
+            ],
+            "answers": "C",
+            "topic": "Monitor your resources and immediately detect unauthorized activity",
+            "themes": {
+                "services": [
+                    "cockpit"
+                ],
+                "concepts": [
+                    "observability"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Reducing retention permanently deletes the data beyond the selected period, and the deletion is irreversible even if the retention is later increased."
+        },
+        {
+            "id": "81",
+            "question": "When creating alerting rules in Grafana for Cockpit, which type of rule applies?",
+            "options": [
+                "Grafana-managed alert rules",
+                "Datasource-managed alert rules",
+                "Both types equally",
+                "Neither type"
+            ],
+            "answers": "B",
+            "topic": "Monitor your resources and immediately detect unauthorized activity",
+            "themes": {
+                "services": [
+                    "cockpit"
+                ],
+                "concepts": [
+                    "alerting"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Scaleway does not support the Grafana alert manager, so alerting rules in Grafana must be data source-managed."
+        },
+        {
+            "id": "82",
+            "question": "Which two Cockpit elements provided by Scaleway are read-only?",
+            "options": [
+                "Predefined dashboards",
+                "Custom dashboards",
+                "Preconfigured alerts",
+                "Custom alerts"
+            ],
+            "answers": [
+                "A",
+                "C"
+            ],
+            "topic": "Monitor your resources and immediately detect unauthorized activity",
+            "themes": {
+                "services": [
+                    "cockpit"
+                ],
+                "concepts": [
+                    "observability"
+                ],
+                "questionTypes": [
+                    "multi-choice"
+                ]
+            },
+            "explanation": "Scaleway data sources are read-only, and preconfigured dashboards in the Scaleway folder are always read-only."
+        },
+        {
+            "id": "83",
+            "question": "What does the preferred Project of an API key define?",
+            "options": [
+                "The Project where the key was created",
+                "The Project context for API calls",
+                "The Project that owns the key",
+                "The Project where alerts are sent"
+            ],
+            "answers": "B",
+            "topic": "Manage access to encrypted data with Object Storage",
+            "themes": {
+                "services": [
+                    "iam",
+                    "object-storage"
+                ],
+                "concepts": [
+                    "api-keys"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "S3-compatible tools cannot pass a Project ID, so the API key's preferred Project is the one used for Object Storage actions."
+        },
+        {
+            "id": "84",
+            "question": "Which two statements about bucket policies are true?",
+            "options": [
+                "Bucket policies can grant access to IAM users",
+                "Bucket policies are always required for bucket access",
+                "Bucket policies can restrict access by IP address",
+                "Bucket policies can grant cross-account access"
+            ],
+            "answers": [
+                "A",
+                "C"
+            ],
+            "topic": "Manage access to encrypted data with Object Storage",
+            "themes": {
+                "services": [
+                    "object-storage"
+                ],
+                "concepts": [
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "multi-choice"
+                ]
+            },
+            "explanation": "A bucket holds a single bucket policy, which a new push overwrites; with version 2023-04-17 only explicitly allowed actions are permitted, so Deny statements are useless."
+        },
+        {
+            "id": "85",
+            "question": "Several principals have Object Storage access through IAM. You add a bucket policy. What happens?",
+            "options": [
+                "IAM permissions override bucket policy",
+                "Bucket policy overrides IAM permissions",
+                "Both are evaluated, most restrictive wins",
+                "Only IAM permissions apply"
+            ],
+            "answers": "C",
+            "topic": "Manage access to encrypted data with Object Storage",
+            "themes": {
+                "services": [
+                    "iam",
+                    "object-storage"
+                ],
+                "concepts": [
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Once a bucket policy restricts access, every other principal that needs access must be explicitly allowed by the bucket policy."
+        },
+        {
+            "id": "86",
+            "question": "Organization Owner pushes a bucket policy that denies all access. What happens?",
+            "options": [
+                "Access is denied to everyone including Owner",
+                "Owner retains access despite the deny",
+                "Only IAM users are affected",
+                "Access is denied only to new users"
+            ],
+            "answers": "B",
+            "topic": "Manage access to encrypted data with Object Storage",
+            "themes": {
+                "services": [
+                    "object-storage",
+                    "iam"
+                ],
+                "concepts": [
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "The Owner always has the right to put and delete bucket policies, even if the policy does not allow other bucket operations."
+        },
+        {
+            "id": "87",
+            "question": "After uploading an object with SSE-C, what does Object Storage retain?",
+            "options": [
+                "The encryption key in plaintext",
+                "A hash of the encryption key",
+                "Nothing about the key",
+                "The key ID but not the key itself"
+            ],
+            "answers": "B",
+            "topic": "Manage access to encrypted data with Object Storage",
+            "themes": {
+                "services": [
+                    "object-storage"
+                ],
+                "concepts": [
+                    "encryption"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "With SSE-C the key is deleted once the data is copied, and only its digest is saved in the object's metadata so the object can be decrypted on download."
+        },
+        {
+            "id": "88",
+            "question": "Which Object Storage server-side encryption method uses a key encryption key to wrap data encryption keys?",
+            "options": [
+                "SSE-S3",
+                "SSE-C",
+                "SSE-KMS",
+                "SSE-ONE"
+            ],
+            "answers": "C",
+            "topic": "Manage access to encrypted data with Object Storage",
+            "themes": {
+                "services": [
+                    "object-storage",
+                    "key-manager"
+                ],
+                "concepts": [
+                    "encryption"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "SSE-KMS relies on a symmetric KEK from Key Manager associated with the bucket, while SSE-ONE uses keys managed by Scaleway and SSE-C uses customer-provided keys."
+        },
+        {
+            "id": "89",
+            "question": "Application has ObjectStorageFullAccess but no Key Manager access. What happens with SSE-KMS encrypted objects?",
+            "options": [
+                "Can read and decrypt objects",
+                "Can read but cannot decrypt objects",
+                "Cannot read objects at all",
+                "Can read and decrypt if key is in same Project"
+            ],
+            "answers": "C",
+            "topic": "Manage access to encrypted data with Object Storage",
+            "themes": {
+                "services": [
+                    "object-storage",
+                    "key-manager",
+                    "iam"
+                ],
+                "concepts": [
+                    "encryption",
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Object Storage permission sets alone are not sufficient for SSE-KMS buckets, and writing needs KeyManagerKeyEncrypt."
+        },
+        {
+            "id": "90",
+            "question": "Enabling SSE-ONE on an existing bucket also encrypts objects already stored?",
+            "options": [
+                "Yes, automatically",
+                "No, only new objects",
+                "Yes, after a manual re-encryption job",
+                "Only if Object Lock is enabled"
+            ],
+            "answers": "B",
+            "topic": "Manage access to encrypted data with Object Storage",
+            "themes": {
+                "services": [
+                    "object-storage"
+                ],
+                "concepts": [
+                    "encryption"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Objects uploaded before SSE-ONE was enabled are not encrypted; only new uploads are."
+        },
+        {
+            "id": "91",
+            "question": "A bucket policy must allow a principal to list a bucket and read objects. Which two statements apply?",
+            "options": [
+                "Allow s3:ListBucket on the bucket",
+                "Allow s3:GetObject on the bucket",
+                "Allow s3:ListBucket on individual objects",
+                "Allow s3:GetObject on objects with a specific prefix"
+            ],
+            "answers": [
+                "B",
+                "D"
+            ],
+            "topic": "Manage access to encrypted data with Object Storage",
+            "themes": {
+                "services": [
+                    "object-storage"
+                ],
+                "concepts": [
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "multi-choice"
+                ]
+            },
+            "explanation": "s3:ListBucket requires the bucket resource and s3:GetObject requires <BUCKET_NAME>/*, which grants access to the objects but not to the bucket itself."
+        },
+        {
+            "id": "92",
+            "question": "An API key has bucket A's Project as preferred Project. How can it access bucket B in another Project?",
+            "options": [
+                "It cannot, API keys are locked to one Project",
+                "Use the API key with a different Project header",
+                "Append @<Project ID> to the access key, subject to permissions on that Project",
+                "Create a new API key for bucket B's Project"
+            ],
+            "answers": "C",
+            "topic": "Manage access to encrypted data with Object Storage",
+            "themes": {
+                "services": [
+                    "iam",
+                    "object-storage"
+                ],
+                "concepts": [
+                    "api-keys"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Appending @ and a Project ID to the access key overrides the preferred Project, provided the key has permissions on the target Project."
+        }
+    ]
+}

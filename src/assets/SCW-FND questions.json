@@ -1,0 +1,2401 @@
+{
+    "version": 2,
+    "exam": {
+        "name": "Scaleway Foundations",
+        "code": "SCW-FND",
+        "totalQuestions": 50,
+        "timeLimitMinutes": 60,
+        "passingScore": {
+            "passingScore": 70
+        },
+        "weights": {
+            "Bare Metal": 10.0,
+            "Compute": 10.0,
+            "Introduction to the Scaleway Ecosystem": 10.0,
+            "Kubernetes": 10.0,
+            "Managed Databases": 10.0,
+            "Networking": 10.0,
+            "Observability": 10.0,
+            "Security & Identity": 10.0,
+            "Serverless": 10.0,
+            "Storage": 10.0
+        }
+    },
+    "themes": {
+        "services": [
+            "apple-silicon",
+            "audit-trail",
+            "billing",
+            "block-storage",
+            "cockpit",
+            "company",
+            "container-registry",
+            "dedibox",
+            "developer-tools",
+            "domains-dns",
+            "elastic-metal",
+            "flexible-ip",
+            "generative-api",
+            "glacier",
+            "iam",
+            "instances",
+            "instant-apps",
+            "interlink",
+            "kapsule",
+            "kosmos",
+            "load-balancer",
+            "managed-database",
+            "managed-database-redis",
+            "object-storage",
+            "organization",
+            "private-network",
+            "project",
+            "public-gateway",
+            "queues",
+            "regions-az",
+            "serverless-containers",
+            "serverless-functions",
+            "serverless-jobs",
+            "serverless-sql-database",
+            "support",
+            "topics-events",
+            "transactional-email",
+            "vpc",
+            "web-hosting"
+        ],
+        "concepts": [
+            "access-management",
+            "bare-metal",
+            "billing",
+            "cloud-history",
+            "containers",
+            "cost-optimization",
+            "cpu-architecture",
+            "data-durability",
+            "data-modeling",
+            "deployment",
+            "disaster-recovery",
+            "high-availability",
+            "load-balancing",
+            "messaging",
+            "networking",
+            "observability",
+            "operating-systems",
+            "private-networking",
+            "regions-availability-zones",
+            "resource-organization",
+            "scalability",
+            "serverless",
+            "storage-options",
+            "virtualization"
+        ],
+        "questionTypes": [
+            "multi-choice",
+            "single-choice",
+            "true-false",
+            "yes-no"
+        ]
+    },
+    "questions": [
+        {
+            "id": "1",
+            "question": "What does Scaleway's Domains and DNS service primarily do?",
+            "options": [
+                "Send transactional emails reliably",
+                "Register and manage domains, configure DNS zones",
+                "Manage cloud resources",
+                "Offer web hosting plans"
+            ],
+            "answers": "B",
+            "topic": "Networking",
+            "themes": {
+                "services": [
+                    "domains-dns"
+                ],
+                "concepts": [
+                    "networking"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "2",
+            "question": "True or false: API keys inherit their bearer's policy permissions.",
+            "options": [
+                "True",
+                "False"
+            ],
+            "answers": "A",
+            "topic": "Security & Identity",
+            "themes": {
+                "services": [
+                    "iam"
+                ],
+                "concepts": [
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "true-false"
+                ]
+            }
+        },
+        {
+            "id": "3",
+            "question": "How do Generative APIs Serverless and Dedicated Deployments differ regarding model control?",
+            "options": [
+                "Both give full control",
+                "Both give limited control",
+                "Serverless full, Dedicated limited",
+                "Serverless limited, Dedicated full"
+            ],
+            "answers": "D",
+            "topic": "Introduction to the Scaleway Ecosystem",
+            "themes": {
+                "services": [
+                    "generative-api"
+                ],
+                "concepts": [
+                    "serverless"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "4",
+            "question": "True or false: a bucket holds at most 100 objects.",
+            "options": [
+                "True",
+                "False"
+            ],
+            "answers": "B",
+            "topic": "Storage",
+            "themes": {
+                "services": [
+                    "object-storage"
+                ],
+                "concepts": [
+                    "data-durability"
+                ],
+                "questionTypes": [
+                    "true-false"
+                ]
+            }
+        },
+        {
+            "id": "5",
+            "question": "Which protocol does Scaleway Queues implement internally for message queuing?",
+            "options": [
+                "MQTT",
+                "AWS SNS",
+                "HTTP/S",
+                "AWS SQS"
+            ],
+            "answers": "D",
+            "topic": "Introduction to the Scaleway Ecosystem",
+            "themes": {
+                "services": [
+                    "queues"
+                ],
+                "concepts": [
+                    "messaging"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "6",
+            "question": "Which support tiers does Scaleway provide?",
+            "options": [
+                "Basic, Advanced, Business, Enterprise",
+                "Basic and Enterprise",
+                "Basic only"
+            ],
+            "answers": "A",
+            "topic": "Introduction to the Scaleway Ecosystem",
+            "themes": {
+                "services": [
+                    "support"
+                ],
+                "concepts": [
+                    "billing"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "7",
+            "question": "True or false: Object Storage theoretically offers unlimited capacity.",
+            "options": [
+                "True",
+                "False"
+            ],
+            "answers": "A",
+            "topic": "Storage",
+            "themes": {
+                "services": [
+                    "object-storage"
+                ],
+                "concepts": [
+                    "data-durability"
+                ],
+                "questionTypes": [
+                    "true-false"
+                ]
+            }
+        },
+        {
+            "id": "8",
+            "question": "Domains and Elastic Metal are invoiced at order time. How often are other products billed?",
+            "options": [
+                "Monthly",
+                "Quarterly",
+                "Weekly",
+                "Varies by product"
+            ],
+            "answers": "A",
+            "topic": "Introduction to the Scaleway Ecosystem",
+            "themes": {
+                "services": [
+                    "billing"
+                ],
+                "concepts": [
+                    "billing"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "9",
+            "question": "Does Cockpit ship ready-made dashboards for supported products?",
+            "options": [
+                "Yes",
+                "No"
+            ],
+            "answers": "A",
+            "topic": "Observability",
+            "themes": {
+                "services": [
+                    "cockpit"
+                ],
+                "concepts": [
+                    "observability"
+                ],
+                "questionTypes": [
+                    "yes-no"
+                ]
+            }
+        },
+        {
+            "id": "10",
+            "question": "Which statement about Kubernetes Kapsule is correct?",
+            "options": [
+                "Uses nodes outside Scaleway",
+                "Fully embedded in the Scaleway ecosystem",
+                "Only integrates with Load Balancers and Cockpit",
+                "Paris region only"
+            ],
+            "answers": "B",
+            "topic": "Kubernetes",
+            "themes": {
+                "services": [
+                    "kapsule"
+                ],
+                "concepts": [
+                    "containers"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "11",
+            "question": "True or false: bucket policies and IAM policies can be used together.",
+            "options": [
+                "True",
+                "False"
+            ],
+            "answers": "A",
+            "topic": "Security & Identity",
+            "themes": {
+                "services": [
+                    "object-storage",
+                    "iam"
+                ],
+                "concepts": [
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "true-false"
+                ]
+            }
+        },
+        {
+            "id": "12",
+            "question": "What is the primary purpose of Topics and Events?",
+            "options": [
+                "Point-to-point message broker",
+                "IoT protocol",
+                "Queue-based async processing",
+                "One-to-many publish/subscribe"
+            ],
+            "answers": "D",
+            "topic": "Introduction to the Scaleway Ecosystem",
+            "themes": {
+                "services": [
+                    "topics-events"
+                ],
+                "concepts": [
+                    "messaging"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "13",
+            "question": "Which user types exist within a Scaleway Organization?",
+            "options": [
+                "Owner",
+                "Application",
+                "Manager",
+                "Guest",
+                "Member"
+            ],
+            "answers": [
+                "A",
+                "E"
+            ],
+            "topic": "Security & Identity",
+            "themes": {
+                "services": [
+                    "organization"
+                ],
+                "concepts": [
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "multi-choice"
+                ]
+            }
+        },
+        {
+            "id": "14",
+            "question": "True or false: all Object Storage resources in a Project are public by default.",
+            "options": [
+                "True",
+                "False"
+            ],
+            "answers": "B",
+            "topic": "Storage",
+            "themes": {
+                "services": [
+                    "object-storage"
+                ],
+                "concepts": [
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "true-false"
+                ]
+            }
+        },
+        {
+            "id": "15",
+            "question": "True or false: a network outage in one Region causes outages in all Regions.",
+            "options": [
+                "True",
+                "False"
+            ],
+            "answers": "B",
+            "topic": "Introduction to the Scaleway Ecosystem",
+            "themes": {
+                "services": [
+                    "regions-az"
+                ],
+                "concepts": [
+                    "regions-availability-zones"
+                ],
+                "questionTypes": [
+                    "true-false"
+                ]
+            }
+        },
+        {
+            "id": "16",
+            "question": "True or false: resources can move between Projects.",
+            "options": [
+                "True",
+                "False"
+            ],
+            "answers": "B",
+            "topic": "Security & Identity",
+            "themes": {
+                "services": [
+                    "project"
+                ],
+                "concepts": [
+                    "resource-organization"
+                ],
+                "questionTypes": [
+                    "true-false"
+                ]
+            }
+        },
+        {
+            "id": "17",
+            "question": "What is a Scaleway Instance?",
+            "options": [
+                "Single-tenant dedicated machine",
+                "Cloud VM with shared or dedicated resources"
+            ],
+            "answers": "B",
+            "topic": "Compute",
+            "themes": {
+                "services": [
+                    "instances"
+                ],
+                "concepts": [
+                    "virtualization"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "18",
+            "question": "Can a flexible IP be moved from an Instance in fr-par-1 to one in fr-par-2?",
+            "options": [
+                "Yes",
+                "No"
+            ],
+            "answers": "B",
+            "topic": "Networking",
+            "themes": {
+                "services": [
+                    "flexible-ip"
+                ],
+                "concepts": [
+                    "networking"
+                ],
+                "questionTypes": [
+                    "yes-no"
+                ]
+            }
+        },
+        {
+            "id": "19",
+            "question": "What is a key benefit of Scaleway Transactional Email?",
+            "options": [
+                "Limited analytics",
+                "No integrations",
+                "High deliverability and advanced analytics",
+                "No SPF/DKIM/DMARC"
+            ],
+            "answers": "C",
+            "topic": "Introduction to the Scaleway Ecosystem",
+            "themes": {
+                "services": [
+                    "transactional-email"
+                ],
+                "concepts": [
+                    "messaging"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "20",
+            "question": "How can Instance costs be kept within budget? Choose three.",
+            "options": [
+                "Update the OS",
+                "Track usage in the main dashboard",
+                "Estimate cost before launch",
+                "Power off when unused to stop billing"
+            ],
+            "answers": [
+                "B",
+                "C",
+                "D"
+            ],
+            "topic": "Introduction to the Scaleway Ecosystem",
+            "themes": {
+                "services": [
+                    "billing",
+                    "instances"
+                ],
+                "concepts": [
+                    "cost-optimization"
+                ],
+                "questionTypes": [
+                    "multi-choice"
+                ]
+            }
+        },
+        {
+            "id": "21",
+            "question": "Which product is not part of the Networking category?",
+            "options": [
+                "Virtual Private Cloud",
+                "Public Gateway",
+                "Load Balancer",
+                "Cockpit",
+                "Domains and DNS"
+            ],
+            "answers": "D",
+            "topic": "Networking",
+            "themes": {
+                "services": [
+                    "vpc",
+                    "public-gateway",
+                    "load-balancer",
+                    "cockpit",
+                    "domains-dns"
+                ],
+                "concepts": [
+                    "networking"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "22",
+            "question": "What was Scaleway called when founded in 1999?",
+            "options": [
+                "Scaleway Datacenters",
+                "BookMyName",
+                "Dedibox",
+                "Online"
+            ],
+            "answers": "B",
+            "topic": "Introduction to the Scaleway Ecosystem",
+            "themes": {
+                "services": [
+                    "company"
+                ],
+                "concepts": [
+                    "cloud-history"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "23",
+            "question": "How frequently is Dedibox billed?",
+            "options": [
+                "Hourly",
+                "Weekly",
+                "Monthly"
+            ],
+            "answers": "C",
+            "topic": "Bare Metal",
+            "themes": {
+                "services": [
+                    "dedibox"
+                ],
+                "concepts": [
+                    "billing"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "24",
+            "question": "Which Managed Database suits sessions and API calls best?",
+            "options": [
+                "Managed In-Memory DB for Redis",
+                "Managed Relational DB for PostgreSQL and MySQL"
+            ],
+            "answers": "A",
+            "topic": "Managed Databases",
+            "themes": {
+                "services": [
+                    "managed-database-redis"
+                ],
+                "concepts": [
+                    "data-modeling"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "25",
+            "question": "Which product costs nothing at all?",
+            "options": [
+                "Secret Manager",
+                "Public Gateway",
+                "Serverless Functions",
+                "IAM"
+            ],
+            "answers": "D",
+            "topic": "Security & Identity",
+            "themes": {
+                "services": [
+                    "iam"
+                ],
+                "concepts": [
+                    "billing"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "26",
+            "question": "How does an instance on a Private Network reach the Internet?",
+            "options": [
+                "Via Public Gateway",
+                "Via Load Balancer",
+                "Via domain name",
+                "Not possible"
+            ],
+            "answers": "A",
+            "topic": "Networking",
+            "themes": {
+                "services": [
+                    "private-network",
+                    "public-gateway"
+                ],
+                "concepts": [
+                    "private-networking"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "27",
+            "question": "Used an Apple Mac Mini M1 for 12 hours. Billed for 24 hours?",
+            "options": [
+                "Yes",
+                "No"
+            ],
+            "answers": "A",
+            "topic": "Bare Metal",
+            "themes": {
+                "services": [
+                    "apple-silicon"
+                ],
+                "concepts": [
+                    "billing"
+                ],
+                "questionTypes": [
+                    "yes-no"
+                ]
+            }
+        },
+        {
+            "id": "28",
+            "question": "Can running Instance RAM/CPU be increased?",
+            "options": [
+                "Yes",
+                "No"
+            ],
+            "answers": "A",
+            "topic": "Compute",
+            "themes": {
+                "services": [
+                    "instances"
+                ],
+                "concepts": [
+                    "scalability"
+                ],
+                "questionTypes": [
+                    "yes-no"
+                ]
+            }
+        },
+        {
+            "id": "29",
+            "question": "Which InstantApps are available on Instances? Choose three.",
+            "options": [
+                "Docker",
+                "OpenVPN",
+                "Vimeo",
+                "WordPress",
+                "BuzzFeed"
+            ],
+            "answers": [
+                "A",
+                "B",
+                "D"
+            ],
+            "topic": "Compute",
+            "themes": {
+                "services": [
+                    "instances",
+                    "instant-apps"
+                ],
+                "concepts": [
+                    "deployment"
+                ],
+                "questionTypes": [
+                    "multi-choice"
+                ]
+            }
+        },
+        {
+            "id": "30",
+            "question": "What is a sound Instance backup approach?",
+            "options": [
+                "Rely only on images and snapshots",
+                "Perform regular backups via S3 Object Storage protocol"
+            ],
+            "answers": "B",
+            "topic": "Compute",
+            "themes": {
+                "services": [
+                    "instances",
+                    "object-storage"
+                ],
+                "concepts": [
+                    "disaster-recovery"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "31",
+            "question": "Which deployment mode suits production Database Instances?",
+            "options": [
+                "Standalone",
+                "High Availability"
+            ],
+            "answers": "B",
+            "topic": "Managed Databases",
+            "themes": {
+                "services": [
+                    "managed-database"
+                ],
+                "concepts": [
+                    "high-availability"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "32",
+            "question": "True or false: Development Instances include dedicated vCPU.",
+            "options": [
+                "True",
+                "False"
+            ],
+            "answers": "B",
+            "topic": "Compute",
+            "themes": {
+                "services": [
+                    "instances"
+                ],
+                "concepts": [
+                    "cpu-architecture"
+                ],
+                "questionTypes": [
+                    "true-false"
+                ]
+            }
+        },
+        {
+            "id": "33",
+            "question": "Which Instance ranges provide dedicated vCPU only? Choose two.",
+            "options": [
+                "General Purpose",
+                "Compute Optimized",
+                "Memory Optimized",
+                "Development"
+            ],
+            "answers": [
+                "B",
+                "C"
+            ],
+            "topic": "Compute",
+            "themes": {
+                "services": [
+                    "instances"
+                ],
+                "concepts": [
+                    "cpu-architecture"
+                ],
+                "questionTypes": [
+                    "multi-choice"
+                ]
+            }
+        },
+        {
+            "id": "34",
+            "question": "Where are objects stored?",
+            "options": [
+                "In a bucket",
+                "In a Serverless Container",
+                "In a pod",
+                "In a namespace",
+                "In a folder"
+            ],
+            "answers": "A",
+            "topic": "Storage",
+            "themes": {
+                "services": [
+                    "object-storage"
+                ],
+                "concepts": [
+                    "data-durability"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "35",
+            "question": "Does Scaleway Glacier offer Multi-AZ redundancy?",
+            "options": [
+                "Yes",
+                "No"
+            ],
+            "answers": "B",
+            "topic": "Storage",
+            "themes": {
+                "services": [
+                    "glacier"
+                ],
+                "concepts": [
+                    "data-durability"
+                ],
+                "questionTypes": [
+                    "yes-no"
+                ]
+            }
+        },
+        {
+            "id": "36",
+            "question": "True or false: Dedibox supports Windows OS.",
+            "options": [
+                "True",
+                "False"
+            ],
+            "answers": "A",
+            "topic": "Bare Metal",
+            "themes": {
+                "services": [
+                    "dedibox"
+                ],
+                "concepts": [
+                    "operating-systems"
+                ],
+                "questionTypes": [
+                    "true-false"
+                ]
+            }
+        },
+        {
+            "id": "37",
+            "question": "True or false: newly added bucket objects default to private visibility.",
+            "options": [
+                "True",
+                "False"
+            ],
+            "answers": "A",
+            "topic": "Storage",
+            "themes": {
+                "services": [
+                    "object-storage"
+                ],
+                "concepts": [
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "true-false"
+                ]
+            }
+        },
+        {
+            "id": "38",
+            "question": "True or false: each Region has exactly three evenly distributed AZs.",
+            "options": [
+                "True",
+                "False"
+            ],
+            "answers": "A",
+            "topic": "Introduction to the Scaleway Ecosystem",
+            "themes": {
+                "services": [
+                    "regions-az"
+                ],
+                "concepts": [
+                    "regions-availability-zones"
+                ],
+                "questionTypes": [
+                    "true-false"
+                ]
+            }
+        },
+        {
+            "id": "39",
+            "question": "Which serverless product cannot process concurrent requests?",
+            "options": [
+                "Serverless Functions",
+                "Serverless Containers"
+            ],
+            "answers": "A",
+            "topic": "Serverless",
+            "themes": {
+                "services": [
+                    "serverless-functions",
+                    "serverless-containers"
+                ],
+                "concepts": [
+                    "serverless"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "40",
+            "question": "Can you add Block Storage to an Elastic Metal server?",
+            "options": [
+                "Yes",
+                "No"
+            ],
+            "answers": "B",
+            "topic": "Bare Metal",
+            "themes": {
+                "services": [
+                    "elastic-metal",
+                    "block-storage"
+                ],
+                "concepts": [
+                    "storage-options"
+                ],
+                "questionTypes": [
+                    "yes-no"
+                ]
+            }
+        },
+        {
+            "id": "41",
+            "question": "What is the relationship between Availability Zone and Region?",
+            "options": [
+                "Region contains an AZ",
+                "AZ contains a Region",
+                "Region contains multiple AZs"
+            ],
+            "answers": "C",
+            "topic": "Introduction to the Scaleway Ecosystem",
+            "themes": {
+                "services": [
+                    "regions-az"
+                ],
+                "concepts": [
+                    "regions-availability-zones"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "42",
+            "question": "Where are container images stored?",
+            "options": [
+                "Managed DB",
+                "Kapsule pod",
+                "Container Registry",
+                "Object Storage bucket"
+            ],
+            "answers": "C",
+            "topic": "Kubernetes",
+            "themes": {
+                "services": [
+                    "container-registry"
+                ],
+                "concepts": [
+                    "containers"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "43",
+            "question": "Can a Load Balancer be private?",
+            "options": [
+                "Yes",
+                "No"
+            ],
+            "answers": "A",
+            "topic": "Networking",
+            "themes": {
+                "services": [
+                    "load-balancer"
+                ],
+                "concepts": [
+                    "load-balancing"
+                ],
+                "questionTypes": [
+                    "yes-no"
+                ]
+            }
+        },
+        {
+            "id": "44",
+            "question": "What is a defining feature of Web Hosting?",
+            "options": [
+                "Limited email storage",
+                "Support for only 10 preconfigured apps",
+                "No dedicated email",
+                "Over 420 preconfigured click-to-deploy apps"
+            ],
+            "answers": "D",
+            "topic": "Introduction to the Scaleway Ecosystem",
+            "themes": {
+                "services": [
+                    "web-hosting"
+                ],
+                "concepts": [
+                    "deployment"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            }
+        },
+        {
+            "id": "45",
+            "question": "Can multiple public IPs attach to one Instance?",
+            "options": [
+                "Yes",
+                "No"
+            ],
+            "answers": "A",
+            "topic": "Networking",
+            "themes": {
+                "services": [
+                    "flexible-ip",
+                    "instances"
+                ],
+                "concepts": [
+                    "networking"
+                ],
+                "questionTypes": [
+                    "yes-no"
+                ]
+            }
+        },
+        {
+            "id": "46",
+            "question": "True or false: besides cloud VMs, Scaleway offers dedicated physical servers.",
+            "options": [
+                "True",
+                "False"
+            ],
+            "answers": "A",
+            "topic": "Bare Metal",
+            "themes": {
+                "services": [
+                    "elastic-metal",
+                    "dedibox"
+                ],
+                "concepts": [
+                    "bare-metal"
+                ],
+                "questionTypes": [
+                    "true-false"
+                ]
+            }
+        },
+        {
+            "id": "47",
+            "question": "Which Scaleway feature notifies you by SMS, email or API webhook when spending reaches a budget threshold?",
+            "options": [
+                "Cost manager",
+                "Savings plan",
+                "Billing alerts",
+                "Billing contact"
+            ],
+            "answers": "C",
+            "topic": "Introduction to the Scaleway Ecosystem",
+            "themes": {
+                "services": [
+                    "billing"
+                ],
+                "concepts": [
+                    "billing",
+                    "cost-optimization"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Billing alerts notify you through SMS, email or API webhooks when predefined budget thresholds are met, while the cost manager is used to monitor and analyze consumption."
+        },
+        {
+            "id": "48",
+            "question": "Which are Scaleway Regions? Choose three.",
+            "options": [
+                "Paris (fr-par)",
+                "Amsterdam (nl-ams)",
+                "New York (us-nyc)",
+                "Warsaw (pl-waw)",
+                "Singapore (sg-sin)"
+            ],
+            "answers": [
+                "A",
+                "B",
+                "D"
+            ],
+            "topic": "Introduction to the Scaleway Ecosystem",
+            "themes": {
+                "services": [
+                    "regions-az"
+                ],
+                "concepts": [
+                    "regions-availability-zones"
+                ],
+                "questionTypes": [
+                    "multi-choice"
+                ]
+            },
+            "explanation": "The Scaleway documentation lists Paris (fr-par), Amsterdam (nl-ams) and Warsaw (pl-waw) among its Regions."
+        },
+        {
+            "id": "49",
+            "question": "Which Scaleway support plan includes a Technical Account Manager?",
+            "options": [
+                "Basic",
+                "Advanced",
+                "Business",
+                "Enterprise"
+            ],
+            "answers": "D",
+            "topic": "Introduction to the Scaleway Ecosystem",
+            "themes": {
+                "services": [
+                    "support"
+                ],
+                "concepts": [
+                    "billing"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Only the Enterprise plan includes a Technical Account Manager, together with quarterly technical reviews and an architecture audit."
+        },
+        {
+            "id": "50",
+            "question": "Which tool describes Scaleway resources in configuration files and deploys declaratively as IaC?",
+            "options": [
+                "Scaleway CLI (scw)",
+                "Terraform or OpenTofu with Scaleway provider",
+                "Scaleway Python SDK",
+                "Cockpit"
+            ],
+            "answers": "B",
+            "topic": "Introduction to the Scaleway Ecosystem",
+            "themes": {
+                "services": [
+                    "developer-tools"
+                ],
+                "concepts": [
+                    "deployment"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Terraform and OpenTofu are Infrastructure as Code tools used to deploy Scaleway resources declaratively, whereas the CLI is a command-line tool built on the Scaleway API."
+        },
+        {
+            "id": "51",
+            "question": "True or false: using less than committed in a savings plan means billing only actual consumption.",
+            "options": [
+                "True",
+                "False"
+            ],
+            "answers": "B",
+            "topic": "Introduction to the Scaleway Ecosystem",
+            "themes": {
+                "services": [
+                    "billing"
+                ],
+                "concepts": [
+                    "billing",
+                    "cost-optimization"
+                ],
+                "questionTypes": [
+                    "true-false"
+                ]
+            },
+            "explanation": "With a savings plan you are still billed the committed amount (with the discount applied) when you use less, and usage above it is charged at standard prices."
+        },
+        {
+            "id": "52",
+            "question": "What is an IAM application?",
+            "options": [
+                "A non-human user in an Organization that can hold API keys not linked to a person",
+                "A group of users sharing the same policy",
+                "A preinstalled software image for Instances",
+                "A permission set restricted to a single Project"
+            ],
+            "answers": "A",
+            "topic": "Security & Identity",
+            "themes": {
+                "services": [
+                    "iam"
+                ],
+                "concepts": [
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "An IAM application is a non-human user used to create API keys that are not linked to a human user; it has no access to the Scaleway console."
+        },
+        {
+            "id": "53",
+            "question": "Which two elements make up an IAM policy rule?",
+            "options": [
+                "An SSH key",
+                "A scope (Project or Organization level)",
+                "A Cockpit token",
+                "One or more permission sets",
+                "A payment method"
+            ],
+            "answers": [
+                "B",
+                "D"
+            ],
+            "topic": "Security & Identity",
+            "themes": {
+                "services": [
+                    "iam"
+                ],
+                "concepts": [
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "multi-choice"
+                ]
+            },
+            "explanation": "Each IAM rule consists of a scope and one or more permission sets, plus optional conditions."
+        },
+        {
+            "id": "54",
+            "question": "Which scope must a policy rule use to grant access to billing and IAM features?",
+            "options": [
+                "Project",
+                "Region",
+                "Availability Zone",
+                "Organization"
+            ],
+            "answers": "D",
+            "topic": "Security & Identity",
+            "themes": {
+                "services": [
+                    "iam",
+                    "organization"
+                ],
+                "concepts": [
+                    "access-management",
+                    "resource-organization"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Billing, IAM, Project management and support are managed at Organization level, so the Organization scope is required to give access to them."
+        },
+        {
+            "id": "55",
+            "question": "True or false: a single Project can group resources in different Regions.",
+            "options": [
+                "True",
+                "False"
+            ],
+            "answers": "A",
+            "topic": "Security & Identity",
+            "themes": {
+                "services": [
+                    "project"
+                ],
+                "concepts": [
+                    "resource-organization"
+                ],
+                "questionTypes": [
+                    "true-false"
+                ]
+            },
+            "explanation": "Projects are cross-regional: resources located in different Regions can be grouped in one Project."
+        },
+        {
+            "id": "56",
+            "question": "Who implements backup strategy, including cross-Region replication, for Object Storage data?",
+            "options": [
+                "Scaleway, automatically for every bucket",
+                "Scaleway Support, on request",
+                "The customer",
+                "A third-party partner appointed by Scaleway"
+            ],
+            "answers": "C",
+            "topic": "Security & Identity",
+            "themes": {
+                "services": [
+                    "object-storage"
+                ],
+                "concepts": [
+                    "disaster-recovery"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Under the storage shared responsibility model, internal resiliency does not protect against accidental deletion, so the customer must set up external backups and cross-region replication."
+        },
+        {
+            "id": "57",
+            "question": "Which two situations require spreading resources across several Regions rather than only AZs?",
+            "options": [
+                "Tolerating a power outage in a single data center",
+                "Protecting against a regional outage such as a natural disaster",
+                "Low-latency replication with fast failover between nearby sites",
+                "Keeping backups in a physically separate location"
+            ],
+            "answers": [
+                "B",
+                "D"
+            ],
+            "topic": "Security & Identity",
+            "themes": {
+                "services": [
+                    "regions-az"
+                ],
+                "concepts": [
+                    "disaster-recovery",
+                    "regions-availability-zones"
+                ],
+                "questionTypes": [
+                    "multi-choice"
+                ]
+            },
+            "explanation": "Multi-region is recommended for regional outages and for backup and recovery in a physically separate location, while multi-AZ covers localized failures and low-latency failover."
+        },
+        {
+            "id": "58",
+            "question": "What best describes an Elastic Metal server?",
+            "options": [
+                "A virtual machine with shared resources",
+                "A dedicated physical server for a single tenant",
+                "A serverless container instance",
+                "A managed database instance"
+            ],
+            "answers": "B",
+            "topic": "Bare Metal",
+            "themes": {
+                "services": [
+                    "elastic-metal"
+                ],
+                "concepts": [
+                    "bare-metal"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Elastic Metal servers are on-demand, 100% dedicated physical machines without a hypervisor."
+        },
+        {
+            "id": "59",
+            "question": "Which Elastic Metal range has large local storage for data protection?",
+            "options": [
+                "Aluminium",
+                "Beryllium",
+                "Iridium",
+                "Lithium"
+            ],
+            "answers": "D",
+            "topic": "Bare Metal",
+            "themes": {
+                "services": [
+                    "elastic-metal"
+                ],
+                "concepts": [
+                    "bare-metal",
+                    "storage-options"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Lithium servers are designed with huge Local Storage, while Beryllium targets production-grade applications and Iridium high-workload applications."
+        },
+        {
+            "id": "60",
+            "question": "What is Scaleway Apple silicon as-a-Service built on, and what is it for?",
+            "options": [
+                "Mac mini hardware for developing, building, testing and signing apps for Apple devices",
+                "Mac Pro towers for video rendering",
+                "iPhone device farms for hosting mobile games",
+                "Mac mini hardware for hosting Windows virtual desktops"
+            ],
+            "answers": "A",
+            "topic": "Bare Metal",
+            "themes": {
+                "services": [
+                    "apple-silicon"
+                ],
+                "concepts": [
+                    "bare-metal",
+                    "cpu-architecture"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Apple silicon as-a-Service uses Apple Mac mini hardware and is tailored for developing, building, testing and signing applications for Apple devices."
+        },
+        {
+            "id": "61",
+            "question": "Which two statements about InterLink are correct?",
+            "options": [
+                "IPsec tunnel over public internet",
+                "Secure private link between external infrastructure and VPC, off public internet",
+                "Attach to multiple VPCs simultaneously",
+                "One InterLink per VPC, same Region"
+            ],
+            "answers": [
+                "B",
+                "D"
+            ],
+            "topic": "Networking",
+            "themes": {
+                "services": [
+                    "interlink",
+                    "vpc"
+                ],
+                "concepts": [
+                    "networking",
+                    "private-networking"
+                ],
+                "questionTypes": [
+                    "multi-choice"
+                ]
+            },
+            "explanation": "InterLink is a private connection between external infrastructure and a VPC that bypasses the public internet, and each InterLink attaches to one VPC in the same region."
+        },
+        {
+            "id": "62",
+            "question": "To back up only an Instance data volume, not the whole Instance, which resource should you create?",
+            "options": [
+                "Placement group",
+                "Image",
+                "Security group",
+                "Snapshot"
+            ],
+            "answers": "D",
+            "topic": "Compute",
+            "themes": {
+                "services": [
+                    "instances"
+                ],
+                "concepts": [
+                    "disaster-recovery"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "A snapshot captures a single volume at one point in time, whereas an image is a complete backup of the Instance with all its volumes."
+        },
+        {
+            "id": "63",
+            "question": "Which volume types can a Scaleway Instance use for storage?",
+            "options": [
+                "Local and Block volumes",
+                "Object Storage buckets and Glacier archives",
+                "Container Registry namespaces and Dedibackup spaces",
+                "Only network file shares"
+            ],
+            "answers": "A",
+            "topic": "Compute",
+            "themes": {
+                "services": [
+                    "instances",
+                    "block-storage"
+                ],
+                "concepts": [
+                    "storage-options"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Instances use local volumes (SSD storage on the hypervisor, with a size fixed by the Instance type) or network-attached block volumes, and some types boot directly on block volumes."
+        },
+        {
+            "id": "64",
+            "question": "What distinguishes a GPU Instance from other Scaleway Instances?",
+            "options": [
+                "It has no public IP",
+                "It includes GPU hardware for AI/ML workloads",
+                "It is billed per minute only",
+                "It runs only Windows OS"
+            ],
+            "answers": "B",
+            "topic": "Compute",
+            "themes": {
+                "services": [
+                    "instances"
+                ],
+                "concepts": [
+                    "cpu-architecture",
+                    "virtualization"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "GPU Instances are Instances equipped with dedicated high-end NVIDIA graphics processing units."
+        },
+        {
+            "id": "65",
+            "question": "An Instance is powered off (not standby). Which three statements apply?",
+            "options": [
+                "Billing stops for the Instance",
+                "Flexible IP continues to be billed",
+                "Block Storage continues to be billed",
+                "Public IP is automatically released"
+            ],
+            "answers": [
+                "A",
+                "B",
+                "C"
+            ],
+            "topic": "Compute",
+            "themes": {
+                "services": [
+                    "instances",
+                    "flexible-ip",
+                    "billing"
+                ],
+                "concepts": [
+                    "billing",
+                    "cost-optimization"
+                ],
+                "questionTypes": [
+                    "multi-choice"
+                ]
+            },
+            "explanation": "When a server is powered off, only its volumes and any reserved flexible IP address are billed."
+        },
+        {
+            "id": "66",
+            "question": "Which workload fits Instances with dedicated vCPUs rather than shared vCPUs?",
+            "options": [
+                "Development and testing workloads",
+                "Production workloads needing consistent performance",
+                "Low-traffic personal websites",
+                "Short-lived batch jobs"
+            ],
+            "answers": "B",
+            "topic": "Compute",
+            "themes": {
+                "services": [
+                    "instances"
+                ],
+                "concepts": [
+                    "cpu-architecture",
+                    "cost-optimization"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Dedicated vCPUs give consistent and predictable performance for production and latency-sensitive workloads, while shared vCPUs suit development, staging and non-critical workloads at a lower cost."
+        },
+        {
+            "id": "67",
+            "question": "Which statement about SSH keys for Instance access is correct?",
+            "options": [
+                "SSH keys are stored in the Instance metadata",
+                "SSH keys can be managed via IAM",
+                "SSH keys are only for Linux Instances",
+                "SSH keys cannot be rotated"
+            ],
+            "answers": "A",
+            "topic": "Compute",
+            "themes": {
+                "services": [
+                    "instances"
+                ],
+                "concepts": [
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "The public key is kept in your Scaleway account and passed to the Instance at boot, while the private key stays securely on the computer you connect from."
+        },
+        {
+            "id": "68",
+            "question": "Which Instance feature allows restarting the server over the network using a minimal OS for debugging and system data recovery?",
+            "options": [
+                "Auto-reboot",
+                "Rescue mode",
+                "Placement group",
+                "Security group"
+            ],
+            "answers": "B",
+            "topic": "Compute",
+            "themes": {
+                "services": [
+                    "instances"
+                ],
+                "concepts": [
+                    "virtualization"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Rescue mode restarts your server via the network on a minimal OS to debug it and recover system data; the server must be running to switch to it."
+        },
+        {
+            "id": "69",
+            "question": "Which Serverless product runs batch workloads over longer durations?",
+            "options": [
+                "Serverless Functions",
+                "Serverless Containers",
+                "Serverless Jobs",
+                "Serverless SQL Database"
+            ],
+            "answers": "C",
+            "topic": "Serverless",
+            "themes": {
+                "services": [
+                    "serverless-jobs"
+                ],
+                "concepts": [
+                    "serverless"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Serverless Jobs is designed for batch jobs and tasks that need to run to completion, such as data processing or migrations."
+        },
+        {
+            "id": "70",
+            "question": "A Serverless Function has min-scale 0. What happens after idle periods?",
+            "options": [
+                "It keeps running at minimum cost",
+                "It scales to zero instances",
+                "It is automatically deleted",
+                "It switches to a paid tier"
+            ],
+            "answers": "B",
+            "topic": "Serverless",
+            "themes": {
+                "services": [
+                    "serverless-functions"
+                ],
+                "concepts": [
+                    "serverless",
+                    "scalability"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "With a minimum scale of 0, Functions scale down to zero active instances while idle and do not consume resources, which reduces cost."
+        },
+        {
+            "id": "71",
+            "question": "Which three can trigger a Serverless Function? Choose three.",
+            "options": [
+                "HTTP request",
+                "Object Storage event",
+                "Cron schedule",
+                "Message queue",
+                "Database query"
+            ],
+            "answers": [
+                "A",
+                "C",
+                "D"
+            ],
+            "topic": "Serverless",
+            "themes": {
+                "services": [
+                    "serverless-functions",
+                    "queues"
+                ],
+                "concepts": [
+                    "serverless",
+                    "messaging"
+                ],
+                "questionTypes": [
+                    "multi-choice"
+                ]
+            },
+            "explanation": "Functions can be triggered by HTTP requests, CRON schedules and messages from a queue (or a NATS subject)."
+        },
+        {
+            "id": "72",
+            "question": "Where should a stateless Serverless Function store data that must be kept?",
+            "options": [
+                "In the function's local filesystem",
+                "In Object Storage",
+                "In the function's environment variables",
+                "In the function's memory"
+            ],
+            "answers": "B",
+            "topic": "Serverless",
+            "themes": {
+                "services": [
+                    "serverless-functions",
+                    "object-storage"
+                ],
+                "concepts": [
+                    "serverless",
+                    "storage-options"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Serverless Functions are stateless and keep no state between executions, so persistent data goes to services such as Object Storage, Managed Databases or Serverless SQL Databases."
+        },
+        {
+            "id": "73",
+            "question": "Which service provides network-attached volumes that behave like regular disks?",
+            "options": [
+                "Object Storage",
+                "Block Storage",
+                "Glacier",
+                "Container Registry"
+            ],
+            "answers": "B",
+            "topic": "Storage",
+            "themes": {
+                "services": [
+                    "block-storage"
+                ],
+                "concepts": [
+                    "storage-options"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Block volumes are network-attached storage that you can plug in and out of Instances like a virtual hard drive."
+        },
+        {
+            "id": "74",
+            "question": "How is a Block Storage volume billed?",
+            "options": [
+                "Per GB per hour",
+                "Per read/write operation",
+                "Flat fee regardless of size"
+            ],
+            "answers": "A",
+            "topic": "Storage",
+            "themes": {
+                "services": [
+                    "block-storage"
+                ],
+                "concepts": [
+                    "billing",
+                    "cost-optimization"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Block Storage is billed by the hour based on the size of the volume, not on the data actually stored on it."
+        },
+        {
+            "id": "75",
+            "question": "Which two statements about Object Storage bucket versioning are correct?",
+            "options": [
+                "Versioning keeps multiple versions of an object",
+                "Versioning can be suspended but not reversed",
+                "Each version has its own key",
+                "Versioning doubles storage costs for each version"
+            ],
+            "answers": [
+                "A",
+                "B"
+            ],
+            "topic": "Storage",
+            "themes": {
+                "services": [
+                    "object-storage"
+                ],
+                "concepts": [
+                    "data-durability",
+                    "disaster-recovery"
+                ],
+                "questionTypes": [
+                    "multi-choice"
+                ]
+            },
+            "explanation": "Non-current versions remain stored and billable and can be retrieved by version ID, and a bucket whose versioning was enabled can only move to Suspended, not back to Unversioned."
+        },
+        {
+            "id": "76",
+            "question": "Which Object Storage class is best for secondary backup copies?",
+            "options": [
+                "Standard",
+                "Glacier",
+                "Multi-AZ",
+                "Single Zone"
+            ],
+            "answers": "B",
+            "topic": "Storage",
+            "themes": {
+                "services": [
+                    "object-storage"
+                ],
+                "concepts": [
+                    "storage-options",
+                    "data-durability"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Glacier is the Object Storage class best suited for secondary backup copies and long-term retention, as it provides the most cost-effective storage for data that is accessed infrequently."
+        },
+        {
+            "id": "77",
+            "question": "Which Object Storage feature applies write-once-read-many (WORM) mode?",
+            "options": [
+                "Versioning",
+                "Object Lock",
+                "Lifecycle rules",
+                "SSE-C encryption"
+            ],
+            "answers": "B",
+            "topic": "Storage",
+            "themes": {
+                "services": [
+                    "object-storage"
+                ],
+                "concepts": [
+                    "data-durability",
+                    "disaster-recovery"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Object lock uses a WORM model to prevent deletion or overwriting for a fixed period or indefinitely, and it requires versioning to be enabled on the bucket."
+        },
+        {
+            "id": "78",
+            "question": "Resources on the same Private Network can be located in which scope?",
+            "options": [
+                "A single Availability Zone",
+                "A single Region",
+                "Multiple Regions",
+                "A single Project"
+            ],
+            "answers": "B",
+            "topic": "Networking",
+            "themes": {
+                "services": [
+                    "private-network",
+                    "vpc"
+                ],
+                "concepts": [
+                    "private-networking"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Private Networks connect resources across multiple Availability Zones within the same region, and all Private Networks are now regional."
+        },
+        {
+            "id": "79",
+            "question": "Which two features does a Public Gateway provide?",
+            "options": [
+                "NAT for private resources",
+                "DNS resolution",
+                "Load balancing",
+                "SSH bastion access"
+            ],
+            "answers": [
+                "A",
+                "D"
+            ],
+            "topic": "Networking",
+            "themes": {
+                "services": [
+                    "public-gateway"
+                ],
+                "concepts": [
+                    "networking"
+                ],
+                "questionTypes": [
+                    "multi-choice"
+                ]
+            },
+            "explanation": "Public Gateways sit at the border of Private Networks and offer NAT as well as an SSH bastion."
+        },
+        {
+            "id": "80",
+            "question": "How does a Load Balancer maintain application availability when a backend server fails?",
+            "options": [
+                "Reinstalls the OS on the failed server",
+                "Replicates server data to another Region",
+                "Uses health checks to stop sending requests to unhealthy servers",
+                "Forces clients to reconnect through a Public Gateway"
+            ],
+            "answers": "C",
+            "topic": "Networking",
+            "themes": {
+                "services": [
+                    "load-balancer"
+                ],
+                "concepts": [
+                    "load-balancing",
+                    "high-availability"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "The Load Balancer monitors backend servers with health checks and, when a server is down, rebalances the load between the remaining servers."
+        },
+        {
+            "id": "81",
+            "question": "Do Load Balancer backend servers need public IP addresses?",
+            "options": [
+                "Yes",
+                "No"
+            ],
+            "answers": "B",
+            "topic": "Networking",
+            "themes": {
+                "services": [
+                    "load-balancer",
+                    "private-network"
+                ],
+                "concepts": [
+                    "load-balancing",
+                    "private-networking"
+                ],
+                "questionTypes": [
+                    "yes-no"
+                ]
+            },
+            "explanation": "The Load Balancer can address backend servers by their private IP addresses over a Private Network (required for a private Load Balancer) and can reach any backend server in the same VPC this way, so a public IP is not required."
+        },
+        {
+            "id": "82",
+            "question": "To which resource can a flexible IP created for Instances be moved?",
+            "options": [
+                "Another Instance",
+                "A Load Balancer",
+                "A Public Gateway",
+                "An Elastic Metal server"
+            ],
+            "answers": "A",
+            "topic": "Networking",
+            "themes": {
+                "services": [
+                    "flexible-ip",
+                    "instances"
+                ],
+                "concepts": [
+                    "networking"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Flexible IPs are tied to a product category: an Instance flexible IP can be moved to another Instance but not to a Load Balancer, a Public Gateway or an Elastic Metal server."
+        },
+        {
+            "id": "83",
+            "question": "How is a flexible IP billed when reserved but not attached?",
+            "options": [
+                "Free until attached",
+                "Billed only while attached",
+                "Billed once when first reserved",
+                "Billed as long as reservation is open"
+            ],
+            "answers": "D",
+            "topic": "Networking",
+            "themes": {
+                "services": [
+                    "flexible-ip",
+                    "billing"
+                ],
+                "concepts": [
+                    "billing",
+                    "cost-optimization"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "A flexible IP is billed from the moment you reserve it until you cancel the reservation, whether you are effectively using it or not."
+        },
+        {
+            "id": "84",
+            "question": "Can you run queries on the standby node of HA Managed Database for PostgreSQL?",
+            "options": [
+                "Yes",
+                "No"
+            ],
+            "answers": "B",
+            "topic": "Managed Databases",
+            "themes": {
+                "services": [
+                    "managed-database"
+                ],
+                "concepts": [
+                    "high-availability"
+                ],
+                "questionTypes": [
+                    "yes-no"
+                ]
+            },
+            "explanation": "The standby node is a hot standby that takes over only if the main node fails; read-only queries require a Read Replica."
+        },
+        {
+            "id": "85",
+            "question": "Which Managed Database feature gives a read-only live copy to offload read traffic?",
+            "options": [
+                "Read Replica",
+                "Snapshot",
+                "Clone",
+                "Allowed IPs"
+            ],
+            "answers": "A",
+            "topic": "Managed Databases",
+            "themes": {
+                "services": [
+                    "managed-database"
+                ],
+                "concepts": [
+                    "scalability"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "A Read Replica is a live copy of a Database Instance that only allows read-only connections, whereas a snapshot or a clone is a point-in-time copy."
+        },
+        {
+            "id": "86",
+            "question": "Which statement about Serverless SQL Database billing is correct?",
+            "options": [
+                "Storage is free while database is idle",
+                "Compute is billed at full rate even when idle",
+                "Storage always billed, idle DB with 0 minimum vCPU has no compute cost",
+                "Idle database is automatically deleted"
+            ],
+            "answers": "C",
+            "topic": "Managed Databases",
+            "themes": {
+                "services": [
+                    "serverless-sql-database"
+                ],
+                "concepts": [
+                    "serverless",
+                    "cost-optimization"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Storage is billed whether the database is active or idle, and you are not billed for compute if the database has 0 vCPU as a minimum and is idle."
+        },
+        {
+            "id": "87",
+            "question": "True or false: once encryption at rest is activated on Managed Database, it cannot be disabled.",
+            "options": [
+                "True",
+                "False"
+            ],
+            "answers": "A",
+            "topic": "Managed Databases",
+            "themes": {
+                "services": [
+                    "managed-database"
+                ],
+                "concepts": [
+                    "data-durability"
+                ],
+                "questionTypes": [
+                    "true-false"
+                ]
+            },
+            "explanation": "The documentation states that, once activated on a Database Instance, encryption at rest cannot be disabled."
+        },
+        {
+            "id": "88",
+            "question": "Which Scaleway managed Kubernetes service connects nodes from other cloud providers?",
+            "options": [
+                "Kubernetes Kapsule",
+                "Serverless Containers",
+                "Container Registry",
+                "Kubernetes Kosmos"
+            ],
+            "answers": "D",
+            "topic": "Kubernetes",
+            "themes": {
+                "services": [
+                    "kosmos",
+                    "kapsule"
+                ],
+                "concepts": [
+                    "containers"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Kosmos is the multi-cloud Kubernetes service, while Kapsule clusters are composed only of Scaleway Instances."
+        },
+        {
+            "id": "89",
+            "question": "Which Scaleway product provides automated monitoring of a Kapsule cluster?",
+            "options": [
+                "Cockpit",
+                "Audit Trail",
+                "Container Registry",
+                "Queues"
+            ],
+            "answers": "A",
+            "topic": "Observability",
+            "themes": {
+                "services": [
+                    "kapsule",
+                    "cockpit"
+                ],
+                "concepts": [
+                    "containers",
+                    "observability"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Cockpit provides automated monitoring of a Kapsule cluster, with metrics visualized in a hosted Grafana."
+        },
+        {
+            "id": "90",
+            "question": "Which two statements about Container Registry are correct?",
+            "options": [
+                "A namespace is a collection of container images",
+                "Images are always public and cannot be restricted",
+                "An image can be public, private or inherit namespace privacy",
+                "Container Registry stores Kubernetes cluster state"
+            ],
+            "answers": [
+                "A",
+                "C"
+            ],
+            "topic": "Kubernetes",
+            "themes": {
+                "services": [
+                    "container-registry"
+                ],
+                "concepts": [
+                    "containers"
+                ],
+                "questionTypes": [
+                    "multi-choice"
+                ]
+            },
+            "explanation": "A namespace is a collection of container images, and an image can be public, private or inherit the privacy policy of its namespace."
+        },
+        {
+            "id": "91",
+            "question": "Which three data types can Cockpit collect and store? Choose three.",
+            "options": [
+                "Metrics",
+                "Logs",
+                "Container images",
+                "Traces",
+                "Database backups"
+            ],
+            "answers": [
+                "A",
+                "B",
+                "D"
+            ],
+            "topic": "Observability",
+            "themes": {
+                "services": [
+                    "cockpit"
+                ],
+                "concepts": [
+                    "observability"
+                ],
+                "questionTypes": [
+                    "multi-choice"
+                ]
+            },
+            "explanation": "Cockpit stores three data types: metrics, logs and traces."
+        },
+        {
+            "id": "92",
+            "question": "How many Cockpits can a Scaleway Project have?",
+            "options": [
+                "Unlimited",
+                "Only one",
+                "One per resource",
+                "One per Availability Zone"
+            ],
+            "answers": "B",
+            "topic": "Observability",
+            "themes": {
+                "services": [
+                    "cockpit",
+                    "project"
+                ],
+                "concepts": [
+                    "observability"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Cockpits are scoped per Project, and a Scaleway Project can have only one Cockpit."
+        },
+        {
+            "id": "93",
+            "question": "Which product records actions performed by principals on Organization resources?",
+            "options": [
+                "Cockpit",
+                "IAM",
+                "Billing API",
+                "Audit Trail"
+            ],
+            "answers": "D",
+            "topic": "Security & Identity",
+            "themes": {
+                "services": [
+                    "audit-trail"
+                ],
+                "concepts": [
+                    "observability",
+                    "access-management"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Audit Trail holds a record of events and changes performed within a Scaleway Organization, whether the actions were successful, attempted or failed."
+        },
+        {
+            "id": "94",
+            "question": "Under which name is the former Scaleway Managed Inference product now offered?",
+            "options": [
+                "Generative APIs - Dedicated Deployment",
+                "Generative APIs - Serverless",
+                "GPU Instances",
+                "Serverless Containers"
+            ],
+            "answers": "A",
+            "topic": "Introduction to the Scaleway Ecosystem",
+            "themes": {
+                "services": [
+                    "generative-api"
+                ],
+                "concepts": [
+                    "serverless"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "Managed Inference was renamed Generative APIs - Dedicated Deployment; it is the same product under a new name."
+        },
+        {
+            "id": "95",
+            "question": "In Scaleway Queues, what receives messages that cannot be delivered to their destination queue?",
+            "options": [
+                "A FIFO queue",
+                "A Topic",
+                "A NATS account",
+                "A dead-letter queue"
+            ],
+            "answers": "D",
+            "topic": "Introduction to the Scaleway Ecosystem",
+            "themes": {
+                "services": [
+                    "queues"
+                ],
+                "concepts": [
+                    "messaging"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "A dead-letter queue receives and holds undelivered messages, and it must be of the same type, in the same Project and region as the queues it serves."
+        },
+        {
+            "id": "96",
+            "question": "Which Scaleway Queues queue type should be used when exact message order matters and duplicates are not tolerated?",
+            "options": [
+                "Standard queue",
+                "FIFO queue",
+                "Dead-letter queue",
+                "Delay queue"
+            ],
+            "answers": "B",
+            "topic": "Introduction to the Scaleway Ecosystem",
+            "themes": {
+                "services": [
+                    "queues"
+                ],
+                "concepts": [
+                    "messaging"
+                ],
+                "questionTypes": [
+                    "single-choice"
+                ]
+            },
+            "explanation": "FIFO queues preserve the exact order of messages and do not tolerate duplicates, which suits cases such as order management."
+        }
+    ]
+}

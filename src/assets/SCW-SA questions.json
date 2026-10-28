@@ -1,0 +1,3015 @@
+{
+    "version": 2,
+    "exam": {
+        "name": "Scaleway Professional: Solution Architect",
+        "code": "SCW-SA",
+        "totalQuestions": 60,
+        "timeLimitMinutes": 60,
+        "passingScore": {
+            "passingScore": 70
+        },
+        "weights": {
+            "Core Ecosystem Knowledge": 12.5,
+            "Modern Deployment & Cloud native approach": 12.5,
+            "Resilience & Availability": 12.5,
+            "Scalability & elasticity": 12.5,
+            "Security architecture": 12.5,
+            "Sovereignty architecture": 12.5,
+            "Standard architecture patterns": 12.5,
+            "Sustainability architecture": 12.5
+        }
+    },
+    "themes": {
+        "services": [
+            "api-gateway",
+            "audit-trail",
+            "billing-api",
+            "cli",
+            "cockpit",
+            "configuration-management",
+            "console",
+            "direct-link",
+            "edge-services",
+            "elastic-metal",
+            "generative-api",
+            "gpu",
+            "iam",
+            "instances",
+            "interlink",
+            "kapsule",
+            "key-manager",
+            "load-balancer",
+            "managed-database-mongodb",
+            "managed-database-postgresql",
+            "managed-database-redis",
+            "managed-inference",
+            "object-storage",
+            "on-demand-clusters",
+            "private-network",
+            "project",
+            "public-gateway",
+            "secret-manager",
+            "security-groups",
+            "serverless",
+            "serverless-containers",
+            "serverless-database",
+            "serverless-functions",
+            "serverless-jobs",
+            "site-to-site-vpn",
+            "terraform"
+        ],
+        "concepts": [
+            "automation",
+            "autoscaling",
+            "cicd-pipeline",
+            "configuration-drift",
+            "consumption-based-pricing",
+            "cost-optimization",
+            "cpu-architecture",
+            "data-integration",
+            "data-modeling",
+            "data-replication",
+            "deployment-strategies",
+            "disaster-recovery",
+            "encryption",
+            "fault-tolerance",
+            "high-availability",
+            "hybrid-connectivity",
+            "iac",
+            "load-balancing",
+            "microservices",
+            "migration",
+            "monolithic-architecture",
+            "private-networking",
+            "rag",
+            "right-sizing",
+            "scalability",
+            "secrets-management",
+            "serverless",
+            "shared-responsibility",
+            "sovereignty",
+            "sustainability",
+            "testing",
+            "virtualization"
+        ],
+        "questionTypes": [
+            "architecture-decision",
+            "configuration",
+            "most-cost-effective",
+            "most-secure",
+            "factual-recall"
+        ]
+    },
+    "questions": [
+        {
+            "id": "1",
+            "question": "A startup gathers electricity usage data from industrial equipment and needs a database that stores time-series data and supports SQL queries, since their sole engineer only knows SQL. Which solutions fit?",
+            "options": [
+                "Managed Database for PostgreSQL",
+                "Serverless Database",
+                "Managed Database for MongoDB",
+                "Managed Database for Redis"
+            ],
+            "answers": [
+                "A",
+                "B"
+            ],
+            "topic": "Standard architecture patterns",
+            "themes": {
+                "services": [
+                    "managed-database-mongodb",
+                    "managed-database-postgresql",
+                    "managed-database-redis",
+                    "serverless-database"
+                ],
+                "concepts": [
+                    "data-modeling"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            }
+        },
+        {
+            "id": "2",
+            "question": "Ampere ARM64 processors cost less and use less power, but what technical change might some applications need to run on this architecture?",
+            "options": [
+                "They must be stateless.",
+                "They must run a full guest OS.",
+                "They may require compilation from source code.",
+                "They must use a private network."
+            ],
+            "answers": "C",
+            "topic": "Core Ecosystem Knowledge",
+            "themes": {
+                "concepts": [
+                    "cpu-architecture"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            }
+        },
+        {
+            "id": "3",
+            "question": "You are building a multi-region financial platform that requires strong global consistency, sub-5-minute RTO, low latency worldwide, and uses Spilo PostgreSQL, Kafka/NATS async events, GeoDNS routing, and cross-region DB replication. Which architectural change best ensures strong consistency, minimal data loss, and deterministic leader promotion?",
+            "options": [
+                "Use active-active regional writes with conflict-free replicated data types (CRDTs) for resolution.",
+                "Use Spilo's synchronous streaming replication across regions with fencing and quorum-based failover logic.",
+                "Add a distributed consensus layer (e.g., etcd, Zookeeper) across regions to coordinate database writes.",
+                "Implement global leader election using a Paxos/Raft cluster (e.g., Consul) to enforce a single write node."
+            ],
+            "answers": "B",
+            "topic": "Resilience & Availability",
+            "themes": {
+                "concepts": [
+                    "disaster-recovery",
+                    "high-availability"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            }
+        },
+        {
+            "id": "4",
+            "question": "You are designing a multi-region SaaS platform for regulated financial services. Requirements: RTO under 15 minutes, RPO under 5 minutes, zero data loss across AZs, minimal data loss across regions. Which combination of architectures best meets these requirements?",
+            "options": [
+                "Pilot light setup with nightly backups shipped to object storage and restored during a disaster.",
+                "Warm standby in a secondary region with asynchronous replication and manual failover.",
+                "Single-region, multi-AZ deployment with daily offsite backups to object storage.",
+                "Active-Active replication across two regions using multi-master databases, with DNS-based traffic routing.",
+                "Active-Passive architecture across AZs using synchronous replication and automated failover."
+            ],
+            "answers": [
+                "D",
+                "E"
+            ],
+            "topic": "Resilience & Availability",
+            "themes": {
+                "concepts": [
+                    "disaster-recovery",
+                    "high-availability"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            }
+        },
+        {
+            "id": "5",
+            "question": "A secure application moves to Scaleway. All communications between on-premises systems and Scaleway resources (PostgreSQL Managed DB, Elastic Metal servers, Instances) must use private networking only (no internet) and be encrypted in transit. What do you suggest?",
+            "options": [
+                "Use Direct Link",
+                "Use Interlink",
+                "Use a security group",
+                "Use a VPN application such as OpenVPN on an instance, or Scaleway's Managed Site-to-Site VPN"
+            ],
+            "answers": [
+                "B",
+                "D"
+            ],
+            "topic": "Standard architecture patterns",
+            "themes": {
+                "services": [
+                    "direct-link",
+                    "interlink",
+                    "security-groups",
+                    "site-to-site-vpn"
+                ],
+                "concepts": [
+                    "hybrid-connectivity"
+                ],
+                "questionTypes": [
+                    "most-secure"
+                ]
+            }
+        },
+        {
+            "id": "6",
+            "question": "The Cloud migration tools section lists key benefits of using CLI, API, and Terraform. Which two benefits are listed?",
+            "options": [
+                "Automatic re-architecting of monolithic applications.",
+                "Security & Reliability (via encryption, IAM roles, Private Networks).",
+                "Automated optimization without monitoring.",
+                "Automation & Speed."
+            ],
+            "answers": [
+                "B",
+                "D"
+            ],
+            "topic": "Modern Deployment & Cloud native approach",
+            "themes": {
+                "services": [
+                    "cli",
+                    "terraform"
+                ],
+                "concepts": [
+                    "iac",
+                    "migration"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            }
+        },
+        {
+            "id": "7",
+            "question": "In the Choosing your virtualization type decision tree, which two decision points lead to recommending an Elastic Metal Server with a hypervisor?",
+            "options": [
+                "Wants to lower costs by managing virtualization (network, storage, monitoring) yourself.",
+                "OS is NOT offered by Instances.",
+                "Image does NOT boot on UEFI.",
+                "Image boots on UEFI."
+            ],
+            "answers": [
+                "A",
+                "C"
+            ],
+            "topic": "Core Ecosystem Knowledge",
+            "themes": {
+                "services": [
+                    "elastic-metal"
+                ],
+                "concepts": [
+                    "virtualization"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            }
+        },
+        {
+            "id": "8",
+            "question": "You verify whether encryption in transit is enabled for four locations: downloading an object from Object Storage, querying PostgreSQL/MySQL Managed Database, requesting a page from a Load Balancer, and the Load Balancer distributing requests to web servers. Which parameter do you check?",
+            "options": [
+                "The SSL/TLS option of your Object Storage bucket is activated",
+                "The SSL/TLS option of your Managed Database is activated",
+                "The Load Balancer configuration for SSL bridging",
+                "Edge service is activated on your Object Storage bucket",
+                "The Load Balancer configuration for SSL passthrough"
+            ],
+            "answers": "B",
+            "topic": "Security architecture",
+            "themes": {
+                "services": [
+                    "load-balancer",
+                    "managed-database-postgresql",
+                    "object-storage"
+                ],
+                "concepts": [
+                    "encryption"
+                ],
+                "questionTypes": [
+                    "configuration"
+                ]
+            }
+        },
+        {
+            "id": "9",
+            "question": "Physical access to any computer almost guarantees content access. Which two aspects prevent this despite the provider having physical access?",
+            "options": [
+                "The use of a shared responsibility model.",
+                "Certifications of the cloud provider demonstrating internal processes to avoid employee access.",
+                "Encryption at rest.",
+                "The principle of loose coupling."
+            ],
+            "answers": [
+                "B",
+                "C"
+            ],
+            "topic": "Security architecture",
+            "themes": {
+                "concepts": [
+                    "encryption",
+                    "shared-responsibility"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            }
+        },
+        {
+            "id": "10",
+            "question": "What distributes incoming traffic evenly across healthy instances in different Availability Zones in a Highly Available web application?",
+            "options": [
+                "Load Balancer",
+                "Read Replicas",
+                "Standby Nodes",
+                "Auto Scaling Group"
+            ],
+            "answers": "A",
+            "topic": "Resilience & Availability",
+            "themes": {
+                "services": [
+                    "load-balancer"
+                ],
+                "concepts": [
+                    "high-availability",
+                    "load-balancing"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            }
+        },
+        {
+            "id": "11",
+            "question": "Which are described as core mechanisms for Fault Tolerance in a distributed system?",
+            "options": [
+                "Data Replication & Consistency.",
+                "Automated Recovery & Failover.",
+                "Monolithic Architectures.",
+                "Single Point of Failure design."
+            ],
+            "answers": [
+                "A",
+                "B"
+            ],
+            "topic": "Resilience & Availability",
+            "themes": {
+                "concepts": [
+                    "fault-tolerance"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            }
+        },
+        {
+            "id": "12",
+            "question": "You design a hybrid cloud connecting an on-premise datacenter to a VPC using Interlink and/or site-to-site VPN. Which statements are accurate?",
+            "options": [
+                "If I use the same telecommunications operator for Internet and Interlink, I'll reach AWS public API from my VPC using Interlink.",
+                "If someone DDoS-attacks the VPC's site-to-site VPN Gateway external endpoint, it can only come from the gateway in my datacenter.",
+                "A private connection may use the same telecommunications operator as my Internet (my datacenter's ISP).",
+                "Both solutions leverage route exchanges using the BGP protocol.",
+                "Latency and bandwidth are always better with private connections than with VPN.",
+                "If someone DDoS-attacks the VPC's Interlink Gateway external endpoint, it can only come from the gateway in my datacenter."
+            ],
+            "answers": [
+                "C",
+                "D",
+                "F"
+            ],
+            "topic": "Standard architecture patterns",
+            "themes": {
+                "services": [
+                    "interlink",
+                    "site-to-site-vpn"
+                ],
+                "concepts": [
+                    "hybrid-connectivity"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            }
+        },
+        {
+            "id": "13",
+            "question": "What does RTO (Recovery Time Objective) define in Backup and Recovery?",
+            "options": [
+                "The total number of backups stored in Object Storage.",
+                "The maximum amount of data loss that is acceptable.",
+                "How quickly systems and data must be restored to resume operations.",
+                "The continuous health checks performed on infrastructure."
+            ],
+            "answers": "C",
+            "topic": "Resilience & Availability",
+            "themes": {
+                "concepts": [
+                    "disaster-recovery"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            }
+        },
+        {
+            "id": "14",
+            "question": "What Configuration Management goal is achieved by creating a Single Source of Truth (SSoT)?",
+            "options": [
+                "Automating the initial Terraform deployment.",
+                "Integrating with Git workflows for peer review.",
+                "Minimizing downtime and ensuring system stability.",
+                "Creating version-controlled artifacts for production."
+            ],
+            "answers": "C",
+            "topic": "Modern Deployment & Cloud native approach",
+            "themes": {
+                "services": [
+                    "configuration-management"
+                ],
+                "concepts": [
+                    "automation"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            }
+        },
+        {
+            "id": "15",
+            "question": "For Right-Sizing, continuous monitoring tracks which two specific resource usage metrics?",
+            "options": [
+                "Billing API costs.",
+                "Latency.",
+                "p95 usage.",
+                "Average usage."
+            ],
+            "answers": [
+                "C",
+                "D"
+            ],
+            "topic": "Core Ecosystem Knowledge",
+            "themes": {
+                "concepts": [
+                    "cost-optimization",
+                    "right-sizing"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            }
+        },
+        {
+            "id": "16",
+            "question": "A company that did defense image recognition since 1982 now does social media filters after being acquired. They still use expensive Thales HSM appliances but no longer need that security level. They want a simple way to store encryption keys and perform encrypt/decrypt. What is simplest?",
+            "options": [
+                "Use Ansible Vault on an Elastic Metal server",
+                "Use Key Manager",
+                "Use Secret Manager",
+                "Use Hashicorp Vault on an Instance"
+            ],
+            "answers": "B",
+            "topic": "Security architecture",
+            "themes": {
+                "services": [
+                    "key-manager",
+                    "secret-manager"
+                ],
+                "concepts": [
+                    "encryption",
+                    "secrets-management"
+                ],
+                "questionTypes": [
+                    "most-cost-effective"
+                ]
+            }
+        },
+        {
+            "id": "17",
+            "question": "A Fintech startup deploys a payment app on Kapsule. Worker nodes are in a Private Network (VPC) with no public IPs (PCI-DSS compliance). Nodes need outbound Internet for security updates and Docker images. No inbound Internet allowed. Which network architecture?",
+            "options": [
+                "Configure an SSH Bastion instance in the public subnet and route HTTP traffic through an SSH tunnel.",
+                "Deploy a Public Gateway attached to the Private Network and enable NAT.",
+                "Assign a Flexible IP to each node and use Security Groups to block all inbound traffic.",
+                "Use a Public Load Balancer in TCP Passthrough mode for outbound traffic."
+            ],
+            "answers": "B",
+            "topic": "Standard architecture patterns",
+            "themes": {
+                "services": [
+                    "instances",
+                    "load-balancer",
+                    "private-network",
+                    "public-gateway",
+                    "security-groups"
+                ],
+                "concepts": [
+                    "private-networking"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            }
+        },
+        {
+            "id": "18",
+            "question": "A developer needs to run a DB migration script on Scaleway's serverless platform requiring 8GB RAM, possibly taking hours. Which is most accurate?",
+            "options": [
+                "Serverless Functions with extended timeouts (up to 4GB memory).",
+                "Serverless Containers (up to 12GB memory).",
+                "None of Scaleway's serverless offerings would work.",
+                "Serverless Jobs - memory up to 12GB, runtime up to 24 hours."
+            ],
+            "answers": "D",
+            "topic": "Core Ecosystem Knowledge",
+            "themes": {
+                "services": [
+                    "serverless-containers",
+                    "serverless-functions",
+                    "serverless-jobs"
+                ],
+                "concepts": [
+                    "serverless"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            }
+        },
+        {
+            "id": "19",
+            "question": "In the Shared Responsibility Model, for which two components does responsibility explicitly fall under the Cloud Provider?",
+            "options": [
+                "External access and private network configuration.",
+                "A virtual machine Operating System.",
+                "Providing metrics and logs of components only the provider accesses.",
+                "Managed services (e.g., Load Balancers, databases) underlying Operating System."
+            ],
+            "answers": [
+                "C",
+                "D"
+            ],
+            "topic": "Security architecture",
+            "themes": {
+                "services": [
+                    "load-balancer"
+                ],
+                "concepts": [
+                    "shared-responsibility"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            }
+        },
+        {
+            "id": "20",
+            "question": "Layer 7 load balancers offer capabilities beyond Layer 4. Which two Layer 7 capabilities are mentioned?",
+            "options": [
+                "URL-based routing/route base load balancing.",
+                "Support for any TCP or UDP protocol.",
+                "SSL termination.",
+                "Low latency and high throughput."
+            ],
+            "answers": [
+                "A",
+                "C"
+            ],
+            "topic": "Standard architecture patterns",
+            "themes": {
+                "services": [
+                    "load-balancer"
+                ],
+                "concepts": [
+                    "encryption",
+                    "load-balancing"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            }
+        },
+        {
+            "id": "21",
+            "question": "Sustainable data residency requires balancing Data Sovereignty with which two factors?",
+            "options": [
+                "Data Replication.",
+                "Grid Carbon Intensity (energy mix).",
+                "Impact Measurement (tracking Carbon & Water).",
+                "Data Acquisition."
+            ],
+            "answers": [
+                "B",
+                "C"
+            ],
+            "topic": "Sustainability architecture",
+            "themes": {
+                "concepts": [
+                    "sovereignty",
+                    "sustainability"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            }
+        },
+        {
+            "id": "22",
+            "question": "What is Data Integration's function in the Data Management flow?",
+            "options": [
+                "Merges and transforms different datasets into a coherent form.",
+                "Handles how data enters the system from internal and external sources.",
+                "Reconciles schema mismatching, data-types, and business logic across systems.",
+                "Defines how information is structured before it enters the system."
+            ],
+            "answers": [
+                "A",
+                "C"
+            ],
+            "topic": "Core Ecosystem Knowledge",
+            "themes": {
+                "concepts": [
+                    "data-integration",
+                    "data-modeling"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            }
+        },
+        {
+            "id": "23",
+            "question": "Which are general characteristics of all cloud-based services, Public or Private?",
+            "options": [
+                "Fully managed by an external company",
+                "Accessed over the network.",
+                "Billed based on consumption/usage.",
+                "Imply a shared responsibility model."
+            ],
+            "answers": [
+                "B",
+                "C",
+                "D"
+            ],
+            "topic": "Core Ecosystem Knowledge",
+            "themes": {
+                "concepts": [
+                    "consumption-based-pricing",
+                    "shared-responsibility"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            }
+        },
+        {
+            "id": "24",
+            "question": "What is a vCPU (Virtual CPU) as seen inside a Virtual Machine?",
+            "options": [
+                "A serverless function.",
+                "A full physical CPU chip.",
+                "A slice of the physical CPU core: either a time slice or a thread.",
+                "Always a full physical CPU core."
+            ],
+            "answers": "C",
+            "topic": "Core Ecosystem Knowledge",
+            "themes": {
+                "concepts": [
+                    "virtualization"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            }
+        },
+        {
+            "id": "25",
+            "question": "A startup uses ChatGPT for ecommerce comment analysis and apologies. A European state client forbids US data transfer and needs it next week. They have one junior dev who can't redeploy. Alternative to ChatGPT?",
+            "options": [
+                "Use Scaleway Managed Inference API in a private network",
+                "Use Scaleway Generative API",
+                "Train a ML model on GPUs using On-Demand Clusters",
+                "Use a GPU Instance to deploy MistralNemo LLM"
+            ],
+            "answers": "B",
+            "topic": "Sovereignty architecture",
+            "themes": {
+                "services": [
+                    "generative-api",
+                    "gpu",
+                    "managed-inference",
+                    "on-demand-clusters"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            }
+        },
+        {
+            "id": "26",
+            "question": "What isolates costs between environments (dev/prod) or teams in Scaleway billing?",
+            "options": [
+                "Console Budget Alerts.",
+                "Tagging Strategy.",
+                "Segmentation by Project.",
+                "Billing Cost Manager."
+            ],
+            "answers": "C",
+            "topic": "Core Ecosystem Knowledge",
+            "themes": {
+                "services": [
+                    "project"
+                ],
+                "concepts": [
+                    "cost-optimization"
+                ],
+                "questionTypes": [
+                    "most-cost-effective"
+                ]
+            }
+        },
+        {
+            "id": "27",
+            "question": "E-commerce on-prem had water leakage, 10-day downtime. They want Scaleway DR: 1h RPO, 2min RTO, minimal manual, no full infra duplication. Which?",
+            "options": [
+                "Backup and restore",
+                "Pilot light",
+                "Warm standby",
+                "Multi-site"
+            ],
+            "answers": "C",
+            "topic": "Resilience & Availability",
+            "themes": {
+                "concepts": [
+                    "disaster-recovery"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            }
+        },
+        {
+            "id": "28",
+            "question": "Backing up stateful assets to Multi-AZ Object Storage protects against data center loss. Data can be instantly restored to a secondary zone with minimal:",
+            "options": [
+                "Maximum Tolerable Downtime (MTD).",
+                "Recovery Time Objective (RTO).",
+                "Service Level Agreement (SLA).",
+                "Recovery Point Objective (RPO)."
+            ],
+            "answers": "B",
+            "topic": "Resilience & Availability",
+            "themes": {
+                "services": [
+                    "object-storage"
+                ],
+                "concepts": [
+                    "disaster-recovery"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            }
+        },
+        {
+            "id": "29",
+            "question": "A SaaS startup (~10 devs) runs docker-compose on one VM. Unpredictable traffic, latency spikes. Docker-fluent, no K8s. Improve resiliency/scaling with minimal disruption. Best approach?",
+            "options": [
+                "Migrate apps to serverless containers with API Gateway for routing, throttling, and security.",
+                "Rewrite all apps as Serverless functions with API Gateway.",
+                "Full migration to Managed Kubernetes (Kapsule) with auto-healing/scaling.",
+                "Scale docker-compose across multiple VMs behind a load balancer with custom scripts."
+            ],
+            "answers": "A",
+            "topic": "Modern Deployment & Cloud native approach",
+            "themes": {
+                "services": [
+                    "api-gateway",
+                    "kapsule",
+                    "serverless-containers"
+                ],
+                "concepts": [
+                    "serverless"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            }
+        },
+        {
+            "id": "30",
+            "question": "Serverless Containers scale based on concurrent requests per instance. What does the concurrency setting specifically define?",
+            "options": [
+                "Fixed idle duration before container stops.",
+                "Fixed CPU and memory per instance.",
+                "Maximum container instances across the service.",
+                "Requests a single instance handles before autoscaling triggers."
+            ],
+            "answers": "D",
+            "topic": "Scalability & elasticity",
+            "themes": {
+                "services": [
+                    "serverless-containers"
+                ],
+                "concepts": [
+                    "autoscaling",
+                    "serverless"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            }
+        },
+        {
+            "id": "31",
+            "question": "Multi-layer load balancing relies on which two HA design principles?",
+            "options": [
+                "Distributing backends across zones.",
+                "Single Availability Zone deployment.",
+                "Regional load balancer routing to zone-level load balancers isolates failures.",
+                "Monolithic applications."
+            ],
+            "answers": [
+                "A",
+                "C"
+            ],
+            "topic": "Resilience & Availability",
+            "themes": {
+                "services": [
+                    "load-balancer"
+                ],
+                "concepts": [
+                    "high-availability",
+                    "load-balancing"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            }
+        },
+        {
+            "id": "32",
+            "question": "What is Kapsule's default node-pool upgrade strategy?",
+            "options": [
+                "Rolling update, replacing nodes incrementally without full-cluster downtime.",
+                "Blue-green: new cluster, then traffic switch.",
+                "In-place update rebooting all nodes simultaneously.",
+                "Canary: 10% nodes, manual pause, then continue."
+            ],
+            "answers": "A",
+            "topic": "Modern Deployment & Cloud native approach",
+            "themes": {
+                "services": [
+                    "kapsule"
+                ],
+                "concepts": [
+                    "deployment-strategies"
+                ],
+                "questionTypes": [
+                    "configuration"
+                ]
+            }
+        },
+        {
+            "id": "33",
+            "question": "Besides certifications, what prevents a cloud provider with physical access from reading your content?",
+            "options": [
+                "Principle of Least Privilege.",
+                "Encryption at rest.",
+                "Shared Responsibility Model.",
+                "Open source software."
+            ],
+            "answers": "B",
+            "topic": "Security architecture",
+            "themes": {
+                "concepts": [
+                    "encryption",
+                    "shared-responsibility"
+                ],
+                "questionTypes": [
+                    "most-secure"
+                ]
+            }
+        },
+        {
+            "id": "34",
+            "question": "FinOps Optimize phase: two spending-reduction methods without performance impact?",
+            "options": [
+                "Savings Plans.",
+                "Right-Sizing.",
+                "Auditing IAM roles.",
+                "Enforcing Tagging Policies."
+            ],
+            "answers": [
+                "A",
+                "B"
+            ],
+            "topic": "Core Ecosystem Knowledge",
+            "themes": {
+                "concepts": [
+                    "cost-optimization",
+                    "right-sizing"
+                ],
+                "questionTypes": [
+                    "most-cost-effective"
+                ]
+            }
+        },
+        {
+            "id": "35",
+            "question": "Schema difference: Data Lake vs Data Warehouse?",
+            "options": [
+                "Data Lake schema-on-read, Data Warehouse schema-on-write.",
+                "Data Lake structured schema, Data Warehouse raw.",
+                "Data Warehouse schema-on-write, Data Lake schema-on-read.",
+                "Both schema-on-read, Data Lakes for structured."
+            ],
+            "answers": "C",
+            "topic": "Core Ecosystem Knowledge",
+            "themes": {
+                "concepts": [
+                    "data-modeling"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            }
+        },
+        {
+            "id": "36",
+            "question": "You need a fully-managed Scaleway service for millions of embeddings, fast vector search with metadata, RAG, no servers. Which?",
+            "options": [
+                "Managed PostgreSQL + pgvector extension",
+                "Managed ClickHouse",
+                "Managed MySQL",
+                "Object Storage (multi-AZ)"
+            ],
+            "answers": "A",
+            "topic": "Core Ecosystem Knowledge",
+            "themes": {
+                "services": [
+                    "managed-database-postgresql",
+                    "object-storage"
+                ],
+                "concepts": [
+                    "rag"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            }
+        },
+        {
+            "id": "37",
+            "question": "Hospital website under SQLi/XSS/PHP injection. Debian Instances behind LB, ACL and VPC configured. Immediate protection?",
+            "options": [
+                "Open-source firewall and IPS on every Instance.",
+                "Antivirus scanning files hourly on each Instance.",
+                "Activate Scaleway Edge WAF for Load Balancers.",
+                "Serverless Job rotating public IPs and DNS hourly."
+            ],
+            "answers": "C",
+            "topic": "Security architecture",
+            "themes": {
+                "services": [
+                    "edge-services",
+                    "instances",
+                    "load-balancer"
+                ],
+                "questionTypes": [
+                    "most-secure"
+                ]
+            }
+        },
+        {
+            "id": "38",
+            "question": "Key Microservices Architecture principles?",
+            "options": [
+                "Single responsibility per service.",
+                "Decentralized governance.",
+                "Shared data model and database.",
+                "Vertical scaling first."
+            ],
+            "answers": [
+                "A",
+                "B"
+            ],
+            "topic": "Standard architecture patterns",
+            "themes": {
+                "concepts": [
+                    "microservices"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            }
+        },
+        {
+            "id": "39",
+            "question": "Team management practices for security and no single point of failure?",
+            "options": [
+                "External users admin by default.",
+                "No MFA for administrators.",
+                "Secrets manager for API keys, rotate regularly.",
+                "Two admins per critical Project."
+            ],
+            "answers": [
+                "C",
+                "D"
+            ],
+            "topic": "Security architecture",
+            "themes": {
+                "services": [
+                    "secret-manager"
+                ],
+                "concepts": [
+                    "secrets-management"
+                ],
+                "questionTypes": [
+                    "most-secure"
+                ]
+            }
+        },
+        {
+            "id": "40",
+            "question": "CPU decision tree: workload runs AArch64 (ARM64). Recommended path unless targeting Apple?",
+            "options": [
+                "Intel/AMD Elastic Metal Servers",
+                "x86-64 CPUs",
+                "Ampere ARM64 CPUs",
+                "AMD Instances"
+            ],
+            "answers": "C",
+            "topic": "Core Ecosystem Knowledge",
+            "themes": {
+                "services": [
+                    "elastic-metal",
+                    "instances"
+                ],
+                "concepts": [
+                    "cpu-architecture"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            }
+        },
+        {
+            "id": "41",
+            "question": "Core Fault Tolerance mechanisms tied to app design and runtime?",
+            "options": [
+                "Health Monitoring & Self-Healing / Scalability & Performance",
+                "Stateless Architectures.",
+                "Redundancy & Isolation.",
+                "Automated Recovery & Failover."
+            ],
+            "answers": [
+                "A",
+                "C",
+                "D"
+            ],
+            "topic": "Resilience & Availability",
+            "themes": {
+                "concepts": [
+                    "fault-tolerance"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            }
+        },
+        {
+            "id": "42",
+            "question": "Scaleway scaling: which two offer Horizontal scaling?",
+            "options": [
+                "Kapsule pod autoscaling.",
+                "Resize instance CPU/RAM/storage.",
+                "Vertical node type change.",
+                "Serverless auto-scaling by requests."
+            ],
+            "answers": [
+                "A",
+                "D"
+            ],
+            "topic": "Scalability & elasticity",
+            "themes": {
+                "services": [
+                    "kapsule",
+                    "serverless"
+                ],
+                "concepts": [
+                    "autoscaling"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            }
+        },
+        {
+            "id": "43",
+            "question": "Object Storage key traits?",
+            "options": [
+                "High throughput for large objects.",
+                "Medium latency, shared throughput.",
+                "Low latency, high IOPS.",
+                "Highly scalable."
+            ],
+            "answers": [
+                "A",
+                "D"
+            ],
+            "topic": "Core Ecosystem Knowledge",
+            "themes": {
+                "services": [
+                    "object-storage"
+                ],
+                "concepts": [
+                    "scalability"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            }
+        },
+        {
+            "id": "44",
+            "question": "Regular Testing purposes in Backup and Recovery?",
+            "options": [
+                "Snapshots replicated to separate region.",
+                "Define RPO targets.",
+                "Verify snapshot/backup integrity.",
+                "Prove realistic restore works."
+            ],
+            "answers": [
+                "C",
+                "D"
+            ],
+            "topic": "Resilience & Availability",
+            "themes": {
+                "concepts": [
+                    "disaster-recovery",
+                    "testing"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            }
+        },
+        {
+            "id": "45",
+            "question": "Primary Bare Metal use cases?",
+            "options": [
+                "Serverless First pattern.",
+                "Standard Instances with managed hypervisor.",
+                "Customer-managed virtualization platform.",
+                "Lift-and-shift on-prem bare metal to cloud."
+            ],
+            "answers": [
+                "C",
+                "D"
+            ],
+            "topic": "Core Ecosystem Knowledge",
+            "themes": {
+                "services": [
+                    "elastic-metal"
+                ],
+                "concepts": [
+                    "migration",
+                    "virtualization"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            }
+        },
+        {
+            "id": "46",
+            "question": "Services billed Per-GB?",
+            "options": [
+                "Object Storage.",
+                "Compute Instances.",
+                "Data Transfer (Egress).",
+                "Elastic Metal."
+            ],
+            "answers": [
+                "A",
+                "C"
+            ],
+            "topic": "Core Ecosystem Knowledge",
+            "themes": {
+                "services": [
+                    "object-storage"
+                ],
+                "concepts": [
+                    "consumption-based-pricing"
+                ],
+                "questionTypes": [
+                    "most-cost-effective"
+                ]
+            }
+        },
+        {
+            "id": "47",
+            "question": "Instance Autoscaling Groups contribute to Fault Tolerance on which layer?",
+            "options": [
+                "Data",
+                "Automation",
+                "Application",
+                "Base"
+            ],
+            "answers": "D",
+            "topic": "Resilience & Availability",
+            "themes": {
+                "concepts": [
+                    "autoscaling",
+                    "fault-tolerance"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            }
+        },
+        {
+            "id": "48",
+            "question": "CI/CD Test stage: which test types run?",
+            "options": [
+                "Static Analysis (SAST).",
+                "Performance Tests.",
+                "Integration Tests.",
+                "Unit Tests."
+            ],
+            "answers": [
+                "A",
+                "C",
+                "D"
+            ],
+            "topic": "Modern Deployment & Cloud native approach",
+            "themes": {
+                "concepts": [
+                    "cicd-pipeline",
+                    "testing"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            }
+        },
+        {
+            "id": "49",
+            "question": "SaaS cost spike from Object Storage and Compute. Two actions for visibility and control?",
+            "options": [
+                "Public IPs for all resources for transparency.",
+                "Billing alerts and per-project budgets via Billing API.",
+                "Disable monitoring to reduce overhead.",
+                "Review cost dashboard and usage reports."
+            ],
+            "answers": [
+                "B",
+                "D"
+            ],
+            "topic": "Scalability & elasticity",
+            "themes": {
+                "services": [
+                    "billing-api"
+                ],
+                "concepts": [
+                    "cost-optimization"
+                ],
+                "questionTypes": [
+                    "most-cost-effective"
+                ]
+            }
+        },
+        {
+            "id": "50",
+            "question": "Scalable Architecture's ultimate goal as demand increases?",
+            "options": [
+                "Maintain predictable performance, control costs, ensure stability.",
+                "Eliminate load balancing.",
+                "Rely on vertical scaling.",
+                "Minimize infrastructure costs."
+            ],
+            "answers": "A",
+            "topic": "Scalability & elasticity",
+            "themes": {
+                "concepts": [
+                    "scalability"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            }
+        },
+        {
+            "id": "51",
+            "question": "Public Cloud key characteristic?",
+            "options": [
+                "Self-service portal, consumption-based billing.",
+                "Private network only.",
+                "Fixed upfront CapEx billing.",
+                "Customer-managed internally."
+            ],
+            "answers": "A",
+            "topic": "Core Ecosystem Knowledge",
+            "themes": {
+                "concepts": [
+                    "consumption-based-pricing"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            }
+        },
+        {
+            "id": "52",
+            "question": "Re-host migration strategy example?",
+            "options": [
+                "Move on-prem stack to cloud with minimal changes (e.g., VMware to Instances).",
+                "Monolithic to microservices.",
+                "Database to managed PostgreSQL.",
+                "Application to SaaS platform."
+            ],
+            "answers": "A",
+            "topic": "Modern Deployment & Cloud native approach",
+            "themes": {
+                "concepts": [
+                    "migration"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            }
+        },
+        {
+            "id": "53",
+            "question": "Sovereignty: who ensures data, backups, DR stay within one jurisdiction?",
+            "options": [
+                "Customer via application design.",
+                "Customer via IAM policies.",
+                "Cloud Service Provider (Scaleway).",
+                "Third-party software vendors."
+            ],
+            "answers": "C",
+            "topic": "Sovereignty architecture",
+            "themes": {
+                "concepts": [
+                    "shared-responsibility",
+                    "sovereignty"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            }
+        },
+        {
+            "id": "54",
+            "question": "Tool providing Leaf Score (0\u20133) for greenest option during resource creation?",
+            "options": [
+                "Billing Cost Manager.",
+                "Environmental Footprint API.",
+                "Console.",
+                "Observability (Cockpit)."
+            ],
+            "answers": "C",
+            "topic": "Sustainability architecture",
+            "themes": {
+                "services": [
+                    "console"
+                ],
+                "concepts": [
+                    "sustainability"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            }
+        },
+        {
+            "id": "55",
+            "question": "Object Storage redundancy: erasure coding or replication?",
+            "options": [
+                "Exclusively erasure coding 6+3 across all buckets/regions.",
+                "Combines erasure coding and replication by storage class.",
+                "No redundancy; customer responsible.",
+                "Always triple replication."
+            ],
+            "answers": "B",
+            "topic": "Resilience & Availability",
+            "themes": {
+                "services": [
+                    "object-storage"
+                ],
+                "concepts": [
+                    "data-replication"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            }
+        },
+        {
+            "id": "56",
+            "question": "Monolithic Architecture performance via which scaling strategy?",
+            "options": [
+                "Vertical scaling first",
+                "Elastic scaling (scale to zero)",
+                "API-first communication",
+                "Horizontal scaling first"
+            ],
+            "answers": "A",
+            "topic": "Standard architecture patterns",
+            "themes": {
+                "concepts": [
+                    "monolithic-architecture",
+                    "scalability"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            }
+        },
+        {
+            "id": "57",
+            "question": "Configuration Management solves what problem boot scripts don't address long-term?",
+            "options": [
+                "Initial VM deployment.",
+                "Initial OS installation.",
+                "Workload isolation on shared infrastructure.",
+                "Undocumented changes causing production outages."
+            ],
+            "answers": "D",
+            "topic": "Modern Deployment & Cloud native approach",
+            "themes": {
+                "services": [
+                    "configuration-management"
+                ],
+                "concepts": [
+                    "configuration-drift"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            }
+        },
+        {
+            "id": "58",
+            "question": "Monolithic Architecture feature that simplifies deployment but hinders independent scaling?",
+            "options": [
+                "Single codebase/repository with in-process communication.",
+                "Technology heterogeneity.",
+                "Decentralized data management.",
+                "Design for failure."
+            ],
+            "answers": "A",
+            "topic": "Standard architecture patterns",
+            "themes": {
+                "concepts": [
+                    "monolithic-architecture"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            }
+        },
+        {
+            "id": "59",
+            "question": "Company scaling manually with docker-compose on new Instances. Wants scale-in too. Best improvement?",
+            "options": [
+                "Auto scaling with Cockpit and Serverless functions.",
+                "Migrate to Kubernetes Kapsule.",
+                "Instance auto scaling groups with cloud-init.",
+                "Migrate to serverless architecture."
+            ],
+            "answers": "C",
+            "topic": "Scalability & elasticity",
+            "themes": {
+                "services": [
+                    "cockpit",
+                    "instances",
+                    "kapsule",
+                    "serverless"
+                ],
+                "concepts": [
+                    "autoscaling"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            }
+        },
+        {
+            "id": "60",
+            "question": "Ticketing DB on Managed PostgreSQL fr-par HA. New rule: survive AZ loss, minutes RPO, small ops team. Best addition?",
+            "options": [
+                "HA standby already in another AZ.",
+                "Multi-AZ Read Replica in another AZ, manual promote.",
+                "Larger primary and standby nodes.",
+                "Daily logical backup, restore to AZ on loss."
+            ],
+            "answers": "B",
+            "topic": "Resilience & Availability",
+            "themes": {
+                "services": [
+                    "managed-database-postgresql"
+                ],
+                "concepts": [
+                    "disaster-recovery",
+                    "high-availability"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            },
+            "explanation": "The HA standby runs in the same data center on a separate rack, so it does not cover the loss of a zone, whereas a Multi-AZ Read Replica is hosted in a different AZ and replicates asynchronously. Promoting a Read Replica is an explicit action by the operator, and a daily backup could not meet a recovery point of a few minutes."
+        },
+        {
+            "id": "61",
+            "question": "Online learning platform DR in second Scaleway region: RPO 15 min, RTO 2 hours, manual OK, lowest standing cost. Strategy?",
+            "options": [
+                "Backup and restore: nightly backups to secondary region, rebuild from them.",
+                "Warm standby: scaled-down full copy always running in secondary region.",
+                "Multi-site active-active: serve from both regions at full capacity.",
+                "Pilot light: continuous DB replication, app tier stopped, start via IaC."
+            ],
+            "answers": "D",
+            "topic": "Resilience & Availability",
+            "themes": {
+                "concepts": [
+                    "disaster-recovery",
+                    "iac"
+                ],
+                "questionTypes": [
+                    "architecture-decision",
+                    "most-cost-effective"
+                ]
+            },
+            "explanation": "Continuous database replication meets the 15-minute RPO, and starting the stopped application tier from code fits the 2-hour RTO at a minimal standing cost. Nightly backups miss the RPO, while warm standby and active-active cost more than needed."
+        },
+        {
+            "id": "62",
+            "question": "Clustered DB on multi-AZ Kapsule with Block Storage volumes. Stay available if one AZ fails. Design?",
+            "options": [
+                "Replicas in different zones, topology spread, app-level volume replication.",
+                "One volume mounted on pods in all zones.",
+                "Kubernetes auto-replicates volumes to other zones on failure.",
+                "All DB pods in largest node pool one zone, LB in front."
+            ],
+            "answers": "A",
+            "topic": "Resilience & Availability",
+            "themes": {
+                "services": [
+                    "kapsule"
+                ],
+                "concepts": [
+                    "high-availability",
+                    "data-replication"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            },
+            "explanation": "Persistent volumes are limited to their Availability Zone, so the application must replicate data between volumes in different zones, and topology spread constraints keep the replicas in separate zones."
+        },
+        {
+            "id": "63",
+            "question": "E-commerce sessions in web server memory behind LB. Scale-in logs customers out. Add/remove servers freely, code changeable. Best fix?",
+            "options": [
+                "Sticky sessions on LB, sessions in server memory.",
+                "Larger Instance type for one server.",
+                "Session state in shared Managed Redis, stateless web servers.",
+                "Larger LB size (LB-M) for longer connections."
+            ],
+            "answers": "C",
+            "topic": "Standard architecture patterns",
+            "themes": {
+                "services": [
+                    "managed-database-redis",
+                    "load-balancer"
+                ],
+                "concepts": [
+                    "scalability",
+                    "fault-tolerance"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            },
+            "explanation": "Sticky sessions still lose the session when a server is removed or fails. Externalizing the state makes the web tier stateless, so any server can serve any request and scaling in is safe."
+        },
+        {
+            "id": "64",
+            "question": "Product catalogue in two regions. Changes a few times/day, reads tolerate seconds-late updates, reads available if inter-region link cut. Consistency?",
+            "options": [
+                "Strong consistency: synchronous replication, block until both agree.",
+                "Eventual consistency: async replication, local reads during partition.",
+                "Single-region primary only, second region stopped.",
+                "Two-phase commit for every update and read."
+            ],
+            "answers": "B",
+            "topic": "Standard architecture patterns",
+            "themes": {
+                "concepts": [
+                    "data-replication",
+                    "high-availability"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            },
+            "explanation": "During a network partition a system must choose between consistency and availability. Data that tolerates short staleness favours availability, which asynchronous replication and local reads provide."
+        },
+        {
+            "id": "65",
+            "question": "Microservices: payment service slow, checkout threads pile up, whole site slows. Resilience pattern preventing cascade?",
+            "options": [
+                "Retry indefinitely until payment answers.",
+                "More checkout threads to wait.",
+                "Larger payment Instance, calls unchanged.",
+                "Timeouts and circuit breaker with fallback."
+            ],
+            "answers": "D",
+            "topic": "Standard architecture patterns",
+            "themes": {
+                "concepts": [
+                    "microservices",
+                    "fault-tolerance"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            },
+            "explanation": "Timeouts and a circuit breaker stop callers from waiting on a failing dependency and let the system fail fast. Unbounded retries and more waiting threads make the overload worse."
+        },
+        {
+            "id": "66",
+            "question": "DR review: production failover takes 6 hours, business needs 1 hour RTO. Two actions reduce recovery time?",
+            "options": [
+                "Shorten backup interval 24h to 1h (less data loss).",
+                "Extend backup retention 30 to 365 days.",
+                "Run regular disaster recovery drills (game days).",
+                "Keep documentation only, no practice."
+            ],
+            "answers": [
+                "C",
+                "D"
+            ],
+            "topic": "Resilience & Availability",
+            "themes": {
+                "concepts": [
+                    "disaster-recovery",
+                    "automation"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            },
+            "explanation": "The RTO is the time needed to restore the service, and it falls with automation and a pre-provisioned standby. A shorter backup interval improves the RPO and longer retention does neither."
+        },
+        {
+            "id": "67",
+            "question": "Web app on Kapsule needs to resize images. Each request saturates one vCPU for seconds. Default concurrent-requests policy overloads instances before scaling. Appropriate config?",
+            "options": [
+                "Scale on CPU, min-scale 1 or more.",
+                "Keep concurrent requests, raise concurrency to 200.",
+                "Scale on CPU, min-scale 0.",
+                "Disable autoscaling, fixed one instance."
+            ],
+            "answers": "A",
+            "topic": "Resilience & Availability",
+            "themes": {
+                "services": [
+                    "object-storage"
+                ],
+                "concepts": [
+                    "high-availability",
+                    "fault-tolerance"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            },
+            "explanation": "Standard Multi-AZ is available in Paris, Amsterdam and Warsaw and keeps data across zones. Standard One Zone is meant for secondary backup copies or easily re-created data, and Glacier needs a restore before access."
+        },
+        {
+            "id": "68",
+            "question": "Serverless Container resizes images, CPU-saturated requests. Default concurrent-requests policy overloads. Appropriate?",
+            "options": [
+                "Scale on CPU, min-scale 1 or more.",
+                "Keep concurrent requests, raise concurrency.",
+                "Scale on CPU, min-scale 0.",
+                "Disable autoscaling."
+            ],
+            "answers": "C",
+            "topic": "Modern Deployment & Cloud native approach",
+            "themes": {
+                "services": [
+                    "serverless-jobs",
+                    "secret-manager"
+                ],
+                "concepts": [
+                    "serverless",
+                    "automation"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            },
+            "explanation": "Serverless Jobs are designed for batch workloads that run to completion, with cron triggers, retries and Secret Manager references. Functions and Containers are request-driven services, and an Instance would be paid for while idle."
+        },
+        {
+            "id": "69",
+            "question": "Startup HTTP API in unsupported Serverless Functions runtime. Team knows Docker, no K8s, wants autoscaling with scale to zero. Service?",
+            "options": [
+                "Serverless Functions (any language).",
+                "Serverless Containers (package as container image).",
+                "Serverless Jobs (scale to zero between runs).",
+                "Kapsule with dedicated control plane."
+            ],
+            "answers": "B",
+            "topic": "Modern Deployment & Cloud native approach",
+            "themes": {
+                "services": [
+                    "serverless-containers",
+                    "serverless-functions",
+                    "serverless-jobs",
+                    "kapsule"
+                ],
+                "concepts": [
+                    "serverless",
+                    "autoscaling"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            },
+            "explanation": "Serverless Functions only accept code in the supported runtimes, whereas Serverless Containers run any containerized application and scale from and to zero. Serverless Jobs are batch tasks for workloads that do not expose a port, and Kapsule would need Kubernetes skills that the team does not have."
+        },
+        {
+            "id": "70",
+            "question": "Serverless Container resizes images, each request saturates one vCPU for seconds. Default concurrent-requests overloads. Configuration?",
+            "options": [
+                "Scale on CPU, min-scale 1 or more.",
+                "Keep concurrent requests, raise concurrency to 200.",
+                "Scale on CPU, min-scale 0.",
+                "Disable autoscaling, fixed instances."
+            ],
+            "answers": "A",
+            "topic": "Scalability & elasticity",
+            "themes": {
+                "services": [
+                    "serverless-containers"
+                ],
+                "concepts": [
+                    "autoscaling",
+                    "serverless"
+                ],
+                "questionTypes": [
+                    "configuration"
+                ]
+            },
+            "explanation": "Serverless Containers can scale on concurrent requests, CPU usage or RAM usage, and CPU or RAM based scaling requires a min-scale of at least 1. Raising concurrency would pack even more CPU-bound requests on one instance."
+        },
+        {
+            "id": "71",
+            "question": "Serverless Container min-scale 0, slow first responses after quiet periods. Two actions to reduce cold start?",
+            "options": [
+                "Set min-scale 1 or more so instance stays ready.",
+                "Increase max-scale to 100.",
+                "Switch to CPU scaling, keep min-scale 0.",
+                "Optimize startup: limit dependencies loaded at start."
+            ],
+            "answers": [
+                "A",
+                "D"
+            ],
+            "topic": "Scalability & elasticity",
+            "themes": {
+                "services": [
+                    "serverless-containers"
+                ],
+                "concepts": [
+                    "serverless",
+                    "autoscaling"
+                ],
+                "questionTypes": [
+                    "configuration"
+                ]
+            },
+            "explanation": "Scaleway's documentation on reducing cold starts lists keeping an instance ready with a min-scale of 1 (at the price of continuous cost) and optimizing the startup, which is affected by the dependencies loaded and the resources opened at startup. Raising max-scale is not a documented measure, and CPU based scaling requires a min-scale of at least 1."
+        },
+        {
+            "id": "72",
+            "question": "Kapsule web app: pods Pending during sales (nodes full), unhealthy node replaced manually. Both handled without manual action. Configure?",
+            "options": [
+                "Node pool autoscaling (min/max) and autohealing.",
+                "Horizontal Pod Autoscaler only.",
+                "Dedicated control plane.",
+                "Fixed peak-size node pool."
+            ],
+            "answers": "A",
+            "topic": "Scalability & elasticity",
+            "themes": {
+                "services": [
+                    "kapsule"
+                ],
+                "concepts": [
+                    "autoscaling",
+                    "high-availability"
+                ],
+                "questionTypes": [
+                    "configuration"
+                ]
+            },
+            "explanation": "Node pools can enable autoscaling, with a minimum and a maximum number of machines, and autohealing, which reboots or replaces unhealthy nodes. A pod autoscaler adjusts pods, not nodes, a dedicated control plane does not replace nodes, and a fixed peak size neither follows the demand nor replaces unhealthy nodes."
+        },
+        {
+            "id": "73",
+            "question": "Retailer: latency-sensitive checkout in production, staging copy. Predictable prod performance, lowest staging cost. Instance choice?",
+            "options": [
+                "Shared vCPU prod, dedicated vCPU staging.",
+                "Shared vCPU both.",
+                "Dedicated vCPU prod, shared vCPU staging.",
+                "Dedicated vCPU both."
+            ],
+            "answers": "C",
+            "topic": "Scalability & elasticity",
+            "themes": {
+                "services": [
+                    "instances"
+                ],
+                "concepts": [
+                    "right-sizing",
+                    "cost-optimization"
+                ],
+                "questionTypes": [
+                    "most-cost-effective"
+                ]
+            },
+            "explanation": "Dedicated vCPUs give consistent performance for production, while shared vCPUs are cheaper and suit development and staging, with the risk of CPU steal during peaks of neighbouring workloads."
+        },
+        {
+            "id": "74",
+            "question": "Three-node self-managed DB on Instances fr-par-1. Single hypervisor failure must not take down more than one node. Use?",
+            "options": [
+                "Placement group low_latency, Enforced policy.",
+                "Single Private Network, same AZ.",
+                "Security group allowing inter-node traffic all ports.",
+                "Placement group max_availability, Enforced policy."
+            ],
+            "answers": "D",
+            "topic": "Resilience & Availability",
+            "themes": {
+                "services": [
+                    "instances"
+                ],
+                "concepts": [
+                    "high-availability",
+                    "fault-tolerance"
+                ],
+                "questionTypes": [
+                    "configuration"
+                ]
+            },
+            "explanation": "A placement group in max_availability mode ensures that the Instances do not run on the same underlying hardware, and the Enforced policy lets the Instances boot only on hypervisors matching the group settings. The low_latency mode does the opposite by bringing the Instances closer together, and a Private Network or a security group does not influence the hypervisor placement."
+        },
+        {
+            "id": "75",
+            "question": "Kubernetes on Scaleway and another cloud. Single managed Scaleway control plane for nodes in both. Service?",
+            "options": [
+                "Kapsule with node pool in other cloud.",
+                "Kubernetes Kosmos (multi-cloud managed K8s).",
+                "Kapsule with dedicated control plane.",
+                "Serverless Container namespace in each cloud."
+            ],
+            "answers": "B",
+            "topic": "Modern Deployment & Cloud native approach",
+            "themes": {
+                "services": [
+                    "kapsule"
+                ],
+                "concepts": [
+                    "microservices"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            },
+            "explanation": "Kosmos connects Instances and servers from any cloud provider to a single managed control plane hosted by Scaleway, whereas Kapsule clusters are made only of Scaleway Instances."
+        },
+        {
+            "id": "76",
+            "question": "Health app: sensitive records encrypted before DB write. Ingestion service must encrypt but never decrypt, key never in app code. Approach?",
+            "options": [
+                "Key Manager, IAM app with encrypt-only permission.",
+                "AES key in Secret Manager, read at startup.",
+                "Key in env var injected at deployment.",
+                "Generate key in app code, store next to data."
+            ],
+            "answers": "A",
+            "topic": "Security architecture",
+            "themes": {
+                "services": [
+                    "key-manager",
+                    "secret-manager",
+                    "iam"
+                ],
+                "concepts": [
+                    "encryption",
+                    "secrets-management"
+                ],
+                "questionTypes": [
+                    "most-secure"
+                ]
+            },
+            "explanation": "Key Manager keys cannot be extracted and it performs the cryptographic operations itself, so principals can be authorized to encrypt only or to decrypt only. A key read from Secret Manager would let the service decrypt as well."
+        },
+        {
+            "id": "77",
+            "question": "Large files encrypted with Key Manager envelope encryption before Object Storage upload. Two correct statements?",
+            "options": [
+                "Key Manager stores every DEK.",
+                "Key Manager generates DEKs on demand, returns KEK-encrypted.",
+                "KEK exported once for local encryption.",
+                "KEK stored in Key Manager, never leaves it."
+            ],
+            "answers": [
+                "B",
+                "D"
+            ],
+            "topic": "Security architecture",
+            "themes": {
+                "services": [
+                    "key-manager",
+                    "object-storage"
+                ],
+                "concepts": [
+                    "encryption"
+                ],
+                "questionTypes": [
+                    "most-secure"
+                ]
+            },
+            "explanation": "In Key Manager the KEK is permanently stored and never leaves the service. DEKs are generated on demand, encrypted by the KEK chosen by the user and forwarded to the recipient, and they are not stored by Key Manager: the users keep the encrypted DEK with their data."
+        },
+        {
+            "id": "78",
+            "question": "Contractor credentials readable only once; critical production secrets protected against accidental deletion. Two configurations?",
+            "options": [
+                "Contractor secret with ephemeral single-access policy.",
+                "Disable contractor secret versions when contract ends.",
+                "Enable secret protection on production secrets.",
+                "Schedule production secret deletion (pending period)."
+            ],
+            "answers": [
+                "A",
+                "C"
+            ],
+            "topic": "Security architecture",
+            "themes": {
+                "services": [
+                    "secret-manager",
+                    "iam"
+                ],
+                "concepts": [
+                    "secrets-management"
+                ],
+                "questionTypes": [
+                    "configuration",
+                    "most-secure"
+                ]
+            },
+            "explanation": "An ephemeral policy with single access makes versions expire after one access, and it can only be set at secret creation. Secret protection prevents the deletion of a secret, whereas scheduled deletion actually starts a deletion."
+        },
+        {
+            "id": "79",
+            "question": "Bank portal behind LB with Edge Services WAF. Banking-standard protection, accepts false positives with exclusions, not most aggressive rules. Setting?",
+            "options": [
+                "Paranoia level 1 (minimal).",
+                "Paranoia level 2 (moderate).",
+                "Paranoia level 3 (strong).",
+                "Paranoia level 4 (maximum)."
+            ],
+            "answers": "C",
+            "topic": "Security architecture",
+            "themes": {
+                "services": [
+                    "edge-services",
+                    "load-balancer"
+                ],
+                "questionTypes": [
+                    "configuration",
+                    "most-secure"
+                ]
+            },
+            "explanation": "The WAF paranoia levels go from 1 to 4, and a higher level detects more attacks but triggers more false positives. Level 3 is described as banking-standard, level 4 is for the most critical assets, and levels 1 and 2 are less sensitive."
+        },
+        {
+            "id": "80",
+            "question": "CI/CD deploys into single Project using Owner's API key. Most secure replacement?",
+            "options": [
+                "Pipeline as Member with admin access to whole Organization.",
+                "IAM application with API key, policy with required permissions on that Project.",
+                "Keep Owner's key in Secret Manager, rotate monthly.",
+                "One shared API key for all pipelines."
+            ],
+            "answers": "B",
+            "topic": "Security architecture",
+            "themes": {
+                "services": [
+                    "iam",
+                    "project"
+                ],
+                "concepts": [
+                    "automation"
+                ],
+                "questionTypes": [
+                    "most-secure"
+                ]
+            },
+            "explanation": "An IAM application is a non-human user whose API key gives programmatic access, and its policy can scope permission sets to a single Project, which is least privilege. The Owner's key, an Organization-wide administrator access or a key shared by all the pipelines grant far more than needed or break accountability."
+        },
+        {
+            "id": "81",
+            "question": "Three-tier app on Instances. Backend has public IPs, default security group. Two changes reduce attack surface?",
+            "options": [
+                "Second public flexible IP per backend.",
+                "Remove public IPs, Private Network, expose only LB.",
+                "SSH bastion on Public Gateway with Allowed IPs.",
+                "Open SSH 0.0.0.0/0 with SSH keys."
+            ],
+            "answers": [
+                "B",
+                "C"
+            ],
+            "topic": "Security architecture",
+            "themes": {
+                "services": [
+                    "instances",
+                    "private-network",
+                    "public-gateway",
+                    "security-groups",
+                    "load-balancer"
+                ],
+                "concepts": [
+                    "private-networking"
+                ],
+                "questionTypes": [
+                    "most-secure"
+                ]
+            },
+            "explanation": "Removing public connectivity and attaching the Instances to a Private Network minimizes exposure, and the Public Gateway SSH bastion, restricted with Allowed IPs, gives controlled administrative access without exposing the Instances. Additional public IPs or SSH open to the whole internet increase the attack surface."
+        },
+        {
+            "id": "82",
+            "question": "300-employee company, central IdP, SSO to Scaleway console, provider controls session/auth, no separate passwords. Set up?",
+            "options": [
+                "Shared IAM app API key for all employees.",
+                "One IAM Member per employee, quarterly password rotation.",
+                "Single shared Owner account.",
+                "Identity federation, SAML SSO with company IdP."
+            ],
+            "answers": "D",
+            "topic": "Security architecture",
+            "themes": {
+                "services": [
+                    "iam"
+                ],
+                "questionTypes": [
+                    "most-secure"
+                ]
+            },
+            "explanation": "Scaleway Identity Federation supports SAML with any SAML-compatible identity provider, with centralized management of the users from that provider. A shared IAM application key, individual passwords or a shared Owner account give neither SSO nor central control and break accountability."
+        },
+        {
+            "id": "83",
+            "question": "Managed Kapsule cluster: customer responsible under shared responsibility for which two?",
+            "options": [
+                "Kubernetes network policies for intra-cluster traffic.",
+                "Patching etcd and API server of control plane.",
+                "Publishing/patching node images of managed node pools.",
+                "Configuring RBAC and user access permissions."
+            ],
+            "answers": "A",
+            "topic": "Security architecture",
+            "themes": {
+                "services": [
+                    "audit-trail",
+                    "object-storage"
+                ],
+                "concepts": [
+                    "encryption"
+                ],
+                "questionTypes": [
+                    "most-secure"
+                ]
+            },
+            "explanation": "Audit Trail records the identity, date, source IP, API method and status of each action, and its daily export to a bucket benefits from Object Lock, which provides write-once-read-many protection."
+        },
+        {
+            "id": "84",
+            "question": "App logs daily to Object Storage bucket. Move to Glacier after 90 days, delete after 5 years, no code. Configure?",
+            "options": [
+                "Edge Services pipeline with cache TTL.",
+                "Object Lock retention 5 years governance mode.",
+                "Serverless Job listing bucket nightly to move objects.",
+                "Lifecycle config with transition and expiration rules."
+            ],
+            "answers": [
+                "A",
+                "D"
+            ],
+            "topic": "Security architecture",
+            "themes": {
+                "services": [
+                    "kapsule"
+                ],
+                "concepts": [
+                    "shared-responsibility"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            },
+            "explanation": "Customers manage the Kubernetes configuration of their cluster, including RBAC and network policies. Scaleway operates the control plane and maintains the node images of managed pools."
+        },
+        {
+            "id": "85",
+            "question": "Payments platform: Managed PostgreSQL ledger + Managed Redis cache, both HA. Two correct statements about standby replication?",
+            "options": [
+                "Both synchronous to standby for durability.",
+                "Both asynchronous to standby for low write latency.",
+                "PostgreSQL synchronous: transaction confirmed once applied to standby.",
+                "Redis asynchronous: latest writes can be lost after failover."
+            ],
+            "answers": "D",
+            "topic": "Resilience & Availability",
+            "themes": {
+                "services": [
+                    "object-storage"
+                ],
+                "concepts": [
+                    "automation",
+                    "cost-optimization"
+                ],
+                "questionTypes": [
+                    "configuration"
+                ]
+            },
+            "explanation": "Lifecycle rules support transition actions, which change the storage class, and expiration actions, which delete objects automatically. Object Lock prevents deletion, and a Serverless Job would require code."
+        },
+        {
+            "id": "86",
+            "question": "Internal reporting tool: SQL queries few hours/week, unpredictable peaks. Relational DB, no capacity planning, no compute cost while idle. Service?",
+            "options": [
+                "Managed PostgreSQL HA on large node type.",
+                "Serverless SQL Database with autoscaling vCPU.",
+                "PostgreSQL on Elastic Metal operated by team.",
+                "Managed Redis cluster mode, one node per AZ."
+            ],
+            "answers": [
+                "C",
+                "D"
+            ],
+            "topic": "Resilience & Availability",
+            "themes": {
+                "services": [
+                    "managed-database-postgresql",
+                    "managed-database-redis"
+                ],
+                "concepts": [
+                    "data-replication",
+                    "high-availability"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            },
+            "explanation": "The PostgreSQL HA standby uses synchronous replication for durability, whereas the Redis HA standby uses asynchronous replication to maintain good performance, which trades some durability."
+        },
+        {
+            "id": "87",
+            "question": "E-commerce data store pairing. Two correct matches?",
+            "options": [
+                "Orders with multi-table transactions/joins: Managed Redis.",
+                "Orders with multi-table transactions/joins: Managed PostgreSQL.",
+                "Session/page cache expiring keys: Object Storage.",
+                "Session/page cache expiring keys: Managed Redis."
+            ],
+            "answers": "B",
+            "topic": "Core Ecosystem Knowledge",
+            "themes": {
+                "services": [
+                    "serverless-database",
+                    "managed-database-postgresql",
+                    "elastic-metal",
+                    "managed-database-redis"
+                ],
+                "concepts": [
+                    "consumption-based-pricing",
+                    "serverless"
+                ],
+                "questionTypes": [
+                    "architecture-decision",
+                    "most-cost-effective"
+                ]
+            },
+            "explanation": "Serverless SQL Databases autoscale their vCPU, and with a minimum of 0 vCPU an idle database is not billed for compute, although the storage remains billed and the first query after idle may be slower."
+        },
+        {
+            "id": "88",
+            "question": "Static site in Object Storage bucket fr-par. Must stay deployable if region unavailable, data in EU. Approach?",
+            "options": [
+                "Sync content to bucket in nl-ams via rclone in CI/CD, switch DNS during outage.",
+                "Standard Multi-AZ class on fr-par bucket.",
+                "Standard One Zone bucket fr-par, restore manually from laptops.",
+                "Copy to non-European provider geographically further from Paris."
+            ],
+            "answers": [
+                "B",
+                "D"
+            ],
+            "topic": "Core Ecosystem Knowledge",
+            "themes": {
+                "services": [
+                    "managed-database-postgresql",
+                    "managed-database-redis",
+                    "object-storage"
+                ],
+                "concepts": [
+                    "data-modeling"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            },
+            "explanation": "A relational engine such as PostgreSQL provides transactions and joins, and an in-memory store such as Redis fits low-latency caches with expiring keys. Object Storage is not designed for millisecond key lookups."
+        },
+        {
+            "id": "89",
+            "question": "Backups in Object Storage resist ransomware/insider deletion. No one, including admins, can delete/overwrite before retention ends. Configuration?",
+            "options": [
+                "Object Lock Governance mode with retention.",
+                "Versioning without Object Lock.",
+                "Object Lock Compliance mode with retention.",
+                "Bucket policy denying delete to all apps."
+            ],
+            "answers": "A",
+            "topic": "Sovereignty architecture",
+            "themes": {
+                "services": [
+                    "object-storage"
+                ],
+                "concepts": [
+                    "disaster-recovery",
+                    "data-replication",
+                    "sovereignty"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            },
+            "explanation": "Scaleway recommends distributing resources across regions to protect against regional outages, for example by replicating a static site to a bucket in nl-ams with automated tools. Multi-AZ covers the zones of one region, and a non-European copy breaks the residency requirement."
+        },
+        {
+            "id": "90",
+            "question": "Backend Instances no public IP, Private Network with Public Gateway. Admin SSH from office IP range only, no internet exposure. Configure?",
+            "options": [
+                "Flexible IP per Instance, security group allows office range.",
+                "Public LB TCP frontend port 22.",
+                "Static NAT rule forwarding gateway port 22 to every Instance.",
+                "Public Gateway SSH bastion with Allowed IPs restriction."
+            ],
+            "answers": "C",
+            "topic": "Security architecture",
+            "themes": {
+                "services": [
+                    "object-storage"
+                ],
+                "concepts": [
+                    "disaster-recovery"
+                ],
+                "questionTypes": [
+                    "most-secure"
+                ]
+            },
+            "explanation": "In Compliance mode an object version cannot be overwritten or deleted by any user until the retention period ends, and the mode and period cannot be shortened. In Governance mode users can still alter the lock settings."
+        },
+        {
+            "id": "91",
+            "question": "Backend Instances have no public IP address and sit in a Private Network with a Public Gateway. Administrators need SSH access, only from the office IP range, without exposing the Instances to the internet. What should be configured?",
+            "options": [
+                "Assign a flexible IP to each Instance and allow SSH from the office range in the security group.",
+                "Create a TCP frontend on port 22 on a public Load Balancer in front of the Instances.",
+                "Create a Static NAT rule that forwards port 22 of the gateway to every Instance.",
+                "Enable the SSH bastion of the Public Gateway and restrict it with the Allowed IPs feature."
+            ],
+            "answers": "D",
+            "topic": "Standard architecture patterns",
+            "themes": {
+                "services": [
+                    "public-gateway",
+                    "private-network",
+                    "instances"
+                ],
+                "concepts": [
+                    "private-networking"
+                ],
+                "questionTypes": [
+                    "most-secure",
+                    "configuration"
+                ]
+            },
+            "explanation": "The SSH bastion of the Public Gateway is a single point of entry to the private resources, and Allowed IPs limits which public addresses can connect to it. The other options expose the Instances or the SSH port more widely."
+        },
+        {
+            "id": "92",
+            "question": "Production and test Private Networks live in the same VPC, traffic flows freely between them. Security team wants test network to reach only production database on port 5432, everything else blocked. Feature?",
+            "options": [
+                "Instance security groups filter traffic between Private Networks of a VPC.",
+                "VPC Network ACL with default Deny rule and Allow rules for port 5432 and return traffic.",
+                "Load Balancer ACL on the database frontend.",
+                "Static NAT rule on a Public Gateway of the VPC."
+            ],
+            "answers": "B",
+            "topic": "Standard architecture patterns",
+            "themes": {
+                "services": [
+                    "private-network",
+                    "security-groups"
+                ],
+                "concepts": [
+                    "private-networking"
+                ],
+                "questionTypes": [
+                    "configuration",
+                    "most-secure"
+                ]
+            },
+            "explanation": "Network ACLs are stateless rules that control traffic between the Private Networks of a VPC, so the return traffic needs its own rule, and a default Deny rule blocks the rest. Security groups filter the public interface of Instances."
+        },
+        {
+            "id": "93",
+            "question": "Bank connects datacenter to Scaleway VPC with InterLink, needs redundancy against one physical link failure. Two correct statements?",
+            "options": [
+                "Two InterLinks can be attached to the same VPC, each provisioned, configured, billed separately.",
+                "Each InterLink needs a routing policy and activated route propagation before traffic flows.",
+                "A single InterLink is automatically redundant because it has two BGP sessions.",
+                "An InterLink can be attached to several VPCs of different regions to share bandwidth."
+            ],
+            "answers": [
+                "A",
+                "B"
+            ],
+            "topic": "Standard architecture patterns",
+            "themes": {
+                "services": [
+                    "interlink"
+                ],
+                "concepts": [
+                    "hybrid-connectivity",
+                    "high-availability"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            },
+            "explanation": "Two InterLinks on the same VPC provide redundancy, and traffic only flows once a routing policy allows routes and propagation is activated. The two BGP sessions of an InterLink are for IPv4 and IPv6, and an InterLink attaches to a single VPC of its region."
+        },
+        {
+            "id": "94",
+            "question": "Architect designs Site-to-Site VPN between Scaleway VPC and remote office. Two correct statements?",
+            "options": [
+                "Only dynamic routing with BGP is supported, static routes cannot be configured at all.",
+                "The tunnel runs over a private physical link between both sites that never crosses the internet.",
+                "By default, all routes through the tunnel stay blocked until a routing policy is attached and propagation is on.",
+                "Traffic is protected by IPsec only if the customer enables the encryption option."
+            ],
+            "answers": [
+                "A",
+                "C"
+            ],
+            "topic": "Standard architecture patterns",
+            "themes": {
+                "services": [
+                    "site-to-site-vpn"
+                ],
+                "concepts": [
+                    "hybrid-connectivity",
+                    "encryption"
+                ],
+                "questionTypes": [
+                    "configuration"
+                ]
+            },
+            "explanation": "Scaleway Site-to-Site VPN uses BGP for dynamic routing only and blocks all routes until a routing policy is attached. Its tunnel is an IPsec tunnel established over the public internet."
+        },
+        {
+            "id": "95",
+            "question": "Payment application must keep traffic encrypted between clients and LB, and between LB and backend servers, while LB reads HTTP requests to route by URL path. TLS mode?",
+            "options": [
+                "SSL bridging: certificate on frontend and HTTPS backend with its own certificate.",
+                "SSL offloading, backend uses plain HTTP behind LB.",
+                "SSL passthrough, TCP backend with TLS disabled on backend.",
+                "No TLS on LB, with IPsec VPN between clients and LB."
+            ],
+            "answers": "A",
+            "topic": "Standard architecture patterns",
+            "themes": {
+                "services": [
+                    "load-balancer"
+                ],
+                "concepts": [
+                    "encryption",
+                    "load-balancing"
+                ],
+                "questionTypes": [
+                    "configuration",
+                    "most-secure"
+                ]
+            },
+            "explanation": "SSL bridging decrypts the traffic at the frontend, which allows layer 7 actions such as path routing, then re-encrypts it towards the backend. Offloading sends clear traffic to the backend, and passthrough prevents layer 7 actions."
+        },
+        {
+            "id": "96",
+            "question": "Internal API reachable only from resources inside a VPC, no public IP. Security policy requires TLS certificate from company's internal CA. Design?",
+            "options": [
+                "Public LB with ACL allowing only VPC addresses, using Let's Encrypt certificate.",
+                "Private LB with Let's Encrypt certificate generated by Scaleway.",
+                "Private LB attached to Private Network, with internal CA certificate imported.",
+                "Public LB switched to private once setup complete."
+            ],
+            "answers": "C",
+            "topic": "Security architecture",
+            "themes": {
+                "services": [
+                    "load-balancer",
+                    "private-network"
+                ],
+                "concepts": [
+                    "private-networking",
+                    "encryption"
+                ],
+                "questionTypes": [
+                    "architecture-decision",
+                    "most-secure"
+                ]
+            },
+            "explanation": "A private Load Balancer has no public IP address, but it cannot use Let's Encrypt certificates, so the internal CA certificate must be imported. The accessibility of a Load Balancer cannot be modified after its creation."
+        },
+        {
+            "id": "97",
+            "question": "Company wants LB to concentrate requests on as few backend servers as possible, so extra servers can be powered off during off-peak. Balancing method?",
+            "options": [
+                "Round-robin, sends each request to the next server in turn.",
+                "Least connections, sends each request to the server with fewest active connections.",
+                "Cookie-based sticky sessions, binds each user to one server.",
+                "First available, directs each request to the first backend server with connection slots."
+            ],
+            "answers": "D",
+            "topic": "Standard architecture patterns",
+            "themes": {
+                "services": [
+                    "load-balancer"
+                ],
+                "concepts": [
+                    "load-balancing",
+                    "cost-optimization"
+                ],
+                "questionTypes": [
+                    "configuration"
+                ]
+            },
+            "explanation": "With the first available method, a server only receives requests once the previous ones have reached their connection limit, which uses the smallest number of servers at any given time."
+        },
+        {
+            "id": "98",
+            "question": "Team protects public web app with Edge Services pipeline in front of LB, cache and WAF enabled. Two correct statements?",
+            "options": [
+                "WAF also inspects requests answered by cache.",
+                "Requests answered by cache do not go through WAF, because WAF protects backend only.",
+                "WAF exclusions can be defined for an individual rule of the ruleset.",
+                "Edge Services cannot be used with a private Load Balancer."
+            ],
+            "answers": [
+                "B",
+                "D"
+            ],
+            "topic": "Security architecture",
+            "themes": {
+                "services": [
+                    "edge-services",
+                    "load-balancer"
+                ],
+                "questionTypes": [
+                    "most-secure"
+                ]
+            },
+            "explanation": "In a pipeline the WAF sits before the backend and does not filter requests served by the cache, and private Load Balancers are not compatible with Edge Services. WAF exclusions bypass the WAF entirely and cannot target an individual rule."
+        },
+        {
+            "id": "99",
+            "question": "Serverless Container must connect to Managed Database for PostgreSQL with no public endpoint, only Private Network endpoint. What should team do?",
+            "options": [
+                "Re-enable public endpoint of database and restrict to container with allowed IP.",
+                "Attach Serverless Container to same Private Network as database.",
+                "Move application to Kapsule, because Serverless Containers cannot use Private Networks.",
+                "Create an InterLink between container and database."
+            ],
+            "answers": "B",
+            "topic": "Modern Deployment & Cloud native approach",
+            "themes": {
+                "services": [
+                    "serverless-containers",
+                    "managed-database-postgresql",
+                    "private-network"
+                ],
+                "concepts": [
+                    "private-networking"
+                ],
+                "questionTypes": [
+                    "most-secure"
+                ]
+            },
+            "explanation": "Serverless Containers support Private Networks, so they can reach a database exposed only on a Private Network endpoint, which avoids any public path to the data."
+        },
+        {
+            "id": "100",
+            "question": "Company deploys same architecture in fr-par and nl-ams. Wants changes reviewable, repeatable, consistent between regions, instead of console clicking. Adopt?",
+            "options": [
+                "Describe infrastructure with Scaleway Terraform/OpenTofu provider in Git, review plan in pull requests.",
+                "Document each console step in runbook, ask second engineer to repeat in other region.",
+                "Write Bash script of Scaleway CLI commands, run manually from laptop in each region.",
+                "Clone first environment and edit cloned resources by hand in second region."
+            ],
+            "answers": "A",
+            "topic": "Modern Deployment & Cloud native approach",
+            "themes": {
+                "services": [
+                    "terraform"
+                ],
+                "concepts": [
+                    "iac",
+                    "automation",
+                    "configuration-drift"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            },
+            "explanation": "Infrastructure as code is declarative, versioned and reviewable, so the same definition can be applied to several regions and drift is limited. Manual steps and ad hoc scripts are not repeatable or reviewable in the same way."
+        },
+        {
+            "id": "101",
+            "question": "SRE team wants alerting rules from Grafana interface of Scaleway Cockpit. Two practices apply?",
+            "options": [
+                "Use Grafana alert manager, which Scaleway supports natively.",
+                "Create Grafana-managed alert rules, which Cockpit evaluates and routes to contacts.",
+                "Select Scaleway Alerting alert manager when managing alerts from Grafana.",
+                "Create datasource-managed alert rules rather than Grafana-managed alerts."
+            ],
+            "answers": [
+                "C",
+                "D"
+            ],
+            "topic": "Modern Deployment & Cloud native approach",
+            "themes": {
+                "services": [
+                    "cockpit"
+                ],
+                "concepts": [
+                    "automation"
+                ],
+                "questionTypes": [
+                    "configuration"
+                ]
+            },
+            "explanation": "Cockpit does not support the Grafana alert manager or Grafana-managed alerts. Alerts must use the Scaleway Alerting alert manager and datasource-managed rules."
+        },
+        {
+            "id": "102",
+            "question": "Team releases major version of critical API. Needs zero downtime, instant rollback by switching traffic back, can run two full environments. Strategy?",
+            "options": [
+                "Recreate deployment, stopping old version before starting new one.",
+                "Canary release to 5% users for several days, both versions share one environment.",
+                "Blue-green deployment, switching traffic to new environment once validated.",
+                "Rolling update replaces instances one by one, rolling back by redeploying old version."
+            ],
+            "answers": "C",
+            "topic": "Standard architecture patterns",
+            "themes": {
+                "concepts": [
+                    "deployment-strategies",
+                    "cicd-pipeline"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            },
+            "explanation": "Blue-green keeps the previous environment running, so the traffic switch is atomic and the rollback is a switch back. Recreate causes downtime, and canary and rolling updates mix versions in one environment."
+        },
+        {
+            "id": "103",
+            "question": "Team deploys same containerized app to development, staging, production on Scaleway. Two practices fit reliable CI/CD pipeline?",
+            "options": [
+                "Build container image once, store in Container Registry, promote same image.",
+                "Run automated tests as gates before each promotion to next environment.",
+                "Rebuild image from source for each environment so it can be adapted.",
+                "Test only in production with real traffic."
+            ],
+            "answers": [
+                "A",
+                "B"
+            ],
+            "topic": "Modern Deployment & Cloud native approach",
+            "themes": {
+                "concepts": [
+                    "cicd-pipeline",
+                    "testing",
+                    "deployment-strategies"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            },
+            "explanation": "Building once and promoting the same immutable artifact guarantees that what was tested is what runs in production, and automated test gates catch regressions early. Rebuilding per environment breaks that guarantee."
+        },
+        {
+            "id": "104",
+            "question": "Microservices app on Kapsule responds slowly. Team wants to see which service in call chain adds latency for a given request. Cockpit data type?",
+            "options": [
+                "Metrics: numeric measurements over time.",
+                "Traces: represent path of a request.",
+                "Logs: textual records of events.",
+                "Billing consumption data of each Project."
+            ],
+            "answers": [
+                "B",
+                "C"
+            ],
+            "topic": "Modern Deployment & Cloud native approach",
+            "themes": {
+                "services": [
+                    "serverless-containers",
+                    "cockpit"
+                ],
+                "concepts": [
+                    "serverless",
+                    "migration"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            },
+            "explanation": "The twelve-factor approach keeps configuration in the environment and treats logs as event streams. Ephemeral storage disappears with the instance, and in-memory sessions would be lost when instances scale in."
+        },
+        {
+            "id": "105",
+            "question": "Team wants Kapsule cluster to receive Kubernetes patch upgrades without manual action, only Sunday night when traffic lowest. Configure?",
+            "options": [
+                "Cron job from laptop every Sunday draining and upgrading nodes by hand.",
+                "Create new cluster every Sunday and migrate workloads.",
+                "Disable autoscaler during weekend so no node is replaced.",
+                "Enable auto-upgrade on cluster with maintenance window Sunday night."
+            ],
+            "answers": "B",
+            "topic": "Modern Deployment & Cloud native approach",
+            "themes": {
+                "services": [
+                    "cockpit",
+                    "kapsule"
+                ],
+                "concepts": [
+                    "microservices"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            },
+            "explanation": "Cockpit handles metrics, logs and traces, and traces describe the path of a request across services, which is what is needed to locate where the latency is added."
+        },
+        {
+            "id": "106",
+            "question": "Webhook receiver for internal tool called ~20 times/day, each under 1 second, no night traffic. Lowest running cost, no server to manage. Choose?",
+            "options": [
+                "Small Instance running 24/7 with webhook receiver.",
+                "Kapsule cluster with three-node pool hosting receiver.",
+                "Serverless Container min-scale 1, one instance always runs.",
+                "Serverless Container min-scale 0, scales to zero when idle."
+            ],
+            "answers": "D",
+            "topic": "Modern Deployment & Cloud native approach",
+            "themes": {
+                "services": [
+                    "kapsule"
+                ],
+                "concepts": [
+                    "automation"
+                ],
+                "questionTypes": [
+                    "configuration"
+                ]
+            },
+            "explanation": "Auto-upgrade lets the user schedule a maintenance window in which the cluster is upgraded. It applies patch updates within the current minor version to the control plane and the managed nodes, which removes the need for manual action."
+        },
+        {
+            "id": "107",
+            "question": "Company runs one Kapsule cluster for development and another for regulated production needing SLA-backed control plane isolated from other customers. Most cost-effective control plane choice?",
+            "options": [
+                "Dedicated control planes for both clusters.",
+                "Mutualized control planes for both clusters.",
+                "Mutualized control plane for development, dedicated for production.",
+                "Dedicated control plane for development, mutualized for production."
+            ],
+            "answers": "D",
+            "topic": "Scalability & elasticity",
+            "themes": {
+                "services": [
+                    "serverless-containers"
+                ],
+                "concepts": [
+                    "serverless",
+                    "consumption-based-pricing",
+                    "cost-optimization"
+                ],
+                "questionTypes": [
+                    "most-cost-effective"
+                ]
+            },
+            "explanation": "With a minimum scale of 0, Serverless Containers scale down to zero instances when they are not triggered and consume no resources while idle, at the price of a cold start on the first call."
+        },
+        {
+            "id": "108",
+            "question": "B2B web app on Kapsule has heavy weekday morning traffic, little at night/weekends. Two measures reduce cost without reducing peak availability?",
+            "options": [
+                "Let node pool autoscale between minimum and maximum size.",
+                "Provision peak capacity permanently so scaling never needed.",
+                "Double size of every node pool for safety margin.",
+                "Right-size node types from resource usage observed in Cockpit."
+            ],
+            "answers": "C",
+            "topic": "Scalability & elasticity",
+            "themes": {
+                "services": [
+                    "kapsule"
+                ],
+                "concepts": [
+                    "cost-optimization",
+                    "right-sizing"
+                ],
+                "questionTypes": [
+                    "most-cost-effective"
+                ]
+            },
+            "explanation": "Mutualized control planes are free and have no SLA, which is acceptable for development. Dedicated control planes provide isolated infrastructure and an SLA, at a higher cost, so they should be reserved for production."
+        },
+        {
+            "id": "109",
+            "question": "Fleet of 40 backend Instances all have public flexible IPs, only reached through LB. Company wants to cut costs and reduce exposure. Do?",
+            "options": [
+                "Keep public IPs and add security group denying all inbound internet traffic.",
+                "Detach flexible IPs, attach Instances to Private Network, expose only through LB.",
+                "Replace flexible IPs with dynamic IPs on each Instance, released when stopped.",
+                "Move Instances to larger type so fewer public addresses needed."
+            ],
+            "answers": [
+                "A",
+                "D"
+            ],
+            "topic": "Scalability & elasticity",
+            "themes": {
+                "services": [
+                    "kapsule",
+                    "cockpit"
+                ],
+                "concepts": [
+                    "autoscaling",
+                    "right-sizing",
+                    "cost-optimization"
+                ],
+                "questionTypes": [
+                    "most-cost-effective"
+                ]
+            },
+            "explanation": "Autoscaling matches capacity to demand, and right-sizing from the usage observed in Cockpit avoids paying for unused resources. Permanent peak capacity or doubled node pools waste money."
+        },
+        {
+            "id": "110",
+            "question": "Startup launches beta with small budget on Managed Database for PostgreSQL. Wants lowest DB cost during beta, add HA at launch without migrating data. Plan?",
+            "options": [
+                "Create standalone Database Instance now and upgrade to High Availability at launch.",
+                "Create HA Database Instance now and switch back to standalone after beta.",
+                "Create HA Database Instance now and keep for whole project.",
+                "Install PostgreSQL on small Instance now and migrate to Managed Database at launch."
+            ],
+            "answers": "B",
+            "topic": "Security architecture",
+            "themes": {
+                "services": [
+                    "instances",
+                    "private-network",
+                    "load-balancer"
+                ],
+                "concepts": [
+                    "private-networking",
+                    "cost-optimization"
+                ],
+                "questionTypes": [
+                    "most-cost-effective",
+                    "most-secure"
+                ]
+            },
+            "explanation": "Scaleway recommends disabling public connectivity unless it is required, and attaching resources to Private Networks, which gives better security, lower cost and better latency. Public IPs that are kept still cost money and remain exposed."
+        },
+        {
+            "id": "111",
+            "question": "Public hospital group must keep patient data, backups, DR under EU jurisdiction, survive loss of entire region. Primary in fr-par. Design?",
+            "options": [
+                "Primary in fr-par, replicate backups to US region of another cloud provider.",
+                "Primary in fr-par, place DR site outside EU (DR data not subject to sovereignty).",
+                "Primary in fr-par, place DR site and cross-region backups in another EU region (nl-ams or pl-waw).",
+                "Primary and DR site in fr-par, rely on encryption alone for sovereignty."
+            ],
+            "answers": "A",
+            "topic": "Scalability & elasticity",
+            "themes": {
+                "services": [
+                    "managed-database-postgresql"
+                ],
+                "concepts": [
+                    "cost-optimization",
+                    "high-availability"
+                ],
+                "questionTypes": [
+                    "most-cost-effective"
+                ]
+            },
+            "explanation": "A standalone Database Instance can be upgraded to High Availability at any time, but High Availability cannot be reverted to standalone. Enabling it adds a secondary node, which increases the cost."
+        },
+        {
+            "id": "112",
+            "question": "Company wants Scaleway architecture reversible to move to another provider. Two supporting choices?",
+            "options": [
+                "Rely on open standards and APIs: S3-compatible Object Storage, Kubernetes, PostgreSQL.",
+                "Build application around proprietary single-provider managed services.",
+                "Keep regular exports of data in standard formats, restorable on another provider.",
+                "Keep only backup copies in provider archive class without export."
+            ],
+            "answers": "C",
+            "topic": "Sovereignty architecture",
+            "themes": {
+                "concepts": [
+                    "sovereignty",
+                    "disaster-recovery"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            },
+            "explanation": "Paris, Amsterdam and Warsaw are all in the EU, so a second region keeps data, backups and DR inside one jurisdiction. Sovereignty concerns the legal perimeter of data, backups and DR sites, and a single region would not survive a regional loss."
+        },
+        {
+            "id": "113",
+            "question": "Console environmental footprint (green leaves) for each AZ based on two factors?",
+            "options": [
+                "Number of Instances customer runs in zone.",
+                "Power Usage Effectiveness (PUE) of data center.",
+                "Distance between zone and customer's office.",
+                "Energy mix of country hosting data center."
+            ],
+            "answers": [
+                "A",
+                "C"
+            ],
+            "topic": "Sovereignty architecture",
+            "themes": {
+                "services": [
+                    "object-storage",
+                    "kapsule"
+                ],
+                "concepts": [
+                    "sovereignty",
+                    "migration"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            },
+            "explanation": "Reversibility depends on interoperability and on the ability to retrieve the data, so open standards and portable exports make a move practical, whereas proprietary services and a single archived copy create lock-in."
+        },
+        {
+            "id": "114",
+            "question": "Nightly analytics batch for European company, no latency requirement, personal data must stay EU. Smallest environmental footprint. Choose location?",
+            "options": [
+                "AZ closest to team's office.",
+                "Cheapest AZ (cost equals carbon impact).",
+                "Non-EU region with lower-carbon grid, ignore residency.",
+                "EU zone with lowest CO2e per kWh in console estimation."
+            ],
+            "answers": [
+                "B",
+                "D"
+            ],
+            "topic": "Sustainability architecture",
+            "themes": {
+                "services": [
+                    "console"
+                ],
+                "concepts": [
+                    "sustainability"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            },
+            "explanation": "The Availability Zone estimate in CO2e per kWh is determined by the PUE of the data center and the energy mix of its country."
+        },
+        {
+            "id": "115",
+            "question": "ESG team needs carbon/water footprint of Scaleway usage by Project and region, automate extraction into reporting tool. Feature?",
+            "options": [
+                "Billing API reporting CO2e per invoice line.",
+                "Environmental Footprint dashboard filtered by Project and locality, with API.",
+                "Cockpit metrics including carbon data per Project.",
+                "Audit Trail export listing resources per region."
+            ],
+            "answers": "D",
+            "topic": "Sustainability architecture",
+            "themes": {
+                "services": [
+                    "console"
+                ],
+                "concepts": [
+                    "sustainability",
+                    "sovereignty"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            },
+            "explanation": "The residency constraint is a hard requirement, and within the allowed zones the estimation, based on PUE and energy mix, shows which one emits the least CO2e per kWh."
+        },
+        {
+            "id": "116",
+            "question": "Company runs PostgreSQL on self-managed VM, wants to reduce operations by moving to Managed Database for PostgreSQL, no app change except connection string. Migration strategy?",
+            "options": [
+                "Replatform: moves to managed service with minimal changes.",
+                "Rehost: moves virtual machine unchanged to Scaleway.",
+                "Refactor: re-architects application to microservices.",
+                "Retire: switches off application for good."
+            ],
+            "answers": "B",
+            "topic": "Sustainability architecture",
+            "themes": {
+                "services": [
+                    "console",
+                    "billing-api"
+                ],
+                "concepts": [
+                    "sustainability"
+                ],
+                "questionTypes": [
+                    "factual-recall"
+                ]
+            },
+            "explanation": "The documentation describes the Environmental Footprint dashboard, which shows carbon and water consumption and can be filtered by period, service category, product category, Project and locality, and the Environmental Footprint API to retrieve the consumption data. The Billing, Cockpit and Audit Trail documentation do not describe carbon or water data."
+        },
+        {
+            "id": "117",
+            "question": "A startup launches a beta with small budget on Managed Database for PostgreSQL. It wants the lowest database cost during the beta, and to add high availability at launch without migrating data. Which plan fits?",
+            "options": [
+                "Create standalone Database Instance now and upgrade to High Availability at launch.",
+                "Create HA Database Instance now and switch back to standalone after beta.",
+                "Create HA Database Instance now and keep for whole project.",
+                "Install PostgreSQL on small Instance now and migrate to Managed Database at launch."
+            ],
+            "answers": "A",
+            "topic": "Modern Deployment & Cloud native approach",
+            "themes": {
+                "services": [
+                    "managed-database-postgresql"
+                ],
+                "concepts": [
+                    "migration"
+                ],
+                "questionTypes": [
+                    "architecture-decision"
+                ]
+            },
+            "explanation": "Replatforming keeps the application and moves a component to a managed service, whereas rehosting moves the stack unchanged and refactoring changes the architecture."
+        }
+    ]
+}
