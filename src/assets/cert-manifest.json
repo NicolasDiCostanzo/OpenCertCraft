@@ -58,7 +58,7 @@
         "Context Management & Reliability": 15
       }
     },
-    "questionCount": 357
+    "questionCount": 382
   },
   {
     "file": "CCAO-F questions.json",
@@ -104,7 +104,7 @@
         "Developer Productivity & Operational Enablement": 7
       }
     },
-    "questionCount": 143
+    "questionCount": 158
   },
   {
     "file": "GCP-ACE questions.json",
@@ -147,7 +147,7 @@
         "Tools and MCPs": 10
       }
     },
-    "questionCount": 193
+    "questionCount": 220
   },
   {
     "file": "CKA questions.json",

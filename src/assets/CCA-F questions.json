@@ -48,7 +48,8 @@
       "tool-distribution",
       "tool-interface-design",
       "validation-retry-loops",
-      "workflow-enforcement"
+      "workflow-enforcement",
+      "code-generation"
     ],
     "tools": [
       "agent-sdk",
@@ -8690,6 +8691,660 @@
         ],
         "tools": [
           "tool-use"
+        ]
+      }
+    },
+    {
+      "id": "358",
+      "question": "A complex workflow involves auditing a massive codebase across several distinct subsystems. How should a coordinator agent spawn the investigation subagents to minimize turn overhead?",
+      "options": [
+        "Emit multiple subagent tool calls within a single assistant response turn",
+        "Invoke one subagent, wait for its ResultMessage, and then call the next subagent",
+        "Prompt the model to chain subagents sequentially via intermediate user confirmations",
+        "Run each subagent from separate CLI terminals using independent configuration directories"
+      ],
+      "answers": "A",
+      "topic": "Agentic Architecture & Orchestration",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "agentic-loops",
+          "workflow-enforcement"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision",
+          "feature-selection"
+        ]
+      }
+    },
+    {
+      "id": "359",
+      "question": "A team needs to explore two divergent refactoring strategies from a shared codebase analysis without having either branch alter the baseline session history. Which mechanism should they use in the Agent SDK?",
+      "options": [
+        "Execute manual compaction by sending /compact to split the conversation history",
+        "Define an Explore subagent inside the existing session options",
+        "Pass fork_session = True with resume set to the baseline session ID",
+        "Call query() passing the baseline session ID with continue_conversation = True"
+      ],
+      "answers": "C",
+      "topic": "Agentic Architecture & Orchestration",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "agentic-loops",
+          "workflow-enforcement"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision",
+          "feature-selection"
+        ]
+      }
+    },
+    {
+      "id": "360",
+      "question": "A developer needs to detect when Claude invokes a subagent during an Agent SDK session across various version releases. Which block names should the code check for in tool_use events?",
+      "options": [
+        "Subagent and Worker",
+        "TaskCreate and TaskUpdate",
+        "Delegate and Spawn",
+        "Agent and Task"
+      ],
+      "answers": "D",
+      "topic": "Agentic Architecture & Orchestration",
+      "explanation": "D. Agent and Task   Newer releases label the block Agent in tool_use events, while older releases used Task, and Task also still appears as a name in the tools list, so checking for both keeps detection working across versions. Subagent and Worker are not names the SDK actually uses for delegating work. TaskCreate and TaskUpdate belong to the built in task tracking tools rather than to subagent invocation. Delegate and Spawn are not valid tool names in the SDK at all.",
+      "themes": {
+        "tasks": [
+          "agentic-loops",
+          "workflow-enforcement"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision",
+          "feature-selection"
+        ]
+      }
+    },
+    {
+      "id": "361",
+      "question": "An agent session ended prematurely. The developer examines the resulting ResultMessage in the Claude Agent SDK. Which field is the primary indicator of how the loop terminated?",
+      "options": [
+        "usage",
+        "subtype",
+        "result",
+        "stop_reason"
+      ],
+      "answers": "B",
+      "topic": "Agentic Architecture & Orchestration",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "agentic-loops",
+          "workflow-enforcement"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision",
+          "feature-selection"
+        ]
+      }
+    },
+    {
+      "id": "362",
+      "question": "An architect wraps an internal read-only lookup as a custom tool in the Agent SDK, then finds that its calls always wait for one another even when Claude asks for several of them in the same turn. What makes the SDK willing to run those calls at the same time?",
+      "options": [
+        "Setting readOnlyHint in the tool&#39;s annotations",
+        "Listing the tool in allowedTools so its calls are approved without a prompt",
+        "Raising max_turns so that more calls fit inside one round trip",
+        "Returning the lookup result as a single text block rather than structured content"
+      ],
+      "answers": "A",
+      "topic": "Agentic Architecture & Orchestration",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "agentic-loops",
+          "workflow-enforcement"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision",
+          "feature-selection"
+        ]
+      }
+    },
+    {
+      "id": "363",
+      "question": "A team is deciding which parts of a feature build to hand to subagents and which to keep in the session they are working in. Which piece of work belongs in the main conversation?",
+      "options": [
+        "A dependency audit whose command output runs to thousands of lines",
+        "Reworking one authentication path, where design, edit and tests each build on the last",
+        "A migration run under a tool list that permits writes in one directory only",
+        "A sweep of the test suite that comes back as a list of failing cases"
+      ],
+      "answers": "B",
+      "topic": "Agentic Architecture & Orchestration",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "agentic-loops",
+          "workflow-enforcement"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision",
+          "feature-selection"
+        ]
+      }
+    },
+    {
+      "id": "364",
+      "question": "A payments agent must never call the refund tool before a lookup tool has returned a verified customer ID. Which Agent SDK arrangement blocks the refund call itself rather than asking the model to remember the order?",
+      "options": [
+        "A PostToolUse hook on the lookup tool that appends the customer ID to the transcript",
+        "A paragraph in the system prompt telling Claude to call the lookup tool first",
+        "A PreToolUse hook matched to the refund tool that returns a deny decision and a reason",
+        "A SubagentStop hook that checks for a verified ID once delegated work finishes"
+      ],
+      "answers": "C",
+      "topic": "Agentic Architecture & Orchestration",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "agentic-loops",
+          "workflow-enforcement"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision",
+          "feature-selection"
+        ]
+      }
+    },
+    {
+      "id": "365",
+      "question": "In an Agent SDK application, a custom tool handler queries a legacy backend and returns a text payload far larger than the default tool output limit. What happens to that result?",
+      "options": [
+        "The output is written to disk and replaced with an error result citing the file path.",
+        "The SDK aborts the entire agent loop and raises an unrecoverable token exhaustion error.",
+        "The output text is silently truncated to fit the token cap and marked as successful.",
+        "The SDK automatically serializes the data into a base64 string within an image block."
+      ],
+      "answers": "A",
+      "topic": "Tool Design & MCP Integration",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "builtin-tools",
+          "mcp-server-integration"
+        ],
+        "tools": [
+          "mcp",
+          "tool-use"
+        ],
+        "questionTypes": [
+          "feature-selection",
+          "most-secure"
+        ]
+      }
+    },
+    {
+      "id": "366",
+      "question": "While inspecting the system init message at the start of an Agent SDK query, an engineer sees that a remote MCP server has a status of pending. What does that status indicate?",
+      "options": [
+        "The server is reachable but has been switched off for this session by configuration",
+        "The server missed the startup deadline and was dropped from the session",
+        "The server returned a schema that capability discovery could not compile",
+        "The server has not connected yet, or its tool list came from the cache and it will connect on first use"
+      ],
+      "answers": "D",
+      "topic": "Tool Design & MCP Integration",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "builtin-tools",
+          "mcp-server-integration"
+        ],
+        "tools": [
+          "mcp",
+          "tool-use"
+        ],
+        "questionTypes": [
+          "feature-selection",
+          "most-secure"
+        ]
+      }
+    },
+    {
+      "id": "367",
+      "question": "An architect building an agent with the Claude Agent SDK wants a built-in tool such as Bash kept out of Claude&#39;s context entirely, so the model never sees it and never tries to call it. How should that restriction be configured?",
+      "options": [
+        "Add a scoped rule such as Bash(rm *) to the disallowed tools array",
+        "Omit the tool from the tools list, or name it bare in disallowed tools",
+        "Register the tool with an empty handler so its calls come back with nothing",
+        "List the tool in allowed tools and refuse it from the canUseTool callback"
+      ],
+      "answers": "B",
+      "topic": "Tool Design & MCP Integration",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "builtin-tools",
+          "mcp-server-integration"
+        ],
+        "tools": [
+          "mcp",
+          "tool-use"
+        ],
+        "questionTypes": [
+          "feature-selection",
+          "most-secure"
+        ]
+      }
+    },
+    {
+      "id": "368",
+      "question": "During an agent loop, Claude issues a client tool call that omits a mandatory argument. The host application catches the error and returns a tool result with is_error set to true explaining the missing input. How does Claude typically react to this feedback?",
+      "options": [
+        "Claude permanently disables the invoked tool for all subsequent interaction turns.",
+        "Claude automatically replaces the missing argument with null and resumes processing.",
+        "Claude retries two to three times with corrections before apologizing to the user.",
+        "Claude terminates the conversation session immediately and surfaces an unhandled exception."
+      ],
+      "answers": "C",
+      "topic": "Tool Design & MCP Integration",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "builtin-tools",
+          "mcp-server-integration"
+        ],
+        "tools": [
+          "mcp",
+          "tool-use"
+        ],
+        "questionTypes": [
+          "feature-selection",
+          "most-secure"
+        ]
+      }
+    },
+    {
+      "id": "369",
+      "question": "A platform engineer writes a codebase audit skill whose file discovery fills the invoking conversation with paths nobody reads again. Which frontmatter setting keeps that output out of the invoking conversation and returns only the findings?",
+      "options": [
+        "Add isolation: subagent so that verbose tool output is suppressed while the audit runs",
+        "Add agent: background to detach the session for the duration of the audit",
+        "Add sandbox: isolated so that file reads happen in a separate process",
+        "Add context: fork, which hands the skill to a subagent of its own"
+      ],
+      "answers": "D",
+      "topic": "Claude Code Configuration & Workflows",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "code-generation",
+          "context-preservation"
+        ],
+        "tools": [
+          "claude-code"
+        ],
+        "questionTypes": [
+          "architecture-decision",
+          "most-cost-effective"
+        ]
+      }
+    },
+    {
+      "id": "370",
+      "question": "A developer asks Claude to write a helper that rounds currency amounts for invoices, and early attempts get the half-cent cases wrong in a different way each time. What should the developer hand Claude so the work gets checked without a person watching every attempt?",
+      "options": [
+        "A detailed prose description summarizing general language coding conventions and syntax standards for the codebase",
+        "A directive to enter plan mode and generate an elaborate specification document",
+        "Concrete test cases with expected inputs and outputs that Claude can execute",
+        "A collection of negative code samples illustrating previous flawed implementations"
+      ],
+      "answers": "C",
+      "topic": "Claude Code Configuration & Workflows",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "code-generation",
+          "context-preservation"
+        ],
+        "tools": [
+          "claude-code"
+        ],
+        "questionTypes": [
+          "architecture-decision",
+          "most-cost-effective"
+        ]
+      }
+    },
+    {
+      "id": "371",
+      "question": "An architect wants Claude to help design a complex caching mechanism in an unfamiliar system before writing any implementation code. Which technique best surfaces unexpected edge cases, technical constraints, and trade-offs upfront?",
+      "options": [
+        "Provide an initial implementation script and request a full line-by-line syntax review",
+        "Add a PreToolUse hook to intercept file edits and query external documentation endpoints",
+        "Enable plan mode with bypassPermissions so Claude can autonomously test alternative branches",
+        "Start with a minimal prompt and ask Claude to interview you using AskUserQuestion"
+      ],
+      "answers": "D",
+      "topic": "Claude Code Configuration & Workflows",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "code-generation",
+          "context-preservation"
+        ],
+        "tools": [
+          "claude-code"
+        ],
+        "questionTypes": [
+          "architecture-decision",
+          "most-cost-effective"
+        ]
+      }
+    },
+    {
+      "id": "372",
+      "question": "A developer notices that custom instructions added to their project memory system seem to be missing during a session. They want to check which memory files actually loaded into the active session rather than just listing candidate locations on disk. Which command should they run?",
+      "options": [
+        "Run /doctor to view an active breakdown of every loaded project instruction and diagnostic health check",
+        "Run /context to inspect memory files loaded in the current session",
+        "Run /memory to view startup files that were loaded into context",
+        "Run /status to display the concatenated contents of all project memory files"
+      ],
+      "answers": "B",
+      "topic": "Claude Code Configuration & Workflows",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "code-generation",
+          "context-preservation"
+        ],
+        "tools": [
+          "claude-code"
+        ],
+        "questionTypes": [
+          "architecture-decision",
+          "most-cost-effective"
+        ]
+      }
+    },
+    {
+      "id": "373",
+      "question": "A root CLAUDE.md has to pull in a shared standards file kept elsewhere in the repository. The same document also mentions a second path in a sentence of prose, and that one must not be loaded. How should the two paths be written?",
+      "options": [
+        "Write the import as @path/to/file and wrap the mentioned path in backticks",
+        "Write the import as @path/to/file and put a backslash in front of the mentioned path",
+        "Write the import as #include &lt;path&gt; and put the mentioned path in square brackets",
+        "Write both paths as markdown links and let the loader work out which one to expand"
+      ],
+      "answers": "A",
+      "topic": "Claude Code Configuration & Workflows",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "code-generation",
+          "context-preservation"
+        ],
+        "tools": [
+          "claude-code"
+        ],
+        "questionTypes": [
+          "architecture-decision",
+          "most-cost-effective"
+        ]
+      }
+    },
+    {
+      "id": "374",
+      "question": "A developer processes 50,000 records asynchronously with the Message Batches API and streams the resulting JSONL file. How should the application reliably correlate each output result with its original input record?",
+      "options": [
+        "Read lines sequentially from the JSONL output because batch results preserve the submission order.",
+        "Match records using the unique custom_id value assigned to each request in the batch payload.",
+        "Correlate records by matching the generated message ID with the client-side array index.",
+        "Sort retrieved responses chronologically using the creation timestamp in the message payload."
+      ],
+      "answers": "B",
+      "topic": "Prompt Engineering & Structured Output",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "few-shot-prompting",
+          "explicit-criteria"
+        ],
+        "tools": [
+          "structured-outputs"
+        ],
+        "questionTypes": [
+          "output-evaluation",
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "375",
+      "question": "A request that puts strict schemas on several extraction tools comes back with a 400 saying the schema is too complex to compile. Which change to the schemas relieves that pressure?",
+      "options": [
+        "Make parameters required, with a sensible default stated, rather than leaving them optional",
+        "Nest the optional properties inside sub-objects so the top level stays small",
+        "Replace plain string fields with unions that accept several formats",
+        "Raise the compilation timeout on the request so the schema has longer to compile"
+      ],
+      "answers": "A",
+      "topic": "Prompt Engineering & Structured Output",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "few-shot-prompting",
+          "explicit-criteria"
+        ],
+        "tools": [
+          "structured-outputs"
+        ],
+        "questionTypes": [
+          "output-evaluation",
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "376",
+      "question": "An architect designs an agent pipeline where Claude must invoke intermediate lookup tools with guaranteed parameter schemas and subsequently return a strictly formatted JSON report to the client. How should these capabilities be configured in the API request?",
+      "options": [
+        "Rely solely on conversational system prompt instructions without enabling grammar enforcement.",
+        "Apply strict tool use to tool schemas and extract final JSON from intermediate thinking tags.",
+        "Set output_config.format to enforce the JSON report and omit client tools from the request.",
+        "Combine strict tool use on the tool definitions with JSON outputs in output_config.format."
+      ],
+      "answers": "D",
+      "topic": "Prompt Engineering & Structured Output",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "few-shot-prompting",
+          "explicit-criteria"
+        ],
+        "tools": [
+          "structured-outputs"
+        ],
+        "questionTypes": [
+          "output-evaluation",
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "377",
+      "question": "An architect builds an automated intake router where incoming documents may match one of several business record schemas, each represented as a distinct tool. Which tool_choice setting ensures that Claude executes a tool call without forcing a specific named tool?",
+      "options": [
+        "Setting tool_choice to auto to allow the model to choose between text and tools",
+        "Setting tool_choice to none to suppress direct conversational text responses",
+        "Setting tool_choice to any so that the model must invoke one of the available tools",
+        "Setting tool_choice to tool with a wildcard character matching all extraction schemas"
+      ],
+      "answers": "C",
+      "topic": "Prompt Engineering & Structured Output",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "few-shot-prompting",
+          "explicit-criteria"
+        ],
+        "tools": [
+          "structured-outputs"
+        ],
+        "questionTypes": [
+          "output-evaluation",
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "378",
+      "question": "An architect is writing tests for a pipeline that submits work to the Message Batches API and wants to know when a malformed request will be caught. When is the params object of each request in a batch validated?",
+      "options": [
+        "At submission, with the whole batch rejected if any request is malformed",
+        "During polling, with the batch halted at the first malformed request",
+        "In the client library, before the payload leaves the local process",
+        "While the batch runs, with validation errors returned once processing of the whole batch has ended"
+      ],
+      "answers": "D",
+      "topic": "Prompt Engineering & Structured Output",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "few-shot-prompting",
+          "explicit-criteria"
+        ],
+        "tools": [
+          "structured-outputs"
+        ],
+        "questionTypes": [
+          "output-evaluation",
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "379",
+      "question": "In an automated agent loop, the system appends a clarifying text block into the user message alongside the tool_result block after a tool finishes running. What negative behavior can this message pattern cause in subsequent turns?",
+      "options": [
+        "It causes Claude to produce empty responses with an end_turn stop reason.",
+        "It causes an immediate 400 error due to invalid tool result payload formatting.",
+        "It forces Claude to switch automatically to the model_context_window_exceeded stop reason.",
+        "It causes the API to bill input tokens at double the standard cache creation rate."
+      ],
+      "answers": "A",
+      "topic": "Context Management & Reliability",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "context-preservation",
+          "session-state"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "feature-selection",
+          "troubleshooting"
+        ]
+      }
+    },
+    {
+      "id": "380",
+      "question": "An agent doing a long refactor is interrupted partway through, and the team resumes the session on the same machine the next morning. What does resuming give them back?",
+      "options": [
+        "Files edited before the interruption are returned to the contents they had at the start",
+        "Background processes the agent had started are launched again",
+        "The conversation comes back, while the changes already written to disk are left where they are",
+        "The working tree is synchronized with the remote branch before work continues"
+      ],
+      "answers": "C",
+      "topic": "Context Management & Reliability",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "context-preservation",
+          "session-state"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "feature-selection",
+          "troubleshooting"
+        ]
+      }
+    },
+    {
+      "id": "381",
+      "question": "A support workflow with long transcripts keeps drifting toward the model&#39;s context window limit, and an architect proposes prompt caching as the remedy. What does caching actually change for this workflow?",
+      "options": [
+        "Cached prefixes stop counting toward the window, so more turns fit before the limit",
+        "It lowers what repeated tokens cost while those tokens still fill the window",
+        "It compresses the earlier turns so that later messages take fewer tokens",
+        "It moves cached prefixes into client storage until the model asks for them"
+      ],
+      "answers": "B",
+      "topic": "Context Management & Reliability",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "context-preservation",
+          "session-state"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "feature-selection",
+          "troubleshooting"
+        ]
+      }
+    },
+    {
+      "id": "382",
+      "question": "A production agent sometimes gets a response whose stop reason is max_tokens and whose last tool_use block is cut off partway through. What should the application do with that response?",
+      "options": [
+        "Reissue the request with more room for output so the tool call comes back complete",
+        "Return the partial block as a tool result and let Claude repair it on the next turn",
+        "Read what arrived and fill the missing arguments with defaults before running the tool",
+        "Read stop_details and retry the call on a fallback model"
+      ],
+      "answers": "A",
+      "topic": "Context Management & Reliability",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "context-preservation",
+          "session-state"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "feature-selection",
+          "troubleshooting"
         ]
       }
     }

@@ -37,10 +37,13 @@
       "guardrails-safe-deployment",
       "mcp-server-development",
       "model-selection-tradeoffs",
+      "workflow-enforcement",
       "output-handling",
       "prompt-engineering",
       "software-engineering-foundations",
-      "tool-implementation"
+      "tool-implementation",
+      "feature-selection",
+      "most-cost-effective"
     ],
     "tools": [
       "claude-code",
@@ -530,7 +533,8 @@
       "explanation": "Model selection is a fit-to-requirement decision, and a simple, repetitive task is where a smaller model most often suffices. Treating accuracy as unbounded (A) ignores cost, a longer prompt (B) adds expense for no stated need, and reducing frequency (C) changes the requirement rather than meeting it.",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs"
+          "model-selection-tradeoffs",
+          "workflow-enforcement"
         ],
         "tools": [
           "models"
@@ -554,7 +558,8 @@
       "explanation": "Deep, multi-step reasoning over interacting constraints is where capability differences show. The other three are mechanical or single-signal tasks that a small model handles at a fraction of the cost.",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs"
+          "model-selection-tradeoffs",
+          "workflow-enforcement"
         ],
         "tools": [
           "models"
@@ -602,7 +607,8 @@
       "explanation": "Model choice is empirical and task-specific, which is what a representative evaluation establishes. Benchmarks (A) may not reflect the task, recency (B) is not a measurement, and defaulting to size (D) decides before evidence.",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs"
+          "model-selection-tradeoffs",
+          "workflow-enforcement"
         ],
         "tools": [
           "models"
@@ -1459,7 +1465,8 @@
       "explanation": "Where the requirement is met, the cheaper option is correct, and changing inputs are handled by re-evaluating. Insurance against hypothetical change (B), alternation (C), and recency (D) all spend without benefit",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs"
+          "model-selection-tradeoffs",
+          "workflow-enforcement"
         ],
         "tools": [
           "models"
@@ -1483,7 +1490,8 @@
       "explanation": "Multi-step reasoning under interacting constraints is where capability differences show. A small model (A) and splitting (B) both fragment the reasoning, and prompt length (D) does not add capability",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs"
+          "model-selection-tradeoffs",
+          "workflow-enforcement"
         ],
         "tools": [
           "models"
@@ -1820,7 +1828,8 @@
       "explanation": "The decision is evidence-led against a defined bar. Budget (B), volume (C), and latency (D) create pressure to look, but they do not establish that quality holds",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs"
+          "model-selection-tradeoffs",
+          "workflow-enforcement"
         ],
         "tools": [
           "models"
@@ -2735,7 +2744,8 @@
       "explanation": "Temperature 0 makes sampling greedy and outputs far more stable, but the platform does not guarantee bit-identical generation. Robust designs validate outputs against requirements instead of assuming exact repetition. A overstates what temperature controls; B fixes output length, not token selection; D is false — streaming changes delivery, not generation.",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs"
+          "model-selection-tradeoffs",
+          "workflow-enforcement"
         ],
         "tools": [
           "models"
@@ -2760,7 +2770,8 @@
       "explanation": "The context window is a single budget covering everything: input tokens and the reserved output allowance together must fit inside it. Large inputs require trimming, chunking, or a smaller output reservation. A and C describe rules that do not exist; D inverts how the window works.",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs"
+          "model-selection-tradeoffs",
+          "workflow-enforcement"
         ],
         "tools": [
           "models"
@@ -2810,7 +2821,8 @@
       "explanation": "In adaptive mode, thinking is optional for the model: Claude evaluates the complexity of each request and determines whether and how much to use extended thinking, while the effort parameter provides soft guidance on how much thinking Claude allocates. Lower effort levels use fewer tokens per turn and reduce cost, giving exactly the depth-versus-cost lever described. A — budget_tokens is deprecated on current models in favour of adaptive thinking with the effort parameter; C — fast mode changes output token generation speed, not reasoning behaviour; speed and effort are independent dimensions; D — temperature controls sampling randomness and has no relationship to whether thinking is enabled.",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs"
+          "model-selection-tradeoffs",
+          "workflow-enforcement"
         ],
         "tools": [
           "models"
@@ -2835,7 +2847,8 @@
       "explanation": "Simple task, extreme volume, hard cost and latency constraints: that is the Haiku profile. The professional move is to confirm with an eval that the small model meets the accuracy bar — which it typically does on straightforward labelling. A pays a large premium for capability headroom a six-label task does not use; B defaults instead of matching the model to the task; D is not a strategy.",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs"
+          "model-selection-tradeoffs",
+          "workflow-enforcement"
         ],
         "tools": [
           "models"
@@ -2857,10 +2870,11 @@
       ],
       "answers": "B",
       "topic": "Model Selection and Optimization",
-      "explanation": "A model upgrade is a behaviour change, not a drop-in patch. Prompts tuned to one release can interact differently with the next, so the eval suite is the gate: measure, compare, then migrate deliberately. A and C are false — aggregate improvement does not mean identical behaviour on your distribution; D invents a restriction that does not exist.",
+      "explanation": "A model upgrade is a behaviour change, not a drop-in patch. Prompts tuned to one release can interact differently with the next, so the eval suite is the gate: measure, compare, then migrate deliberately. A and C are false \u2014 aggregate improvement does not mean identical behaviour on your distribution; D invents a restriction that does not exist.",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs"
+          "model-selection-tradeoffs",
+          "workflow-enforcement"
         ],
         "tools": [
           "models"
@@ -2939,7 +2953,8 @@
       "explanation": "Fast mode delivers up to 2.5x higher output tokens per second at premium pricing, opted into with speed: \"fast\" and the fast-mode beta header — it is not a different model, so reasoning quality is preserved while interactive latency improves, matching a workload where speed outweighs cost. A — the Batch API targets latency-tolerant workloads with results returned asynchronously; it is the opposite of what an interactive session needs (and fast mode is not available with it); B — extended thinking adds reasoning tokens before the answer, increasing time-to-answer rather than reducing it; D — model tiers trade capability for speed and cost; the scenario explicitly rules out sacrificing reasoning quality, and cost is stated as secondary.",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs"
+          "model-selection-tradeoffs",
+          "workflow-enforcement"
         ],
         "tools": [
           "models"
@@ -3514,7 +3529,8 @@
       "topic": "Model Selection and Optimization",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs"
+          "model-selection-tradeoffs",
+          "workflow-enforcement"
         ],
         "questionTypes": [
           "most-cost-effective"
@@ -4066,7 +4082,8 @@
       "topic": "Model Selection and Optimization",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs"
+          "model-selection-tradeoffs",
+          "workflow-enforcement"
         ],
         "questionTypes": [
           "most-cost-effective"
@@ -4090,7 +4107,8 @@
       "topic": "Model Selection and Optimization",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs"
+          "model-selection-tradeoffs",
+          "workflow-enforcement"
         ],
         "questionTypes": [
           "most-performant"
@@ -4138,7 +4156,8 @@
       "topic": "Model Selection and Optimization",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs"
+          "model-selection-tradeoffs",
+          "workflow-enforcement"
         ],
         "questionTypes": [
           "configuration"
@@ -4234,7 +4253,8 @@
       "topic": "Model Selection and Optimization",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs"
+          "model-selection-tradeoffs",
+          "workflow-enforcement"
         ],
         "questionTypes": [
           "most-cost-effective"
@@ -4793,6 +4813,669 @@
         ],
         "tools": [
           "messages-api"
+        ]
+      }
+    },
+    {
+      "id": "194",
+      "question": "An agent running prolonged coding tasks frequently experiences automatic context compaction, leading it to drop behavioral constraints defined in the starting prompt. Where should persistent rules be placed to ensure they remain active throughout the session?",
+      "options": [
+        "Inside the prompt property of the final ResultMessage handler",
+        "Inside CLAUDE.md loaded into the session using settingSources",
+        "Inside the hookSpecificOutput payload of a PreModelSwitch hook",
+        "Inside the systemMessage string returned by a PostToolUse hook"
+      ],
+      "answers": "B",
+      "topic": "Agents and Workflows",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "workflow-enforcement"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "195",
+      "question": "An engineer configures subagent depth and concurrency limits using the env option in query(). How does the TypeScript SDK handle this option compared to the Python SDK?",
+      "options": [
+        "The TypeScript SDK replaces the subprocess environment entirely, while the Python SDK merges it.",
+        "The TypeScript SDK merges with process.env, while the Python SDK replaces os.environ completely.",
+        "The TypeScript SDK discards custom variables, while the Python SDK requires settingSources.",
+        "Both SDKs strictly merge supplied environment variables on top of inherited process settings."
+      ],
+      "answers": "A",
+      "topic": "Agents and Workflows",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "workflow-enforcement"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "196",
+      "question": "A newly spawned non-fork subagent needs to act on specific error traces and file paths that the main agent uncovered during earlier turns. How should this context be passed from the parent agent to the subagent?",
+      "options": [
+        "Configure settingSources on the subagent to load prior message turns.",
+        "Set the parent environment variables in the subagent env configuration.",
+        "Insert the necessary details directly into the Agent tool prompt string.",
+        "Provide the parent session identifier within the subagent memory options."
+      ],
+      "answers": "C",
+      "topic": "Agents and Workflows",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "workflow-enforcement"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "197",
+      "question": "An organization runs extensive batch processing jobs where individual requests invoke the web_search tool. How does the batch worker prevent these requests from exceeding organizational rate limits?",
+      "options": [
+        "The worker fails throttled requests with an invalid request error for client retry",
+        "The worker disables web search entirely when batch processing concurrency is high",
+        "The worker executes batch web searches sequentially across all client organizations",
+        "The worker throttles web search per organization and retries requests automatically"
+      ],
+      "answers": "D",
+      "topic": "Applications and Integration",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "workflow-enforcement"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "198",
+      "question": "A response comes back with a stop reason of tool_use and carries both a client tool call and a server tool block that has no result yet. Why is the stop reason not pause_turn?",
+      "options": [
+        "Because the server tool loop had already worked through its allowed iterations",
+        "Because Claude stopped to wait for the client to run its own tool first",
+        "Because any response that carries a server tool block reports tool_use",
+        "Because a client tool call has to be refused before a server tool can run"
+      ],
+      "answers": "B",
+      "topic": "Applications and Integration",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "workflow-enforcement"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "199",
+      "question": "A repository ships a shared settings file that defines permissions.allow, and an engineer defines permissions.allow again in their own user settings. What does Claude Code do with the two lists?",
+      "options": [
+        "It keeps the shared project list and drops the entries from user settings",
+        "It keeps the user list and drops the entries the shared project file added",
+        "It reports a configuration conflict and waits for the two to be reconciled",
+        "It combines both lists, so no entry from either file is removed"
+      ],
+      "answers": "D",
+      "topic": "Applications and Integration",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "workflow-enforcement"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "200",
+      "question": "During a streaming Messages API response that calls a client tool, how do updates to that tool&#39;s input reach the consumer across server-sent events?",
+      "options": [
+        "Each delta carries a fully parsed JSON object for a single parameter key",
+        "All parameters are buffered on the server and delivered in one final event",
+        "Parameters arrive as partial JSON strings in content_block_delta events",
+        "Parameter fields are transmitted as newline-delimited plaintext attribute values"
+      ],
+      "answers": "C",
+      "topic": "Applications and Integration",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "workflow-enforcement"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "201",
+      "question": "An engineer adds explanatory comments written with double slashes inside a team settings file for Claude Code. What happens to that file at the next start?",
+      "options": [
+        "It skips over the commented lines and loads the remaining configuration keys",
+        "It rewrites the double slashes into hash comments before parsing the document",
+        "It loads the file while silently discarding every attribute it cannot parse",
+        "It reports a Settings Error at startup because the file is not valid JSON"
+      ],
+      "answers": "D",
+      "topic": "Applications and Integration",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "workflow-enforcement"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "202",
+      "question": "An engineer needs to issue an API request that produces a very large output, exceeding typical HTTP timeout limits. The application does not need to render tokens as they arrive, but requires the full assembled Message object upon completion. How should the developer structure the call using the SDK?",
+      "options": [
+        "Use client.messages.stream and call get_final_message to collect the response object",
+        "Call client.messages.create with the standard parameters and extend the HTTP timeout",
+        "Enable the batch processing parameter directly inside a standard synchronous create call",
+        "Implement a manual SSE event loop to reconstruct content blocks from raw string chunks"
+      ],
+      "answers": "A",
+      "topic": "Applications and Integration",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "workflow-enforcement"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "203",
+      "question": "An engineer documents an internal utility inside CLAUDE.md and mentions the string @README inside a Markdown code span. How does Claude Code interpret this path reference?",
+      "options": [
+        "It ignores the backticks and expands the contents of README into context directly",
+        "It evaluates the import but restricts recursion depth to a single dependency level",
+        "It treats the text literally and skips importing because it is inside a code span",
+        "It raises an invalid import error because paths inside code spans are not permitted"
+      ],
+      "answers": "C",
+      "topic": "Applications and Integration",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "workflow-enforcement"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "204",
+      "question": "In supported Claude models, what is the primary advantage of adding a system instruction using a role of system inside the messages array mid-conversation instead of modifying the top-level system parameter?",
+      "options": [
+        "It bypasses token counting and avoids all input token billing for that instruction",
+        "It appends to the history without invalidating the previously cached prompt prefix",
+        "It grants higher operational authority to the model than top-level system prompts",
+        "It allows structured outputs to be applied selectively to only the next completion"
+      ],
+      "answers": "B",
+      "topic": "Applications and Integration",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "workflow-enforcement"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "205",
+      "question": "A repository keeps one CLAUDE.md at the project root and another inside a subdirectory. When Claude Code starts inside that subdirectory, how does it treat the instructions in the two files?",
+      "options": [
+        "The subdirectory file replaces the instructions in the file above it",
+        "The higher file wins wherever the two sets of instructions disagree",
+        "Both files load and their contents are joined together in context",
+        "Only the file at the git repository root loads when the session starts"
+      ],
+      "answers": "C",
+      "topic": "Claude Code",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "workflow-enforcement"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "206",
+      "question": "A custom skill gathers git and build status through several inline shell commands written with the exclamation and backtick syntax. One of those commands exits with an unexpected error status. What happens?",
+      "options": [
+        "Claude Code substitutes standard error text for that placeholder and continues",
+        "The failing command is skipped and its placeholder stays in the prompt as text",
+        "Claude Code asks in the terminal whether the failed command should be retried",
+        "The failure aborts the whole skill invocation and Claude sees none of it"
+      ],
+      "answers": "D",
+      "topic": "Claude Code",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "workflow-enforcement"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "207",
+      "question": "An engineer inspects a service that routes user prompts to Claude. One request trips a safety classifier and is declined, yet the error handling block that catches HTTP 4xx and 5xx responses never runs. What explains that?",
+      "options": [
+        "The refusal arrives as an ordinary HTTP 200 response, not an API error",
+        "The refusal breaks the connection, so the client sees a timeout instead",
+        "The SDK quietly substitutes a fallback completion before reporting the error",
+        "The refusal returns an empty body that skips HTTP status checking altogether"
+      ],
+      "answers": "A",
+      "topic": "Eval, Testing, and Debugging",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "workflow-enforcement"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "208",
+      "question": "An application sends a request to a Claude 4.5 model where the prompt size plus the requested max_tokens adds up to more than the context window. How does the API treat that request?",
+      "options": [
+        "It rejects the request straight away with a prompt length validation error",
+        "It accepts the request and stops output if it reaches the window limit",
+        "It trims the oldest conversational turns automatically to make the total fit",
+        "It accepts the request only when a dedicated opt-in header is supplied"
+      ],
+      "answers": "B",
+      "topic": "Model Selection and Optimization",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "feature-selection",
+          "most-cost-effective"
+        ],
+        "tools": [
+          "message-batches",
+          "structured-outputs"
+        ],
+        "questionTypes": [
+          "most-cost-effective",
+          "most-performant"
+        ]
+      }
+    },
+    {
+      "id": "209",
+      "question": "An application runs a long multi-step agent workflow and wants the model itself to pace the work against the room left in the context window. On models that offer this, how does the model learn how much capacity remains?",
+      "options": [
+        "The client has to compute the remaining tokens and send them with every turn",
+        "The API injects token budget tags into the prompt and refreshes them",
+        "Server-side compaction has to be turned on before usage figures reach the model",
+        "The model infers how much room is left from its own internal heuristics"
+      ],
+      "answers": "B",
+      "topic": "Model Selection and Optimization",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "feature-selection",
+          "most-cost-effective"
+        ],
+        "tools": [
+          "message-batches",
+          "structured-outputs"
+        ],
+        "questionTypes": [
+          "most-cost-effective",
+          "most-performant"
+        ]
+      }
+    },
+    {
+      "id": "210",
+      "question": "A developer warms the prompt cache ahead of user traffic by sending a request with max_tokens set to 0. In which situation does the API reject that request as invalid?",
+      "options": [
+        "When the cache control breakpoint sits on the system prompt",
+        "When the placeholder user message contains real text such as warmup",
+        "When the request targets a larger model rather than a smaller one",
+        "When the request is submitted inside a Message Batches call"
+      ],
+      "answers": "D",
+      "topic": "Model Selection and Optimization",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "feature-selection",
+          "most-cost-effective"
+        ],
+        "tools": [
+          "message-batches",
+          "structured-outputs"
+        ],
+        "questionTypes": [
+          "most-cost-effective",
+          "most-performant"
+        ]
+      }
+    },
+    {
+      "id": "211",
+      "question": "An engineer inspects the usage metrics returned by the Messages API on a request that utilized prompt caching. How is the total number of input tokens counted toward the context window calculated from the response fields?",
+      "options": [
+        "By reading the input tokens field alone because it already aggregates all prompt content.",
+        "By subtracting cache read tokens from the combined total of written and uncached tokens.",
+        "By summing cache read input tokens, cache creation input tokens, and uncached input tokens.",
+        "By multiplying cache read input tokens by the discount multiplier and adding output tokens."
+      ],
+      "answers": "C",
+      "topic": "Model Selection and Optimization",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "feature-selection",
+          "most-cost-effective"
+        ],
+        "tools": [
+          "message-batches",
+          "structured-outputs"
+        ],
+        "questionTypes": [
+          "most-cost-effective",
+          "most-performant"
+        ]
+      }
+    },
+    {
+      "id": "212",
+      "question": "An engineering team observes that long-running agent conversations run out of context because of accumulated tool execution results from early turns. Which context management technique directly addresses this specific source of context growth without restarting the session?",
+      "options": [
+        "Programmatic tool calling to avoid executing tools inside code sandboxes",
+        "Upfront prompt caching to remove tool schemas from the context window",
+        "Adding tool search to automatically eliminate completed conversation turns",
+        "Context editing to strip previous tool result blocks from message history"
+      ],
+      "answers": "D",
+      "topic": "Prompt and Context Engineering",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "workflow-enforcement"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "213",
+      "question": "A team enables document citations and a strict JSON output schema in the same request, and the call comes back with a 400. Why can these two features not run together?",
+      "options": [
+        "Citations interleave with text, which a strict schema cannot accommodate",
+        "The prompt caching layer cannot compute a prefix hash for the combined request",
+        "Structured outputs turn off the index that citations need for attribution",
+        "Citations attach to document blocks, which a schema request cannot include"
+      ],
+      "answers": "A",
+      "topic": "Prompt and Context Engineering",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "workflow-enforcement"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "214",
+      "question": "A team moves prompts written for an earlier Opus model onto Claude Opus 5 and finds that the instructions telling Claude to check its own work now add tokens and latency without improving accuracy. What should they do with those instructions?",
+      "options": [
+        "Rewrite them so the self-check runs only on the final response",
+        "Take them out, because this model checks its own work without being told",
+        "Keep them but move them from the system prompt into the user turn",
+        "Replace them with a second call that grades the first call&#39;s output"
+      ],
+      "answers": "B",
+      "topic": "Prompt and Context Engineering",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "workflow-enforcement"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "215",
+      "question": "Two PreToolUse hooks match a command invocation: an audit hook logs the command and exits 0, while a safety hook flags a dangerous pattern and exits 2 to deny the action. How does Claude Code execute these hooks and determine the outcome?",
+      "options": [
+        "Both hooks run to completion in parallel, and the deny decision takes precedence.",
+        "Both hooks are marked as non-blocking errors because opposing exit codes conflict.",
+        "The safety hook cancels the audit hook before it can write any commands to the disk.",
+        "The audit hook runs first and suppresses the safety hook due to its zero exit code."
+      ],
+      "answers": "A",
+      "topic": "Security and Safety",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "workflow-enforcement"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "216",
+      "question": "A developer implements a UserPromptSubmit hook callback to screen prompts for usage violations. If this callback takes longer than the timeout period and is canceled, how does Claude Code handle the pending prompt?",
+      "options": [
+        "It allows the prompt to proceed unscreened while recording a non-blocking background error.",
+        "It aborts the entire agent runtime process immediately with an exit code of 2.",
+        "It bypasses the hook and routes the prompt directly to the canUseTool callback.",
+        "It blocks the prompt from processing and shows a message identifying the timeout."
+      ],
+      "answers": "D",
+      "topic": "Security and Safety",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "workflow-enforcement"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "217",
+      "question": "A team installs a large number of Agent Skills and worries about what each one costs in context before it is ever used. What occupies the context window for a skill that has not been triggered?",
+      "options": [
+        "Its full SKILL.md body, which is loaded once the session starts",
+        "Its frontmatter plus the opening section of its written instructions",
+        "Its name and description, and nothing more until it is triggered",
+        "Nothing at all, because skill metadata is held outside the prompt"
+      ],
+      "answers": "C",
+      "topic": "Tools and MCPs",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "workflow-enforcement"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "218",
+      "question": "An engineer authors an MCP server whose tools return extensive diagnostic data to Claude Code. What annotation can the server set in a tool&#39;s tools/list entry to increase the output threshold before data is written to disk?",
+      "options": [
+        "Set anthropic/maxResultSizeChars in the tool&#39;s _meta object.",
+        "Set readOnlyHint: true in the tool&#39;s annotations object.",
+        "Define alwaysLoad: true within the tool&#39;s parameter schema.",
+        "Provide defer_loading: false inside the tool&#39;s default_config."
+      ],
+      "answers": "A",
+      "topic": "Tools and MCPs",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "workflow-enforcement"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "219",
+      "question": "Two separate engineering teams within the same organization use identical system prompts on the Claude API but execute calls under different workspaces. How does prompt caching handle cache sharing between these teams?",
+      "options": [
+        "Caches are shared across the organization because the prompt text is identical.",
+        "Caches are shared only when requests are submitted within the same five-minute window.",
+        "Caches are isolated per individual user rather than at the workspace boundary.",
+        "Caches are isolated per workspace, so the teams do not share cache entries."
+      ],
+      "answers": "D",
+      "topic": "Model Selection and Optimization",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "feature-selection",
+          "most-cost-effective"
+        ],
+        "tools": [
+          "message-batches",
+          "structured-outputs"
+        ],
+        "questionTypes": [
+          "most-cost-effective",
+          "most-performant"
+        ]
+      }
+    },
+    {
+      "id": "220",
+      "question": "When building a multi-turn tool-calling loop using an API model where thinking is enabled, what requirement applies when submitting tool execution outputs back to the assistant?",
+      "options": [
+        "You must summarize earlier reasoning steps into the tool result metadata block before continuing.",
+        "You must include the entire unmodified thinking block and signature that accompanied the tool call.",
+        "You must strip the thinking block and return only the tool results to save context space.",
+        "You must verify and decrypt the cryptographic signature before serializing the tool result payload."
+      ],
+      "answers": "B",
+      "topic": "Prompt and Context Engineering",
+      "explanation": "",
+      "themes": {
+        "tasks": [
+          "workflow-enforcement"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
         ]
       }
     }
