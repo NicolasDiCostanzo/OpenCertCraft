@@ -1,0 +1,45 @@
+name: Bundle consistency review
+
+on:
+  pull_request:
+    paths:
+      - 'src/assets/*questions.json'
+
+concurrency:
+  group: bundle-consistency-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: base
+          sparse-checkout: src/assets
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: 22
+      - name: Review changed questions
+        if: env.ANTHROPIC_API_KEY != ''
+        continue-on-error: true
+        run: node scripts/review-changed-questions.mjs --base base/src/assets --out consistency-review.md
+      - name: Comment on the pull request
+        if: hashFiles('consistency-review.md') != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: gh pr comment "$PR_NUMBER" --body-file consistency-review.md --edit-last --create-if-none
