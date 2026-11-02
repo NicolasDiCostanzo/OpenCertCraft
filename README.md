@@ -101,6 +101,29 @@ CI runs lint, typecheck, unit tests, build, end-to-end tests, an unused-code che
 npm run test && npm run test:e2e
 ```
 
+## Bundle drift review
+
+The `Weekly bundle review` workflow (`.github/workflows/bundle-review.yml`) fires every Monday but only proceeds on the first Monday of the month. It opens a `chore: weekly cert-bundle review` PR containing:
+
+- **Internal drift** (`scripts/check-bundles.mjs`): validation errors, plus changes in questions, topics, themes and exam metadata since the snapshots in `.bundle-snapshots/`.
+- **External drift** (`scripts/llm-review.mjs`): Claude Haiku compares each vendor exam guide (listed in `scripts/vendor-sources.json`) with the bundle structure and reports new, removed or renamed domains, with verbatim quotes. Treat these findings as leads to verify against the guide.
+
+The snapshots in `.bundle-snapshots/` and `.llm-snapshots/` are the baseline for the next run, so merge the PR once its findings are triaged.
+
+Run it manually:
+
+```bash
+gh workflow run bundle-review.yml    # on GitHub, bypasses the first-Monday gate
+
+npm run check:bundles                # internal check, no API key needed
+npm run check:bundles --silent -- --json > internal-report.json
+ANTHROPIC_API_KEY=... node scripts/llm-review.mjs --internal internal-report.json --out weekly-report.md
+```
+
+`npm run check:bundles` rewrites `.bundle-snapshots/` after diffing, so revert those files if you don't want to move the baseline. Add `--no-llm` to `llm-review.mjs` for a report without an API key.
+
+The repo setting "Allow GitHub Actions to create and approve pull requests" must be enabled, otherwise the PR step fails.
+
 ## Contributing
 
 Issues and pull requests are welcome — especially [question corrections](#question-accuracy) and new certification banks.
