@@ -107,6 +107,7 @@ The `Weekly bundle review` workflow (`.github/workflows/bundle-review.yml`) fire
 
 - **Internal drift** (`scripts/check-bundles.mjs`): validation errors, plus changes in questions, topics, themes and exam metadata since the snapshots in `.bundle-snapshots/`.
 - **External drift** (`scripts/llm-review.mjs`): Claude Haiku compares each vendor exam guide (listed in `scripts/vendor-sources.json`) with the bundle structure and reports new, removed or renamed domains, with verbatim quotes. Treat these findings as leads to verify against the guide.
+  Pass `--read-snapshot .llm-snapshots` to compare with the previous run: findings already reported are marked ♻️ and the prior verdict is given to the model for consistent naming. Without a baseline the report is unchanged.
 
 The snapshots in `.bundle-snapshots/` and `.llm-snapshots/` are the baseline for the next run, so merge the PR once its findings are triaged.
 

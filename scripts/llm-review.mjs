@@ -1,6 +1,7 @@
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { classifyFindings, hasFindings, loadBaseline, priorVerdict } from './llm-baseline.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const ASSETS_DIR = join(ROOT, 'src', 'assets');
@@ -125,7 +126,10 @@ function summarizeBundleStructure(cert) {
   return { file, text: lines.join('\n').slice(0, MAX_BUNDLE_CHARS), topics };
 }
 
-function buildPrompt(cert, guideUrl, guideText, bundleText) {
+function buildPrompt(cert, guideUrl, guideText, bundleText, previousVerdict) {
+  const previous = hasFindings(previousVerdict)
+    ? ['---PREVIOUS REVIEW (data from the last run on this same guide; reuse its exact domain names when reporting the same drift)---', JSON.stringify(previousVerdict)]
+    : [];
   return [
     `You review certification exam-prep content for staleness. Cert: ${cert}.`,
     `Official vendor exam guide (${guideUrl}) — extracted text:`,
@@ -133,6 +137,7 @@ function buildPrompt(cert, guideUrl, guideText, bundleText) {
     guideText,
     '---BUNDLE (our current question-bank structure)---',
     bundleText,
+    ...previous,
     'Compare the guide against the bundle structure and return JSON ONLY, no prose, with this shape:',
     '{"new_domains":[{"name":"...","quote":"verbatim guide line, max 200 chars"}],"removed_domains":[{"name":"...","quote":"..."}],"renamed":[{"from":"...","to":"...","quote":"..."}],"notes":["..."]}',
     'Rules: quote the guide VERBATIM for every claim or omit the claim. Bundle topics/themes are the baseline — only report guide-side drift. Never invent answer keys or rewrite questions. Empty arrays when nothing changed.',
@@ -182,19 +187,23 @@ function section(title, lines) {
   return [`## ${title}`, ...(lines.length > 0 ? lines : ['- Nothing to report.']), ''].join('\n');
 }
 
+const ALREADY_REPORTED_ICON = '♻️';
+const icon = (finding, fresh) => (finding.alreadyReported ? ALREADY_REPORTED_ICON : fresh);
+const reported = (finding) => (finding.alreadyReported ? ' Already reported in the previous review, still open.' : '');
+
 function buildReport(date, external, skipped, internal) {
   const parts = [`# Weekly cert-bundle review — ${date}`, ''];
   const externalLines = [];
   for (const row of external) {
     if (row.status === 'changed') {
       for (const domain of row.verdict.new_domains) {
-        externalLines.push(`- 🆕 ${row.cert}: guide now lists "${domain.name}"${domain.quote ? ` — "${domain.quote}"` : ''}. Check whether questions cover it.`);
+        externalLines.push(`- ${icon(domain, '🆕')} ${row.cert}: guide now lists "${domain.name}"${domain.quote ? ` — "${domain.quote}"` : ''}. Check whether questions cover it.${reported(domain)}`);
       }
       for (const domain of row.verdict.removed_domains) {
-        externalLines.push(`- ⚠️ ${row.cert}: guide no longer lists "${domain.name}"${domain.quote ? ` — "${domain.quote}"` : ''}. Questions on it are stale candidates.`);
+        externalLines.push(`- ${icon(domain, '⚠️')} ${row.cert}: guide no longer lists "${domain.name}"${domain.quote ? ` — "${domain.quote}"` : ''}. Questions on it are stale candidates.${reported(domain)}`);
       }
       for (const rename of row.verdict.renamed) {
-        externalLines.push(`- 🔁 ${row.cert}: "${rename.from}" → "${rename.to}" in the guide. Bundle topics/themes may need renaming.`);
+        externalLines.push(`- ${icon(rename, '🔁')} ${row.cert}: "${rename.from}" → "${rename.to}" in the guide. Bundle topics/themes may need renaming.${reported(rename)}`);
       }
       for (const note of row.verdict.notes) externalLines.push(`- 📝 ${row.cert}: ${note}`);
       if (row.verdict.new_domains.length === 0 && row.verdict.removed_domains.length === 0 && row.verdict.renamed.length === 0 && row.verdict.notes.length === 0) {
@@ -219,10 +228,11 @@ function buildReport(date, external, skipped, internal) {
 }
 
 function parseArgs(argv) {
-  const flags = { internal: undefined, writeSnapshotDir: undefined, out: undefined, strict: false, noLlm: false };
+  const flags = { internal: undefined, writeSnapshotDir: undefined, readSnapshotDir: undefined, out: undefined, strict: false, noLlm: false };
   for (let i = 0; i < argv.length; i += 1) {
     if (argv[i] === '--internal') flags.internal = argv[(i += 1)];
     else if (argv[i] === '--write-snapshot') flags.writeSnapshotDir = argv[(i += 1)];
+    else if (argv[i] === '--read-snapshot') flags.readSnapshotDir = argv[(i += 1)];
     else if (argv[i] === '--out') flags.out = argv[(i += 1)];
     else if (argv[i] === '--strict') flags.strict = true;
     else if (argv[i] === '--no-llm') flags.noLlm = true;
@@ -248,6 +258,7 @@ async function main() {
     return;
   }
   const sources = JSON.parse(readFileSync(SOURCES_PATH, 'utf-8'));
+  const baseline = flags.readSnapshotDir ? loadBaseline(flags.readSnapshotDir) : new Map();
   let internal = { issues: [] };
   if (flags.internal) {
     try {
@@ -296,11 +307,12 @@ async function main() {
       if (fetched.status !== 'no-source') strictSkipCount += 1;
       continue;
     }
+    const previous = priorVerdict(baseline, cert, fetched.url);
     let verdict = { new_domains: [], removed_domains: [], renamed: [], notes: [] };
     if (!flags.noLlm) {
       try {
         const guideText = fetched.pdf ? 'Attached as a PDF document in this message — read the attached document for the guide contents.' : fetched.text;
-        const prompt = buildPrompt(cert, fetched.url, guideText, bundle.text);
+        const prompt = buildPrompt(cert, fetched.url, guideText, bundle.text, previous);
         const content = fetched.pdf
           ? [
               { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: fetched.pdf } },
@@ -314,7 +326,7 @@ async function main() {
         continue;
       }
     }
-    external.push({ cert, status: 'changed', source: fetched.url, verdict });
+    external.push({ cert, status: 'changed', source: fetched.url, verdict: classifyFindings(verdict, previous) });
     snapshots.push({ cert, guideUrl: fetched.url, verdict, bundleTopics: bundle.topics ?? [] });
   }
   if (flags.writeSnapshotDir) {

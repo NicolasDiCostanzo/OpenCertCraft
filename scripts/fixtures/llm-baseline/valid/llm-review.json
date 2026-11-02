@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-05T03:00:00.000Z",
+  "snapshots": [
+    {
+      "cert": "CKA",
+      "guideUrl": "https://example.test/cka",
+      "verdict": {
+        "new_domains": [{ "name": "Gateway API", "quote": "Gateway API" }],
+        "removed_domains": [],
+        "renamed": [{ "from": "Storage", "to": "Storage & Data", "quote": "Storage & Data" }],
+        "notes": []
+      },
+      "bundleTopics": ["Storage"]
+    },
+    { "cert": "BROKEN" },
+    { "verdict": {} }
+  ]
+}
