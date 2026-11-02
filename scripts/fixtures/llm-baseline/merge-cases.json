@@ -1,0 +1,30 @@
+[
+  {
+    "name": "certs not reviewed this run keep their existing record",
+    "certs": ["CKA", "DVA-C02"],
+    "baseline": [{ "cert": "CKA", "tag": "old" }, { "cert": "DVA-C02", "tag": "old" }],
+    "fresh": [],
+    "expected": [{ "cert": "CKA", "tag": "old" }, { "cert": "DVA-C02", "tag": "old" }]
+  },
+  {
+    "name": "a newly completed review replaces the old record, the others are kept",
+    "certs": ["CKA", "DVA-C02"],
+    "baseline": [{ "cert": "CKA", "tag": "old" }, { "cert": "DVA-C02", "tag": "old" }],
+    "fresh": [{ "cert": "DVA-C02", "tag": "new" }],
+    "expected": [{ "cert": "CKA", "tag": "old" }, { "cert": "DVA-C02", "tag": "new" }]
+  },
+  {
+    "name": "certs without any record are omitted, output follows the cert order",
+    "certs": ["CKA", "DVA-C02", "GCP-ACE"],
+    "baseline": [{ "cert": "GCP-ACE", "tag": "old" }],
+    "fresh": [{ "cert": "CKA", "tag": "new" }],
+    "expected": [{ "cert": "CKA", "tag": "new" }, { "cert": "GCP-ACE", "tag": "old" }]
+  },
+  {
+    "name": "records of certs no longer listed in the sources are dropped",
+    "certs": ["CKA"],
+    "baseline": [{ "cert": "CKA", "tag": "old" }, { "cert": "RETIRED", "tag": "old" }],
+    "fresh": [],
+    "expected": [{ "cert": "CKA", "tag": "old" }]
+  }
+]

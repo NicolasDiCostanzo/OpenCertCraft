@@ -1,7 +1,7 @@
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { classifyFindings, hasFindings, loadBaseline, priorVerdict, REVIEW_STATUS } from './llm-baseline.mjs';
+import { classifyFindings, hasFindings, loadBaseline, mergeSnapshots, priorVerdict, REVIEW_STATUS } from './llm-baseline.mjs';
 import { buildReport } from './llm-report.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -241,10 +241,10 @@ async function main() {
   }
   const external = [];
   const skipped = [];
-  const snapshots = [];
+  const completedSnapshots = new Map();
   let strictSkipCount = 0;
-  for (const cert of Object.keys(sources).sort()) {
-    if (cert.startsWith('$')) continue;
+  const certs = Object.keys(sources).filter((cert) => !cert.startsWith('$')).sort();
+  for (const cert of certs) {
     let bundle;
     try {
       bundle = summarizeBundleStructure(cert);
@@ -284,11 +284,13 @@ async function main() {
       }
     }
     external.push({ cert, status: 'changed', source: fetched.url, reviewed: !flags.noLlm, verdict: classifyFindings(verdict, previous) });
-    snapshots.push({ cert, guideUrl: fetched.url, reviewStatus: flags.noLlm ? REVIEW_STATUS.notReviewed : REVIEW_STATUS.completed, verdict, bundleTopics: bundle.topics ?? [] });
+    if (!flags.noLlm) {
+      completedSnapshots.set(cert, { cert, guideUrl: fetched.url, reviewStatus: REVIEW_STATUS.completed, verdict, bundleTopics: bundle.topics ?? [] });
+    }
   }
   if (flags.writeSnapshotDir) {
     mkdirSync(flags.writeSnapshotDir, { recursive: true });
-    writeFileSync(join(flags.writeSnapshotDir, 'llm-review.json'), `${JSON.stringify({ date: new Date().toISOString(), snapshots }, undefined, 2)}\n`);
+    writeFileSync(join(flags.writeSnapshotDir, 'llm-review.json'), `${JSON.stringify({ date: new Date().toISOString(), snapshots: mergeSnapshots(baseline, completedSnapshots, certs) }, undefined, 2)}\n`);
   }
   const date = new Date().toISOString().slice(0, 10);
   const report = buildReport(date, external, skipped, internal);

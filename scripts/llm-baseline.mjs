@@ -42,3 +42,7 @@ export function classifyFindings(verdict, previous) {
   });
   return Object.fromEntries(classified);
 }
+
+export function mergeSnapshots(baseline, fresh, certs) {
+  return certs.flatMap((cert) => fresh.get(cert) ?? baseline.get(cert) ?? []);
+}

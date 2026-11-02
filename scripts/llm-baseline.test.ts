@@ -1,7 +1,8 @@
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { classifyFindings, hasFindings, loadBaseline, priorVerdict } from './llm-baseline.mjs'
+import { classifyFindings, hasFindings, loadBaseline, mergeSnapshots, priorVerdict } from './llm-baseline.mjs'
 import classifyCases from './fixtures/llm-baseline/classify-cases.json'
+import mergeCases from './fixtures/llm-baseline/merge-cases.json'
 
 const fixtureDir = (name: string) => join(import.meta.dirname, 'fixtures', 'llm-baseline', name)
 
@@ -44,5 +45,13 @@ describe('hasFindings', () => {
 describe('classifyFindings', () => {
   it.each(classifyCases)('$name', ({ previous, verdict, expected }) => {
     expect(classifyFindings(verdict, previous)).toEqual(expected)
+  })
+})
+
+describe('mergeSnapshots', () => {
+  const toMap = (records: { cert: string }[]) => new Map(records.map((record) => [record.cert, record]))
+
+  it.each(mergeCases)('$name', ({ certs, baseline, fresh, expected }) => {
+    expect(mergeSnapshots(toMap(baseline), toMap(fresh), certs)).toEqual(expected)
   })
 })
