@@ -37,6 +37,7 @@
       "guardrails-safe-deployment",
       "mcp-server-development",
       "model-selection-tradeoffs",
+      "workflow-enforcement",
       "output-handling",
       "prompt-engineering",
       "software-engineering-foundations",
@@ -2748,7 +2749,7 @@
     },
     {
       "id": "110",
-      "question": "An application submits a 190,000-token document to a model with a 200,000-token context window and requests max_tokens of 20,000. The request is rejected. Why?",
+      "question": "An application submits a 190,000-token document to a Claude model released before Claude 4.5, with a 200,000-token context window, and requests max_tokens of 20,000. The request is rejected. Why?",
       "options": [
         "Documents over 100,000 tokens must always use the Batches API",
         "The context window is shared by input and output: 190,000 input tokens plus a 20,000-token output budget exceeds the window",
@@ -2757,7 +2758,7 @@
       ],
       "answers": "B",
       "topic": "Model Selection and Optimization",
-      "explanation": "The context window is a single budget covering everything: input tokens and the reserved output allowance together must fit inside it. Large inputs require trimming, chunking, or a smaller output reservation. A and C describe rules that do not exist; D inverts how the window works.",
+      "explanation": "The context window is a single budget covering everything: input tokens and the reserved output allowance together must fit inside it. Large inputs require trimming, chunking, or a smaller output reservation. A and C describe rules that do not exist; D inverts how the window works. This validation error applies to models before Claude 4.5; Claude 4.5 and newer models accept such a request and stop generation at the window limit.",
       "themes": {
         "tasks": [
           "model-selection-tradeoffs"
@@ -2857,7 +2858,7 @@
       ],
       "answers": "B",
       "topic": "Model Selection and Optimization",
-      "explanation": "A model upgrade is a behaviour change, not a drop-in patch. Prompts tuned to one release can interact differently with the next, so the eval suite is the gate: measure, compare, then migrate deliberately. A and C are false — aggregate improvement does not mean identical behaviour on your distribution; D invents a restriction that does not exist.",
+      "explanation": "A model upgrade is a behaviour change, not a drop-in patch. Prompts tuned to one release can interact differently with the next, so the eval suite is the gate: measure, compare, then migrate deliberately. A and C are false \u2014 aggregate improvement does not mean identical behaviour on your distribution; D invents a restriction that does not exist.",
       "themes": {
         "tasks": [
           "model-selection-tradeoffs"
@@ -4793,6 +4794,661 @@
         ],
         "tools": [
           "messages-api"
+        ]
+      }
+    },
+    {
+      "id": "194",
+      "question": "An agent running prolonged coding tasks frequently experiences automatic context compaction, leading it to drop behavioral constraints defined in the starting prompt. Where should persistent rules be placed to ensure they remain active throughout the session?",
+      "options": [
+        "Inside the prompt property of the final ResultMessage handler",
+        "Inside CLAUDE.md loaded into the session using settingSources",
+        "Inside the hookSpecificOutput payload of a PreModelSwitch hook",
+        "Inside the systemMessage string returned by a PostToolUse hook"
+      ],
+      "answers": "B",
+      "topic": "Agents and Workflows",
+      "explanation": "CLAUDE.md content is re-injected on every request, so rules placed there (loaded through settingSources) survive automatic compaction, whereas instructions in the initial prompt may be summarized away. A ResultMessage handler runs at the end of the loop, and the systemMessage field of a hook output is shown to the user, not to the model.",
+      "themes": {
+        "tasks": [
+          "context-engineering"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "195",
+      "question": "An engineer configures subagent depth and concurrency limits using the env option in query(). How does the TypeScript SDK handle this option compared to the Python SDK?",
+      "options": [
+        "The TypeScript SDK replaces the subprocess environment entirely, while the Python SDK merges it.",
+        "The TypeScript SDK merges with process.env, while the Python SDK replaces os.environ completely.",
+        "The TypeScript SDK discards custom variables, while the Python SDK requires settingSources.",
+        "Both SDKs strictly merge supplied environment variables on top of inherited process settings."
+      ],
+      "answers": "A",
+      "topic": "Agents and Workflows",
+      "explanation": "The TypeScript SDK replaces the subprocess environment with the env option, so process.env must be spread into it to keep variables such as PATH. The Python SDK merges env on top of the inherited environment.",
+      "themes": {
+        "tasks": [
+          "agent-construction"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "196",
+      "question": "A newly spawned non-fork subagent needs to act on specific error traces and file paths that the main agent uncovered during earlier turns. How should this context be passed from the parent agent to the subagent?",
+      "options": [
+        "Configure settingSources on the subagent to load prior message turns.",
+        "Set the parent environment variables in the subagent env configuration.",
+        "Insert the necessary details directly into the Agent tool prompt string.",
+        "Provide the parent session identifier within the subagent memory options."
+      ],
+      "answers": "C",
+      "topic": "Agents and Workflows",
+      "explanation": "A non-fork subagent starts with a fresh context and receives no parent history. The only channel from parent to subagent is the Agent tool prompt string, so file paths, error traces and decisions must be written into it.",
+      "themes": {
+        "tasks": [
+          "agent-patterns"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "197",
+      "question": "An organization runs extensive batch processing jobs where individual requests invoke the web_search tool. How does the batch worker prevent these requests from exceeding organizational rate limits?",
+      "options": [
+        "The worker fails throttled requests with an invalid request error for client retry",
+        "The worker disables web search entirely when batch processing concurrency is high",
+        "The worker executes batch web searches sequentially across all client organizations",
+        "The worker throttles web search per organization and retries requests automatically"
+      ],
+      "answers": "D",
+      "topic": "Applications and Integration",
+      "explanation": "The batch worker throttles web_search per organization so that highly concurrent batches do not exhaust the organization's web-search rate limit, and it retries throttled requests automatically. No client handling is needed, but very large web-search batches can take longer.",
+      "themes": {
+        "tasks": [
+          "cost-token-management"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "198",
+      "question": "A response comes back with a stop reason of tool_use and carries both a client tool call and a server tool block that has no result yet. Why is the stop reason not pause_turn?",
+      "options": [
+        "Because the server tool loop had already worked through its allowed iterations",
+        "Because Claude stopped to wait for the client to run its own tool first",
+        "Because any response that carries a server tool block reports tool_use",
+        "Because a client tool call has to be refused before a server tool can run"
+      ],
+      "answers": "B",
+      "topic": "Applications and Integration",
+      "explanation": "A response that leaves a client tool_use block waiting on you never has pause_turn: when Claude stops to call your tools, the stop reason is tool_use, and the API returns without running the server tool so the client tools can run first. pause_turn is reserved for a server-side loop that hit its iteration limit.",
+      "themes": {
+        "tasks": [
+          "api-mechanics"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "199",
+      "question": "A repository ships a shared settings file that defines permissions.allow, and an engineer defines permissions.allow again in their own user settings. What does Claude Code do with the two lists?",
+      "options": [
+        "It keeps the shared project list and drops the entries from user settings",
+        "It keeps the user list and drops the entries the shared project file added",
+        "It reports a configuration conflict and waits for the two to be reconciled",
+        "It combines both lists, so no entry from either file is removed"
+      ],
+      "answers": "D",
+      "topic": "Applications and Integration",
+      "explanation": "List settings such as permissions.allow are merged across files, not overridden, so each scope can add entries without removing those of another. Only a few model-related keys (fallbackModel, modelPicker, availableModels under managed settings, modelSettings) follow their own rules.",
+      "themes": {
+        "tasks": [
+          "configuration-management"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "200",
+      "question": "During a streaming Messages API response that calls a client tool, how do updates to that tool's input reach the consumer across server-sent events?",
+      "options": [
+        "Each delta carries a fully parsed JSON object for a single parameter key",
+        "All parameters are buffered on the server and delivered in one final event",
+        "Parameters arrive as partial JSON strings in content_block_delta events",
+        "Parameter fields are transmitted as newline-delimited plaintext attribute values"
+      ],
+      "answers": "C",
+      "topic": "Applications and Integration",
+      "explanation": "Tool input is streamed as input_json_delta events inside content_block_delta, each carrying a partial_json string. Consumers accumulate the fragments and parse the JSON once the block is complete, since a single fragment is not valid JSON on its own.",
+      "themes": {
+        "tasks": [
+          "api-mechanics"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "201",
+      "question": "An engineer adds explanatory comments written with double slashes inside a team settings file for Claude Code. What happens to that file at the next start?",
+      "options": [
+        "It skips over the commented lines and loads the remaining configuration keys",
+        "It rewrites the double slashes into hash comments before parsing the document",
+        "It loads the file while silently discarding every attribute it cannot parse",
+        "It reports a Settings Error at startup because the file is not valid JSON"
+      ],
+      "answers": "D",
+      "topic": "Applications and Integration",
+      "explanation": "Settings files are strict JSON: a // comment or a trailing comma is a syntax error. Claude Code reports the file as a Settings Error at the next start instead of skipping lines or rewriting the file.",
+      "themes": {
+        "tasks": [
+          "configuration-management"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "202",
+      "question": "An engineer needs to issue an API request that produces a very large output, exceeding typical HTTP timeout limits. The application does not need to render tokens as they arrive, but requires the full assembled Message object upon completion. How should the developer structure the call using the SDK?",
+      "options": [
+        "Use client.messages.stream and call get_final_message to collect the response object",
+        "Call client.messages.create with the standard parameters and extend the HTTP timeout",
+        "Enable the batch processing parameter directly inside a standard synchronous create call",
+        "Implement a manual SSE event loop to reconstruct content blocks from raw string chunks"
+      ],
+      "answers": "A",
+      "topic": "Applications and Integration",
+      "explanation": "client.messages.stream with get_final_message uses streaming internally to keep the connection alive and returns the complete Message, identical to create(). The SDK requires streaming for very large max_tokens values to avoid HTTP timeouts, so raising the timeout on create is not the documented route and batch is not a request parameter.",
+      "themes": {
+        "tasks": [
+          "api-mechanics"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "203",
+      "question": "An engineer documents an internal utility inside CLAUDE.md and mentions the string @README inside a Markdown code span. How does Claude Code interpret this path reference?",
+      "options": [
+        "It ignores the backticks and expands the contents of README into context directly",
+        "It evaluates the import but restricts recursion depth to a single dependency level",
+        "It treats the text literally and skips importing because it is inside a code span",
+        "It raises an invalid import error because paths inside code spans are not permitted"
+      ],
+      "answers": "C",
+      "topic": "Applications and Integration",
+      "explanation": "Import parsing skips Markdown code spans and fenced code blocks, so @README inside backticks stays literal text and nothing is imported. The same @README outside backticks would import the file.",
+      "themes": {
+        "tasks": [
+          "claude-code-core"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "204",
+      "question": "In supported Claude models, what is the primary advantage of adding a system instruction using a role of system inside the messages array mid-conversation instead of modifying the top-level system parameter?",
+      "options": [
+        "It bypasses token counting and avoids all input token billing for that instruction",
+        "It appends to the history without invalidating the previously cached prompt prefix",
+        "It grants higher operational authority to the model than top-level system prompts",
+        "It allows structured outputs to be applied selectively to only the next completion"
+      ],
+      "answers": "B",
+      "topic": "Applications and Integration",
+      "explanation": "A mid-conversation system message has the same authority as the top-level system field, but it is appended to the end of the history, so it does not invalidate the cached prefix before it. It does not change token billing or scope structured outputs.",
+      "themes": {
+        "tasks": [
+          "prompt-engineering"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "205",
+      "question": "A repository keeps one CLAUDE.md at the project root and another inside a subdirectory. When Claude Code starts inside that subdirectory, how does it treat the instructions in the two files?",
+      "options": [
+        "The subdirectory file replaces the instructions in the file above it",
+        "The higher file wins wherever the two sets of instructions disagree",
+        "Both files load and their contents are joined together in context",
+        "Only the file at the git repository root loads when the session starts"
+      ],
+      "answers": "C",
+      "topic": "Claude Code",
+      "explanation": "Claude Code loads CLAUDE.md files from the working directory and every directory above it, and concatenates them rather than overriding: content is ordered from the filesystem root down, so the file closest to the working directory is read last.",
+      "themes": {
+        "tasks": [
+          "claude-code-core"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "206",
+      "question": "A custom skill gathers git and build status through several inline shell commands written with the exclamation and backtick syntax. One of those commands exits with an unexpected error status. What happens?",
+      "options": [
+        "Claude Code substitutes standard error text for that placeholder and continues",
+        "The failing command is skipped and its placeholder stays in the prompt as text",
+        "Claude Code asks in the terminal whether the failed command should be retried",
+        "The failure aborts the whole skill invocation and Claude sees none of it"
+      ],
+      "answers": "D",
+      "topic": "Claude Code",
+      "explanation": "A failed inline shell command aborts the entire skill invocation: Claude never sees the skill content for that invocation, and the error shows Shell command failed for the pattern. For a command expected to exit non-zero, append || true.",
+      "themes": {
+        "tasks": [
+          "agentic-customization"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "207",
+      "question": "An engineer inspects a service that routes user prompts to Claude. One request trips a safety classifier and is declined, yet the error handling block that catches HTTP 4xx and 5xx responses never runs. What explains that?",
+      "options": [
+        "The refusal arrives as an ordinary HTTP 200 response, not an API error",
+        "The refusal breaks the connection, so the client sees a timeout instead",
+        "The SDK quietly substitutes a fallback completion before reporting the error",
+        "The refusal returns an empty body that skips HTTP status checking altogether"
+      ],
+      "answers": "A",
+      "topic": "Eval, Testing, and Debugging",
+      "explanation": "A refusal from the safety classifiers is returned as a normal HTTP 200 response with stop_reason set to refusal, not as an API error, so 4xx and 5xx handlers never run. Check stop_reason in the response body.",
+      "themes": {
+        "tasks": [
+          "output-handling"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "208",
+      "question": "An application sends a request to a Claude 4.5 model where the prompt size plus the requested max_tokens adds up to more than the context window. How does the API treat that request?",
+      "options": [
+        "It rejects the request straight away with a prompt length validation error",
+        "It accepts the request and stops output if it reaches the window limit",
+        "It trims the oldest conversational turns automatically to make the total fit",
+        "It accepts the request only when a dedicated opt-in header is supplied"
+      ],
+      "answers": "B",
+      "topic": "Model Selection and Optimization",
+      "explanation": "On Claude 4.5 models and newer, the API accepts the request and, if generation reaches the context window limit, stops with stop_reason model_context_window_exceeded. Only an input that alone exceeds the window is rejected. The opt-in beta header applies to earlier models, and the API does not trim turns.",
+      "themes": {
+        "tasks": [
+          "context-engineering"
+        ],
+        "tools": [
+          "messages-api"
+        ],
+        "questionTypes": [
+          "most-cost-effective",
+          "most-performant"
+        ]
+      }
+    },
+    {
+      "id": "209",
+      "question": "An application runs a long multi-step agent workflow and wants the model itself to pace the work against the room left in the context window. On models that offer this, how does the model learn how much capacity remains?",
+      "options": [
+        "The client has to compute the remaining tokens and send them with every turn",
+        "The API injects token budget tags into the prompt and refreshes them",
+        "Server-side compaction has to be turned on before usage figures reach the model",
+        "The model infers how much room is left from its own internal heuristics"
+      ],
+      "answers": "B",
+      "topic": "Model Selection and Optimization",
+      "explanation": "On models with context awareness, the API injects the total token budget into the system prompt and, after each tool call, a system warning with the usage and remaining tokens. The client does not compute it and compaction is not required.",
+      "themes": {
+        "tasks": [
+          "context-engineering"
+        ],
+        "tools": [
+          "messages-api"
+        ],
+        "questionTypes": [
+          "most-cost-effective",
+          "most-performant"
+        ]
+      }
+    },
+    {
+      "id": "210",
+      "question": "A developer warms the prompt cache ahead of user traffic by sending a request with max_tokens set to 0. In which situation does the API reject that request as invalid?",
+      "options": [
+        "When the cache control breakpoint sits on the system prompt",
+        "When the placeholder user message contains real text such as warmup",
+        "When the request targets a larger model rather than a smaller one",
+        "When the request is submitted inside a Message Batches call"
+      ],
+      "answers": "D",
+      "topic": "Model Selection and Optimization",
+      "explanation": "A max_tokens of 0 request is rejected with invalid_request_error when it needs output a zero budget cannot produce: stream true, extended thinking, output_config.format, tool_choice any or tool, and any request inside a Message Batches call. A breakpoint on the system prompt is the recommended placement, placeholder text such as warmup is fine, and model size is irrelevant.",
+      "themes": {
+        "tasks": [
+          "api-mechanics"
+        ],
+        "tools": [
+          "prompt-caching",
+          "message-batches"
+        ],
+        "questionTypes": [
+          "most-cost-effective",
+          "most-performant"
+        ]
+      }
+    },
+    {
+      "id": "211",
+      "question": "An engineer inspects the usage metrics returned by the Messages API on a request that utilized prompt caching. How is the total number of input tokens counted toward the context window calculated from the response fields?",
+      "options": [
+        "By reading the input tokens field alone because it already aggregates all prompt content.",
+        "By subtracting cache read tokens from the combined total of written and uncached tokens.",
+        "By summing cache read input tokens, cache creation input tokens, and uncached input tokens.",
+        "By multiplying cache read input tokens by the discount multiplier and adding output tokens."
+      ],
+      "answers": "C",
+      "topic": "Model Selection and Optimization",
+      "explanation": "The total input is the sum of cache_read_input_tokens, cache_creation_input_tokens and input_tokens. The input_tokens field alone counts only the tokens after the last cache breakpoint, and all three parts count toward the context window.",
+      "themes": {
+        "tasks": [
+          "cost-token-management"
+        ],
+        "tools": [
+          "prompt-caching"
+        ],
+        "questionTypes": [
+          "most-cost-effective",
+          "most-performant"
+        ]
+      }
+    },
+    {
+      "id": "212",
+      "question": "An engineering team observes that long-running agent conversations run out of context because of accumulated tool execution results from early turns. Which context management technique directly addresses this specific source of context growth without restarting the session?",
+      "options": [
+        "Programmatic tool calling to avoid executing tools inside code sandboxes",
+        "Upfront prompt caching to remove tool schemas from the context window",
+        "Adding tool search to automatically eliminate completed conversation turns",
+        "Context editing to strip previous tool result blocks from message history"
+      ],
+      "answers": "D",
+      "topic": "Prompt and Context Engineering",
+      "explanation": "Context editing, through tool result clearing, removes old tool result blocks from the history without restarting the session, which targets this source of growth. Prompt caching changes cost, not what occupies the window, and tool search defers tool definitions rather than removing past turns.",
+      "themes": {
+        "tasks": [
+          "context-engineering"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "213",
+      "question": "A team enables document citations and a strict JSON output schema in the same request, and the call comes back with a 400. Why can these two features not run together?",
+      "options": [
+        "Citations interleave with text, which a strict schema cannot accommodate",
+        "The prompt caching layer cannot compute a prefix hash for the combined request",
+        "Structured outputs turn off the index that citations need for attribution",
+        "Citations attach to document blocks, which a schema request cannot include"
+      ],
+      "answers": "A",
+      "topic": "Prompt and Context Engineering",
+      "explanation": "Citations require citation blocks interleaved with text output, which conflicts with the strict JSON schema of structured outputs. Enabling citations on a document or search_result block together with output_config.format returns a 400. Document blocks themselves are allowed.",
+      "themes": {
+        "tasks": [
+          "output-handling"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "214",
+      "question": "A team moves prompts written for an earlier Opus model onto Claude Opus 5 and finds that the instructions telling Claude to check its own work now add tokens and latency without improving accuracy. What should they do with those instructions?",
+      "options": [
+        "Rewrite them so the self-check runs only on the final response",
+        "Take them out, because this model checks its own work without being told",
+        "Keep them but move them from the system prompt into the user turn",
+        "Replace them with a second call that grades the first call's output"
+      ],
+      "answers": "B",
+      "topic": "Prompt and Context Engineering",
+      "explanation": "Claude Opus 5 verifies its own work without being told. Explicit verification instructions, and legacy scaffolding that adds separate verification steps such as a grading call, cause over-verification, so they should be removed: this saves tokens with no loss in quality.",
+      "themes": {
+        "tasks": [
+          "prompt-engineering"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "215",
+      "question": "Two PreToolUse hooks match a command invocation: an audit hook logs the command and exits 0, while a safety hook flags a dangerous pattern and exits 2 to deny the action. How does Claude Code execute these hooks and determine the outcome?",
+      "options": [
+        "Both hooks run to completion in parallel, and the deny decision takes precedence.",
+        "Both hooks are marked as non-blocking errors because opposing exit codes conflict.",
+        "The safety hook cancels the audit hook before it can write any commands to the disk.",
+        "The audit hook runs first and suppresses the safety hook due to its zero exit code."
+      ],
+      "answers": "A",
+      "topic": "Security and Safety",
+      "explanation": "Matching hooks run in parallel, and for permission decisions the most restrictive result applies. The safety hook exiting 2 is a blocking error that denies the action regardless of the audit hook, which only logged and exited 0.",
+      "themes": {
+        "tasks": [
+          "workflow-enforcement"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "216",
+      "question": "A developer implements a UserPromptSubmit hook callback to screen prompts for usage violations. If this callback takes longer than the timeout period and is canceled, how does Claude Code handle the pending prompt?",
+      "options": [
+        "It allows the prompt to proceed unscreened while recording a non-blocking background error.",
+        "It aborts the entire agent runtime process immediately with an exit code of 2.",
+        "It bypasses the hook and routes the prompt directly to the canUseTool callback.",
+        "It blocks the prompt from processing and shows a message identifying the timeout."
+      ],
+      "answers": "D",
+      "topic": "Security and Safety",
+      "explanation": "When a UserPromptSubmit callback times out, Claude Code cancels it and blocks the prompt with a message naming the hook and the timeout, and the session continues. It does not let the prompt through unscreened.",
+      "themes": {
+        "tasks": [
+          "workflow-enforcement"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "217",
+      "question": "A team installs a large number of Agent Skills and worries about what each one costs in context before it is ever used. What occupies the context window for a skill that has not been triggered?",
+      "options": [
+        "Its full SKILL.md body, which is loaded once the session starts",
+        "Its frontmatter plus the opening section of its written instructions",
+        "Its name and description, and nothing more until it is triggered",
+        "Nothing at all, because skill metadata is held outside the prompt"
+      ],
+      "answers": "C",
+      "topic": "Tools and MCPs",
+      "explanation": "Until a skill is triggered, only its name and description (about 100 tokens) occupy context, loaded at startup. The SKILL.md body enters the window when the skill is triggered, and bundled files only when they are read.",
+      "themes": {
+        "tasks": [
+          "context-engineering"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "218",
+      "question": "An engineer authors an MCP server whose tools return extensive diagnostic data to Claude Code. What annotation can the server set in a tool's tools/list entry to increase the output threshold before data is written to disk?",
+      "options": [
+        "Set anthropic/maxResultSizeChars in the tool's _meta object.",
+        "Set readOnlyHint: true in the tool's annotations object.",
+        "Define alwaysLoad: true within the tool's parameter schema.",
+        "Provide defer_loading: false inside the tool's default_config."
+      ],
+      "answers": "A",
+      "topic": "Tools and MCPs",
+      "explanation": "An MCP server can set anthropic/maxResultSizeChars in the tool's _meta to raise the threshold above which Claude Code saves a large text result to a file. readOnlyHint concerns parallel execution, and alwaysLoad and defer_loading concern tool search deferral.",
+      "themes": {
+        "tasks": [
+          "mcp-server-development"
+        ],
+        "tools": [
+          "tool-use",
+          "mcp"
+        ],
+        "questionTypes": [
+          "architecture-decision"
+        ]
+      }
+    },
+    {
+      "id": "219",
+      "question": "Two separate engineering teams within the same organization use identical system prompts on the Claude API but execute calls under different workspaces. How does prompt caching handle cache sharing between these teams?",
+      "options": [
+        "Caches are shared across the organization because the prompt text is identical.",
+        "Caches are shared only when requests are submitted within the same five-minute window.",
+        "Caches are isolated per individual user rather than at the workspace boundary.",
+        "Caches are isolated per workspace, so the teams do not share cache entries."
+      ],
+      "answers": "D",
+      "topic": "Model Selection and Optimization",
+      "explanation": "On the Claude API, prompt caches are isolated per workspace, so teams in different workspaces do not share entries even with identical prompts. A cache hit also requires identical prompt segments, but neither the time window nor the individual user is the isolation boundary.",
+      "themes": {
+        "tasks": [
+          "cost-token-management"
+        ],
+        "tools": [
+          "prompt-caching"
+        ],
+        "questionTypes": [
+          "most-cost-effective",
+          "most-performant"
+        ]
+      }
+    },
+    {
+      "id": "220",
+      "question": "When building a multi-turn tool-calling loop using an API model where thinking is enabled, what requirement applies when submitting tool execution outputs back to the assistant?",
+      "options": [
+        "You must summarize earlier reasoning steps into the tool result metadata block before continuing.",
+        "You must include the entire unmodified thinking block and signature that accompanied the tool call.",
+        "You must strip the thinking block and return only the tool results to save context space.",
+        "You must verify and decrypt the cryptographic signature before serializing the tool result payload."
+      ],
+      "answers": "B",
+      "topic": "Prompt and Context Engineering",
+      "explanation": "When submitting tool results with thinking enabled, the entire unmodified thinking block, including its signature, must be returned with the tool results. The API verifies the signature and returns an error if the block was modified. No client-side decryption is needed.",
+      "themes": {
+        "tasks": [
+          "tool-implementation"
+        ],
+        "tools": [
+          "tool-use"
+        ],
+        "questionTypes": [
+          "architecture-decision"
         ]
       }
     }

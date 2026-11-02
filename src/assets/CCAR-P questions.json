@@ -65,7 +65,8 @@
       "most-secure",
       "output-evaluation",
       "responsibility-identification",
-      "troubleshooting"
+      "troubleshooting",
+      "evaluation-frameworks"
     ]
   },
   "questions": [
@@ -570,7 +571,8 @@
           "evals"
         ],
         "questionTypes": [
-          "troubleshooting"
+          "troubleshooting",
+          "evaluation-frameworks"
         ]
       }
     },
@@ -2005,7 +2007,8 @@
           "tradeoff-communication"
         ],
         "questionTypes": [
-          "troubleshooting"
+          "troubleshooting",
+          "evaluation-frameworks"
         ],
         "tools": [
           "evals"
