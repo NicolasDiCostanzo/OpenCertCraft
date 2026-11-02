@@ -8705,11 +8705,10 @@
       ],
       "answers": "A",
       "topic": "Agentic Architecture & Orchestration",
-      "explanation": "",
+      "explanation": "When a coordinator emits several subagent tool calls in a single assistant turn, the SDK handles them in the same round trip and subagents can run concurrently, so independent investigations cost one turn instead of one each. Options B and C serialize the work across turns, and option D bypasses the coordinator and its context.",
       "themes": {
         "tasks": [
-          "agentic-loops",
-          "workflow-enforcement"
+          "agentic-loops"
         ],
         "tools": [
           "tool-use"
@@ -8731,11 +8730,10 @@
       ],
       "answers": "C",
       "topic": "Agentic Architecture & Orchestration",
-      "explanation": "",
+      "explanation": "Setting fork_session = True together with resume creates a new session that starts from a copy of the baseline history, so each strategy diverges independently while the original stays unchanged. Compaction rewrites the history instead of branching it, an Explore subagent does not branch the session, and continue_conversation resumes the most recent session and appends to it.",
       "themes": {
         "tasks": [
-          "agentic-loops",
-          "workflow-enforcement"
+          "agentic-loops"
         ],
         "tools": [
           "tool-use"
@@ -8760,8 +8758,7 @@
       "explanation": "D. Agent and Task   Newer releases label the block Agent in tool_use events, while older releases used Task, and Task also still appears as a name in the tools list, so checking for both keeps detection working across versions. Subagent and Worker are not names the SDK actually uses for delegating work. TaskCreate and TaskUpdate belong to the built in task tracking tools rather than to subagent invocation. Delegate and Spawn are not valid tool names in the SDK at all.",
       "themes": {
         "tasks": [
-          "agentic-loops",
-          "workflow-enforcement"
+          "agentic-loops"
         ],
         "tools": [
           "tool-use"
@@ -8783,11 +8780,10 @@
       ],
       "answers": "B",
       "topic": "Agentic Architecture & Orchestration",
-      "explanation": "",
+      "explanation": "The subtype field of ResultMessage is the primary indicator of how the loop ended: success, error_max_turns, error_max_budget_usd, error_during_execution, or error_max_structured_output_retries. The result text exists only on success, usage reports token counts, and stop_reason describes why the model stopped on its last response, not why the loop ended.",
       "themes": {
         "tasks": [
-          "agentic-loops",
-          "workflow-enforcement"
+          "agentic-loops"
         ],
         "tools": [
           "tool-use"
@@ -8809,11 +8805,10 @@
       ],
       "answers": "A",
       "topic": "Agentic Architecture & Orchestration",
-      "explanation": "",
+      "explanation": "Custom tools run sequentially by default. Setting readOnlyHint: true in the tool annotations declares that it has no side effects, which lets the SDK run it in parallel with other read-only calls. allowedTools only controls approval, max_turns caps the number of turns, and the result format has no effect on scheduling.",
       "themes": {
         "tasks": [
-          "agentic-loops",
-          "workflow-enforcement"
+          "agentic-loops"
         ],
         "tools": [
           "tool-use"
@@ -8835,11 +8830,10 @@
       ],
       "answers": "B",
       "topic": "Agentic Architecture & Orchestration",
-      "explanation": "",
+      "explanation": "Phases that build on each other and share context (design, edit, tests) belong in the main conversation. Subagents suit work that produces verbose output you do not need afterwards (options A and D), or that needs its own tool restrictions (option C), because only a summary comes back.",
       "themes": {
         "tasks": [
-          "agentic-loops",
-          "workflow-enforcement"
+          "agentic-loops"
         ],
         "tools": [
           "tool-use"
@@ -8861,7 +8855,7 @@
       ],
       "answers": "C",
       "topic": "Agentic Architecture & Orchestration",
-      "explanation": "",
+      "explanation": "A PreToolUse hook matched to the refund tool runs before the call executes and can deny it with a reason, so the ordering is enforced in code. PostToolUse runs after the lookup and cannot block the refund, a system prompt paragraph relies on the model remembering, and SubagentStop fires when delegated work ends, not before a tool call.",
       "themes": {
         "tasks": [
           "agentic-loops",
@@ -8887,7 +8881,7 @@
       ],
       "answers": "A",
       "topic": "Tool Design & MCP Integration",
-      "explanation": "",
+      "explanation": "The SDK applies the MCP output limits: a successful text result above 25,000 tokens is saved to a file and replaced by an error result that names the file path, so the agent can read it back in portions. It is neither silently truncated nor treated as a fatal loop error.",
       "themes": {
         "tasks": [
           "builtin-tools",
@@ -8914,7 +8908,7 @@
       ],
       "answers": "D",
       "topic": "Tool Design & MCP Integration",
-      "explanation": "",
+      "explanation": "A pending status in the init message is not a failure by itself: the server has not connected yet, or its tool list was served from the cache and it connects on first use. Check for failed or needs-auth to find servers that will not be usable, and disabled for servers turned off by configuration.",
       "themes": {
         "tasks": [
           "builtin-tools",
@@ -8941,7 +8935,7 @@
       ],
       "answers": "B",
       "topic": "Tool Design & MCP Integration",
-      "explanation": "",
+      "explanation": "To keep a built-in tool out of Claude's context, omit it from the tools list or name it bare in disallowedTools. A scoped rule such as Bash(rm *) leaves the tool visible and only denies matching calls, and options C and D keep the tool visible so Claude may still try it.",
       "themes": {
         "tasks": [
           "builtin-tools",
@@ -8968,7 +8962,7 @@
       ],
       "answers": "C",
       "topic": "Tool Design & MCP Integration",
-      "explanation": "",
+      "explanation": "Claude reads a tool result with is_error set to true as feedback and typically retries two to three times with corrections before apologizing to the user. It does not disable the tool, substitute null for the missing argument, or end the session.",
       "themes": {
         "tasks": [
           "builtin-tools",
@@ -8995,7 +8989,7 @@
       ],
       "answers": "D",
       "topic": "Claude Code Configuration & Workflows",
-      "explanation": "",
+      "explanation": "context: fork runs the skill in a separate subagent with its own fresh context, so the file discovery happens there and only the summarized findings return to the invoking conversation. isolation, sandbox: isolated and agent: background are not skill frontmatter settings: agent selects the subagent type and background is a separate boolean.",
       "themes": {
         "tasks": [
           "code-generation",
@@ -9021,7 +9015,7 @@
       ],
       "answers": "C",
       "topic": "Claude Code Configuration & Workflows",
-      "explanation": "",
+      "explanation": "Concrete test cases with expected inputs and outputs give Claude a check it can run itself, so it iterates until they pass without a person reviewing every attempt. Prose conventions, an elaborate plan and negative samples provide no executable pass/fail signal.",
       "themes": {
         "tasks": [
           "code-generation",
@@ -9047,7 +9041,7 @@
       ],
       "answers": "D",
       "topic": "Claude Code Configuration & Workflows",
-      "explanation": "",
+      "explanation": "Starting from a minimal prompt and asking Claude to interview you with AskUserQuestion surfaces edge cases, constraints and trade-offs before any code exists, and can end in a written spec. Reviewing a finished script, adding a PreToolUse hook or enabling bypassPermissions does not draw out requirements.",
       "themes": {
         "tasks": [
           "code-generation",
@@ -9073,18 +9067,16 @@
       ],
       "answers": "B",
       "topic": "Claude Code Configuration & Workflows",
-      "explanation": "",
+      "explanation": "/context shows the CLAUDE.md and rules files actually loaded in the current session, under Memory files. /memory lists candidate locations (including files that do not exist yet) and lets you open them, while /doctor and /status are not the documented way to see what loaded.",
       "themes": {
         "tasks": [
-          "code-generation",
-          "context-preservation"
+          "claude-md-hierarchy"
         ],
         "tools": [
           "claude-code"
         ],
         "questionTypes": [
-          "architecture-decision",
-          "most-cost-effective"
+          "troubleshooting"
         ]
       }
     },
@@ -9099,18 +9091,16 @@
       ],
       "answers": "A",
       "topic": "Claude Code Configuration & Workflows",
-      "explanation": "",
+      "explanation": "@path/to/file imports a file, and import parsing skips Markdown code spans and fenced code blocks, so wrapping the mentioned path in backticks keeps it literal. A backslash only escapes spaces inside an import path, #include and square brackets are not import syntax, and markdown links are not expanded.",
       "themes": {
         "tasks": [
-          "code-generation",
-          "context-preservation"
+          "claude-md-hierarchy"
         ],
         "tools": [
           "claude-code"
         ],
         "questionTypes": [
-          "architecture-decision",
-          "most-cost-effective"
+          "configuration"
         ]
       }
     },
@@ -9125,7 +9115,7 @@
       ],
       "answers": "B",
       "topic": "Prompt Engineering & Structured Output",
-      "explanation": "",
+      "explanation": "Batch results are not guaranteed to come back in submission order, so the documented way to match each result to its request is the unique custom_id set on that request. Message IDs are generated by the API and creation timestamps do not map to input records.",
       "themes": {
         "tasks": [
           "batch-processing"
@@ -9150,7 +9140,7 @@
       ],
       "answers": "A",
       "topic": "Prompt Engineering & Structured Output",
-      "explanation": "",
+      "explanation": "Each optional parameter roughly doubles part of the grammar state space and counts toward a combined limit of 24 across strict schemas, so making parameters required and stating the default reduces complexity. Nesting optional properties compounds it, union types are even more expensive, and the 180-second compilation timeout is enforced by the API, not set per request.",
       "themes": {
         "tasks": [
           "few-shot-prompting",
@@ -9176,7 +9166,7 @@
       ],
       "answers": "D",
       "topic": "Prompt Engineering & Structured Output",
-      "explanation": "",
+      "explanation": "JSON outputs (output_config.format) control the format of Claude's final response, while strict tool use guarantees tool parameters, and the two are designed to be combined in one request. Prompt-only instructions give no guarantee, thinking tags are not a structured output channel, and omitting the client tools would remove the intermediate lookups.",
       "themes": {
         "tasks": [
           "few-shot-prompting",
@@ -9202,7 +9192,7 @@
       ],
       "answers": "C",
       "topic": "Prompt Engineering & Structured Output",
-      "explanation": "",
+      "explanation": "tool_choice set to any requires Claude to call one of the provided tools without forcing a particular one, which fits routing across several schema tools. auto may answer with plain text, none disables tools, and tool forces one named tool (there is no wildcard form).",
       "themes": {
         "tasks": [
           "few-shot-prompting",
@@ -9228,7 +9218,7 @@
       ],
       "answers": "D",
       "topic": "Prompt Engineering & Structured Output",
-      "explanation": "",
+      "explanation": "Validation of each request's params object is asynchronous: errors are returned per request once processing of the entire batch has ended, not at submission and not in the client library. Check the request shape with the Messages API first to catch malformed requests early.",
       "themes": {
         "tasks": [
           "batch-processing"
@@ -9253,7 +9243,7 @@
       ],
       "answers": "A",
       "topic": "Context Management & Reliability",
-      "explanation": "",
+      "explanation": "A text block placed after the tool_result makes the history show user text after every tool result, and Claude can follow that pattern by ending its turn, producing empty end_turn responses of 2-3 tokens. The format itself is valid (text after tool results is allowed), so it is not a 400 error. Send the tool_result alone.",
       "themes": {
         "tasks": [
           "context-preservation",
@@ -9279,7 +9269,7 @@
       ],
       "answers": "C",
       "topic": "Context Management & Reliability",
-      "explanation": "",
+      "explanation": "Sessions persist the conversation, not the filesystem: resuming brings back prompts, tool calls and results, while edits already written to disk stay as they are (file checkpointing is the separate feature to revert them). Resuming does not roll files back, relaunch processes or sync the working tree with the remote.",
       "themes": {
         "tasks": [
           "context-preservation",
@@ -9305,7 +9295,7 @@
       ],
       "answers": "B",
       "topic": "Context Management & Reliability",
-      "explanation": "",
+      "explanation": "Prompt caching lowers the cost and latency of repeated prefixes, but cached tokens still occupy the context window: cache read and cache creation tokens count toward it. To free room in the window, use compaction or context editing.",
       "themes": {
         "tasks": [
           "context-preservation",
@@ -9331,7 +9321,7 @@
       ],
       "answers": "A",
       "topic": "Context Management & Reliability",
-      "explanation": "",
+      "explanation": "A max_tokens stop with an incomplete tool_use block means the arguments were cut off, so the request should be retried with a higher max_tokens to get the complete call. Filling defaults or returning the partial block as a tool result risks acting on invalid input, and a fallback model does not fix an output limit.",
       "themes": {
         "tasks": [
           "context-preservation",

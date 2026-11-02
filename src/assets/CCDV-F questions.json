@@ -4808,7 +4808,7 @@
       ],
       "answers": "B",
       "topic": "Agents and Workflows",
-      "explanation": "",
+      "explanation": "CLAUDE.md content is re-injected on every request, so rules placed there (loaded through settingSources) survive automatic compaction, whereas instructions in the initial prompt may be summarized away. A ResultMessage handler runs at the end of the loop, and the systemMessage field of a hook output is shown to the user, not to the model.",
       "themes": {
         "tasks": [
           "context-engineering"
@@ -4832,7 +4832,7 @@
       ],
       "answers": "A",
       "topic": "Agents and Workflows",
-      "explanation": "",
+      "explanation": "The TypeScript SDK replaces the subprocess environment with the env option, so process.env must be spread into it to keep variables such as PATH. The Python SDK merges env on top of the inherited environment.",
       "themes": {
         "tasks": [
           "agent-construction"
@@ -4856,7 +4856,7 @@
       ],
       "answers": "C",
       "topic": "Agents and Workflows",
-      "explanation": "",
+      "explanation": "A non-fork subagent starts with a fresh context and receives no parent history. The only channel from parent to subagent is the Agent tool prompt string, so file paths, error traces and decisions must be written into it.",
       "themes": {
         "tasks": [
           "agent-patterns"
@@ -4880,7 +4880,7 @@
       ],
       "answers": "D",
       "topic": "Applications and Integration",
-      "explanation": "",
+      "explanation": "The batch worker throttles web_search per organization so that highly concurrent batches do not exhaust the organization's web-search rate limit, and it retries throttled requests automatically. No client handling is needed, but very large web-search batches can take longer.",
       "themes": {
         "tasks": [
           "cost-token-management"
@@ -4904,7 +4904,7 @@
       ],
       "answers": "B",
       "topic": "Applications and Integration",
-      "explanation": "",
+      "explanation": "A response that leaves a client tool_use block waiting on you never has pause_turn: when Claude stops to call your tools, the stop reason is tool_use, and the API returns without running the server tool so the client tools can run first. pause_turn is reserved for a server-side loop that hit its iteration limit.",
       "themes": {
         "tasks": [
           "api-mechanics"
@@ -4928,7 +4928,7 @@
       ],
       "answers": "D",
       "topic": "Applications and Integration",
-      "explanation": "",
+      "explanation": "List settings such as permissions.allow are merged across files, not overridden, so each scope can add entries without removing those of another. Only a few model-related keys (fallbackModel, modelPicker, availableModels under managed settings, modelSettings) follow their own rules.",
       "themes": {
         "tasks": [
           "configuration-management"
@@ -4952,7 +4952,7 @@
       ],
       "answers": "C",
       "topic": "Applications and Integration",
-      "explanation": "",
+      "explanation": "Tool input is streamed as input_json_delta events inside content_block_delta, each carrying a partial_json string. Consumers accumulate the fragments and parse the JSON once the block is complete, since a single fragment is not valid JSON on its own.",
       "themes": {
         "tasks": [
           "api-mechanics"
@@ -4976,7 +4976,7 @@
       ],
       "answers": "D",
       "topic": "Applications and Integration",
-      "explanation": "",
+      "explanation": "Settings files are strict JSON: a // comment or a trailing comma is a syntax error. Claude Code reports the file as a Settings Error at the next start instead of skipping lines or rewriting the file.",
       "themes": {
         "tasks": [
           "configuration-management"
@@ -5000,7 +5000,7 @@
       ],
       "answers": "A",
       "topic": "Applications and Integration",
-      "explanation": "",
+      "explanation": "client.messages.stream with get_final_message uses streaming internally to keep the connection alive and returns the complete Message, identical to create(). The SDK requires streaming for very large max_tokens values to avoid HTTP timeouts, so raising the timeout on create is not the documented route and batch is not a request parameter.",
       "themes": {
         "tasks": [
           "api-mechanics"
@@ -5024,7 +5024,7 @@
       ],
       "answers": "C",
       "topic": "Applications and Integration",
-      "explanation": "",
+      "explanation": "Import parsing skips Markdown code spans and fenced code blocks, so @README inside backticks stays literal text and nothing is imported. The same @README outside backticks would import the file.",
       "themes": {
         "tasks": [
           "claude-code-core"
@@ -5048,7 +5048,7 @@
       ],
       "answers": "B",
       "topic": "Applications and Integration",
-      "explanation": "",
+      "explanation": "A mid-conversation system message has the same authority as the top-level system field, but it is appended to the end of the history, so it does not invalidate the cached prefix before it. It does not change token billing or scope structured outputs.",
       "themes": {
         "tasks": [
           "prompt-engineering"
@@ -5072,7 +5072,7 @@
       ],
       "answers": "C",
       "topic": "Claude Code",
-      "explanation": "",
+      "explanation": "Claude Code loads CLAUDE.md files from the working directory and every directory above it, and concatenates them rather than overriding: content is ordered from the filesystem root down, so the file closest to the working directory is read last.",
       "themes": {
         "tasks": [
           "claude-code-core"
@@ -5096,7 +5096,7 @@
       ],
       "answers": "D",
       "topic": "Claude Code",
-      "explanation": "",
+      "explanation": "A failed inline shell command aborts the entire skill invocation: Claude never sees the skill content for that invocation, and the error shows Shell command failed for the pattern. For a command expected to exit non-zero, append || true.",
       "themes": {
         "tasks": [
           "agentic-customization"
@@ -5120,7 +5120,7 @@
       ],
       "answers": "A",
       "topic": "Eval, Testing, and Debugging",
-      "explanation": "",
+      "explanation": "A refusal from the safety classifiers is returned as a normal HTTP 200 response with stop_reason set to refusal, not as an API error, so 4xx and 5xx handlers never run. Check stop_reason in the response body.",
       "themes": {
         "tasks": [
           "output-handling"
@@ -5144,7 +5144,7 @@
       ],
       "answers": "B",
       "topic": "Model Selection and Optimization",
-      "explanation": "",
+      "explanation": "On Claude 4.5 models and newer, the API accepts the request and, if generation reaches the context window limit, stops with stop_reason model_context_window_exceeded. Only an input that alone exceeds the window is rejected. The opt-in beta header applies to earlier models, and the API does not trim turns.",
       "themes": {
         "tasks": [
           "context-engineering"
@@ -5169,7 +5169,7 @@
       ],
       "answers": "B",
       "topic": "Model Selection and Optimization",
-      "explanation": "",
+      "explanation": "On models with context awareness, the API injects the total token budget into the system prompt and, after each tool call, a system warning with the usage and remaining tokens. The client does not compute it and compaction is not required.",
       "themes": {
         "tasks": [
           "context-engineering"
@@ -5194,7 +5194,7 @@
       ],
       "answers": "D",
       "topic": "Model Selection and Optimization",
-      "explanation": "",
+      "explanation": "A max_tokens of 0 request is rejected with invalid_request_error when it needs output a zero budget cannot produce: stream true, extended thinking, output_config.format, tool_choice any or tool, and any request inside a Message Batches call. A breakpoint on the system prompt is the recommended placement, placeholder text such as warmup is fine, and model size is irrelevant.",
       "themes": {
         "tasks": [
           "api-mechanics"
@@ -5220,7 +5220,7 @@
       ],
       "answers": "C",
       "topic": "Model Selection and Optimization",
-      "explanation": "",
+      "explanation": "The total input is the sum of cache_read_input_tokens, cache_creation_input_tokens and input_tokens. The input_tokens field alone counts only the tokens after the last cache breakpoint, and all three parts count toward the context window.",
       "themes": {
         "tasks": [
           "cost-token-management"
@@ -5245,7 +5245,7 @@
       ],
       "answers": "D",
       "topic": "Prompt and Context Engineering",
-      "explanation": "",
+      "explanation": "Context editing, through tool result clearing, removes old tool result blocks from the history without restarting the session, which targets this source of growth. Prompt caching changes cost, not what occupies the window, and tool search defers tool definitions rather than removing past turns.",
       "themes": {
         "tasks": [
           "context-engineering"
@@ -5269,7 +5269,7 @@
       ],
       "answers": "A",
       "topic": "Prompt and Context Engineering",
-      "explanation": "",
+      "explanation": "Citations require citation blocks interleaved with text output, which conflicts with the strict JSON schema of structured outputs. Enabling citations on a document or search_result block together with output_config.format returns a 400. Document blocks themselves are allowed.",
       "themes": {
         "tasks": [
           "output-handling"
@@ -5293,7 +5293,7 @@
       ],
       "answers": "B",
       "topic": "Prompt and Context Engineering",
-      "explanation": "",
+      "explanation": "Claude Opus 5 verifies its own work without being told. Explicit verification instructions, and legacy scaffolding that adds separate verification steps such as a grading call, cause over-verification, so they should be removed: this saves tokens with no loss in quality.",
       "themes": {
         "tasks": [
           "prompt-engineering"
@@ -5317,7 +5317,7 @@
       ],
       "answers": "A",
       "topic": "Security and Safety",
-      "explanation": "",
+      "explanation": "Matching hooks run in parallel, and for permission decisions the most restrictive result applies. The safety hook exiting 2 is a blocking error that denies the action regardless of the audit hook, which only logged and exited 0.",
       "themes": {
         "tasks": [
           "workflow-enforcement"
@@ -5341,7 +5341,7 @@
       ],
       "answers": "D",
       "topic": "Security and Safety",
-      "explanation": "",
+      "explanation": "When a UserPromptSubmit callback times out, Claude Code cancels it and blocks the prompt with a message naming the hook and the timeout, and the session continues. It does not let the prompt through unscreened.",
       "themes": {
         "tasks": [
           "workflow-enforcement"
@@ -5365,7 +5365,7 @@
       ],
       "answers": "C",
       "topic": "Tools and MCPs",
-      "explanation": "",
+      "explanation": "Until a skill is triggered, only its name and description (about 100 tokens) occupy context, loaded at startup. The SKILL.md body enters the window when the skill is triggered, and bundled files only when they are read.",
       "themes": {
         "tasks": [
           "context-engineering"
@@ -5389,7 +5389,7 @@
       ],
       "answers": "A",
       "topic": "Tools and MCPs",
-      "explanation": "",
+      "explanation": "An MCP server can set anthropic/maxResultSizeChars in the tool's _meta to raise the threshold above which Claude Code saves a large text result to a file. readOnlyHint concerns parallel execution, and alwaysLoad and defer_loading concern tool search deferral.",
       "themes": {
         "tasks": [
           "mcp-server-development"
@@ -5414,7 +5414,7 @@
       ],
       "answers": "D",
       "topic": "Model Selection and Optimization",
-      "explanation": "",
+      "explanation": "On the Claude API, prompt caches are isolated per workspace, so teams in different workspaces do not share entries even with identical prompts. A cache hit also requires identical prompt segments, but neither the time window nor the individual user is the isolation boundary.",
       "themes": {
         "tasks": [
           "cost-token-management"
@@ -5439,7 +5439,7 @@
       ],
       "answers": "B",
       "topic": "Prompt and Context Engineering",
-      "explanation": "",
+      "explanation": "When submitting tool results with thinking enabled, the entire unmodified thinking block, including its signature, must be returned with the tool results. The API verifies the signature and returns an error if the block was modified. No client-side decryption is needed.",
       "themes": {
         "tasks": [
           "tool-implementation"
