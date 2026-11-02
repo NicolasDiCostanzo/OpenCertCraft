@@ -118,10 +118,10 @@ gh workflow run bundle-review.yml    # on GitHub, bypasses the first-Monday gate
 
 npm run check:bundles                # internal check, no API key needed
 npm run check:bundles --silent -- --json > internal-report.json
-ANTHROPIC_API_KEY=... node scripts/llm-review.mjs --internal internal-report.json --out weekly-report.md
+ANTHROPIC_API_KEY=... node scripts/llm-review.mjs --internal internal-report.json --out weekly-report.md --read-snapshot .llm-snapshots --write-snapshot .llm-snapshots
 ```
 
-`npm run check:bundles` rewrites `.bundle-snapshots/` after diffing, so revert those files if you don't want to move the baseline. Add `--no-llm` to `llm-review.mjs` for a report without an API key: guides are listed as "not reviewed" (never "no drift") and the existing records in `.llm-snapshots/` are kept as they are. Only completed reviews update the baseline; certs skipped or failing in a run keep their previous record.
+`npm run check:bundles` rewrites `.bundle-snapshots/` after diffing and `llm-review.mjs` rewrites `.llm-snapshots/`, so revert those files if you don't want to move the baseline. Add `--no-llm` to `llm-review.mjs` for a report without an API key: guides are listed as "not reviewed" (never "no drift") and the existing records in `.llm-snapshots/` are kept as they are. Only completed reviews update the baseline; certs skipped or failing in a run keep their previous record.
 
 The repo setting "Allow GitHub Actions to create and approve pull requests" must be enabled, otherwise the PR step fails.
 
