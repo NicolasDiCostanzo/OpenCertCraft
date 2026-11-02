@@ -13,6 +13,10 @@ describe('loadBaseline', () => {
   it('keeps only well-formed snapshots, keyed by cert', () => {
     expect([...loadBaseline(fixtureDir('valid')).keys()]).toEqual(['CKA'])
   })
+
+  it('drops snapshots from unreviewed (--no-llm) runs so they cannot replace a real baseline', () => {
+    expect([...loadBaseline(fixtureDir('not-reviewed')).keys()]).toEqual(['DVA-C02'])
+  })
 })
 
 describe('priorVerdict', () => {

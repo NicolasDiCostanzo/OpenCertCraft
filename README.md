@@ -121,7 +121,7 @@ npm run check:bundles --silent -- --json > internal-report.json
 ANTHROPIC_API_KEY=... node scripts/llm-review.mjs --internal internal-report.json --out weekly-report.md
 ```
 
-`npm run check:bundles` rewrites `.bundle-snapshots/` after diffing, so revert those files if you don't want to move the baseline. Add `--no-llm` to `llm-review.mjs` for a report without an API key.
+`npm run check:bundles` rewrites `.bundle-snapshots/` after diffing, so revert those files if you don't want to move the baseline. Add `--no-llm` to `llm-review.mjs` for a report without an API key: guides are listed as "not reviewed" (never "no drift"), and their snapshots are tagged `reviewStatus: "not-reviewed"` and ignored as a baseline by the next run.
 
 The repo setting "Allow GitHub Actions to create and approve pull requests" must be enabled, otherwise the PR step fails.
 

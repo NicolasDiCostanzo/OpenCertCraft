@@ -3,6 +3,8 @@ import { join } from 'node:path';
 
 const SNAPSHOT_FILE = 'llm-review.json';
 
+export const REVIEW_STATUS = { completed: 'completed', notReviewed: 'not-reviewed' };
+
 const FINDING_KEYS = {
   new_domains: (entry) => `new:${entry.name}`,
   removed_domains: (entry) => `removed:${entry.name}`,
@@ -15,7 +17,7 @@ export function loadBaseline(dir) {
   try {
     const parsed = JSON.parse(readFileSync(join(dir, SNAPSHOT_FILE), 'utf-8'));
     const snapshots = Array.isArray(parsed?.snapshots) ? parsed.snapshots : [];
-    const usable = snapshots.filter((snapshot) => snapshot && typeof snapshot.cert === 'string' && snapshot.verdict && typeof snapshot.verdict === 'object');
+    const usable = snapshots.filter((snapshot) => snapshot && typeof snapshot.cert === 'string' && snapshot.reviewStatus !== REVIEW_STATUS.notReviewed && snapshot.verdict && typeof snapshot.verdict === 'object');
     return new Map(usable.map((snapshot) => [snapshot.cert, snapshot]));
   } catch (error) {
     if (error.code !== 'ENOENT') console.warn(`Ignoring unreadable LLM baseline in ${dir}: ${error.message}`);
