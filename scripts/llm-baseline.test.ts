@@ -7,8 +7,12 @@ import mergeCases from './fixtures/llm-baseline/merge-cases.json'
 const fixtureDir = (name: string) => join(import.meta.dirname, 'fixtures', 'llm-baseline', name)
 
 describe('loadBaseline', () => {
-  it.each(['missing', 'corrupt', 'wrong-shape'])('falls back to an empty baseline for the %s case', (name) => {
-    expect(loadBaseline(fixtureDir(name)).size).toBe(0)
+  it('treats a missing snapshot file as an empty baseline', () => {
+    expect(loadBaseline(fixtureDir('missing')).size).toBe(0)
+  })
+
+  it.each(['corrupt', 'wrong-shape'])('refuses an existing but invalid snapshot file (%s) instead of emptying the baseline', (name) => {
+    expect(() => loadBaseline(fixtureDir(name))).toThrow(/Invalid LLM baseline/)
   })
 
   it('keeps only well-formed snapshots, keyed by cert', () => {

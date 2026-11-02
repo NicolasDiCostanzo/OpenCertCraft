@@ -14,15 +14,23 @@ const FINDING_KEYS = {
 const asEntries = (value) => (Array.isArray(value) ? value.filter((entry) => entry && typeof entry === 'object') : []);
 
 export function loadBaseline(dir) {
+  const file = join(dir, SNAPSHOT_FILE);
+  let raw;
   try {
-    const parsed = JSON.parse(readFileSync(join(dir, SNAPSHOT_FILE), 'utf-8'));
-    const snapshots = Array.isArray(parsed?.snapshots) ? parsed.snapshots : [];
-    const usable = snapshots.filter((snapshot) => snapshot && typeof snapshot.cert === 'string' && snapshot.reviewStatus !== REVIEW_STATUS.notReviewed && snapshot.verdict && typeof snapshot.verdict === 'object');
-    return new Map(usable.map((snapshot) => [snapshot.cert, snapshot]));
+    raw = readFileSync(file, 'utf-8');
   } catch (error) {
-    if (error.code !== 'ENOENT') console.warn(`Ignoring unreadable LLM baseline in ${dir}: ${error.message}`);
-    return new Map();
+    if (error.code === 'ENOENT') return new Map();
+    throw new Error(`Invalid LLM baseline ${file}: ${error.message}`);
   }
+  let parsed;
+  try {
+    parsed = JSON.parse(raw);
+  } catch (error) {
+    throw new Error(`Invalid LLM baseline ${file}: ${error.message}`);
+  }
+  if (!Array.isArray(parsed?.snapshots)) throw new Error(`Invalid LLM baseline ${file}: "snapshots" must be an array.`);
+  const usable = parsed.snapshots.filter((snapshot) => snapshot && typeof snapshot.cert === 'string' && snapshot.reviewStatus !== REVIEW_STATUS.notReviewed && snapshot.verdict && typeof snapshot.verdict === 'object');
+  return new Map(usable.map((snapshot) => [snapshot.cert, snapshot]));
 }
 
 export function priorVerdict(baseline, cert, guideUrl) {
