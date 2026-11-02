@@ -51,7 +51,7 @@ const selectedQuestion = computed(() =>
 )
 
 const selectedAnswer = computed(() =>
-  selectedQuestionId.value ? props.answers[selectedQuestionId.value] : null,
+  selectedQuestionId.value ? (props.answers[selectedQuestionId.value] ?? null) : null,
 )
 
 const flaggedQuestionIds = computed(() =>

@@ -8856,7 +8856,7 @@
       "options": [
         "A PostToolUse hook on the lookup tool that appends the customer ID to the transcript",
         "A paragraph in the system prompt telling Claude to call the lookup tool first",
-        "A PreToolUse hook matched to the refund tool that returns a deny decision and a reason",
+        "A PreToolUse hook matched to the refund tool that denies the call, with a reason, only when no verified customer ID exists, and permits it after verification",
         "A SubagentStop hook that checks for a verified ID once delegated work finishes"
       ],
       "answers": "C",
@@ -9128,11 +9128,10 @@
       "explanation": "",
       "themes": {
         "tasks": [
-          "few-shot-prompting",
-          "explicit-criteria"
+          "batch-processing"
         ],
         "tools": [
-          "structured-outputs"
+          "message-batches"
         ],
         "questionTypes": [
           "output-evaluation",
@@ -9232,11 +9231,10 @@
       "explanation": "",
       "themes": {
         "tasks": [
-          "few-shot-prompting",
-          "explicit-criteria"
+          "batch-processing"
         ],
         "tools": [
-          "structured-outputs"
+          "message-batches"
         ],
         "questionTypes": [
           "output-evaluation",

@@ -41,9 +41,7 @@
       "output-handling",
       "prompt-engineering",
       "software-engineering-foundations",
-      "tool-implementation",
-      "feature-selection",
-      "most-cost-effective"
+      "tool-implementation"
     ],
     "tools": [
       "claude-code",
@@ -533,8 +531,7 @@
       "explanation": "Model selection is a fit-to-requirement decision, and a simple, repetitive task is where a smaller model most often suffices. Treating accuracy as unbounded (A) ignores cost, a longer prompt (B) adds expense for no stated need, and reducing frequency (C) changes the requirement rather than meeting it.",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs",
-          "workflow-enforcement"
+          "model-selection-tradeoffs"
         ],
         "tools": [
           "models"
@@ -558,8 +555,7 @@
       "explanation": "Deep, multi-step reasoning over interacting constraints is where capability differences show. The other three are mechanical or single-signal tasks that a small model handles at a fraction of the cost.",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs",
-          "workflow-enforcement"
+          "model-selection-tradeoffs"
         ],
         "tools": [
           "models"
@@ -607,8 +603,7 @@
       "explanation": "Model choice is empirical and task-specific, which is what a representative evaluation establishes. Benchmarks (A) may not reflect the task, recency (B) is not a measurement, and defaulting to size (D) decides before evidence.",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs",
-          "workflow-enforcement"
+          "model-selection-tradeoffs"
         ],
         "tools": [
           "models"
@@ -1465,8 +1460,7 @@
       "explanation": "Where the requirement is met, the cheaper option is correct, and changing inputs are handled by re-evaluating. Insurance against hypothetical change (B), alternation (C), and recency (D) all spend without benefit",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs",
-          "workflow-enforcement"
+          "model-selection-tradeoffs"
         ],
         "tools": [
           "models"
@@ -1490,8 +1484,7 @@
       "explanation": "Multi-step reasoning under interacting constraints is where capability differences show. A small model (A) and splitting (B) both fragment the reasoning, and prompt length (D) does not add capability",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs",
-          "workflow-enforcement"
+          "model-selection-tradeoffs"
         ],
         "tools": [
           "models"
@@ -1828,8 +1821,7 @@
       "explanation": "The decision is evidence-led against a defined bar. Budget (B), volume (C), and latency (D) create pressure to look, but they do not establish that quality holds",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs",
-          "workflow-enforcement"
+          "model-selection-tradeoffs"
         ],
         "tools": [
           "models"
@@ -2744,8 +2736,7 @@
       "explanation": "Temperature 0 makes sampling greedy and outputs far more stable, but the platform does not guarantee bit-identical generation. Robust designs validate outputs against requirements instead of assuming exact repetition. A overstates what temperature controls; B fixes output length, not token selection; D is false — streaming changes delivery, not generation.",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs",
-          "workflow-enforcement"
+          "model-selection-tradeoffs"
         ],
         "tools": [
           "models"
@@ -2758,7 +2749,7 @@
     },
     {
       "id": "110",
-      "question": "An application submits a 190,000-token document to a model with a 200,000-token context window and requests max_tokens of 20,000. The request is rejected. Why?",
+      "question": "An application submits a 190,000-token document to a Claude model released before Claude 4.5, with a 200,000-token context window, and requests max_tokens of 20,000. The request is rejected. Why?",
       "options": [
         "Documents over 100,000 tokens must always use the Batches API",
         "The context window is shared by input and output: 190,000 input tokens plus a 20,000-token output budget exceeds the window",
@@ -2767,11 +2758,10 @@
       ],
       "answers": "B",
       "topic": "Model Selection and Optimization",
-      "explanation": "The context window is a single budget covering everything: input tokens and the reserved output allowance together must fit inside it. Large inputs require trimming, chunking, or a smaller output reservation. A and C describe rules that do not exist; D inverts how the window works.",
+      "explanation": "The context window is a single budget covering everything: input tokens and the reserved output allowance together must fit inside it. Large inputs require trimming, chunking, or a smaller output reservation. A and C describe rules that do not exist; D inverts how the window works. This validation error applies to models before Claude 4.5; Claude 4.5 and newer models accept such a request and stop generation at the window limit.",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs",
-          "workflow-enforcement"
+          "model-selection-tradeoffs"
         ],
         "tools": [
           "models"
@@ -2821,8 +2811,7 @@
       "explanation": "In adaptive mode, thinking is optional for the model: Claude evaluates the complexity of each request and determines whether and how much to use extended thinking, while the effort parameter provides soft guidance on how much thinking Claude allocates. Lower effort levels use fewer tokens per turn and reduce cost, giving exactly the depth-versus-cost lever described. A — budget_tokens is deprecated on current models in favour of adaptive thinking with the effort parameter; C — fast mode changes output token generation speed, not reasoning behaviour; speed and effort are independent dimensions; D — temperature controls sampling randomness and has no relationship to whether thinking is enabled.",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs",
-          "workflow-enforcement"
+          "model-selection-tradeoffs"
         ],
         "tools": [
           "models"
@@ -2847,8 +2836,7 @@
       "explanation": "Simple task, extreme volume, hard cost and latency constraints: that is the Haiku profile. The professional move is to confirm with an eval that the small model meets the accuracy bar — which it typically does on straightforward labelling. A pays a large premium for capability headroom a six-label task does not use; B defaults instead of matching the model to the task; D is not a strategy.",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs",
-          "workflow-enforcement"
+          "model-selection-tradeoffs"
         ],
         "tools": [
           "models"
@@ -2873,8 +2861,7 @@
       "explanation": "A model upgrade is a behaviour change, not a drop-in patch. Prompts tuned to one release can interact differently with the next, so the eval suite is the gate: measure, compare, then migrate deliberately. A and C are false \u2014 aggregate improvement does not mean identical behaviour on your distribution; D invents a restriction that does not exist.",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs",
-          "workflow-enforcement"
+          "model-selection-tradeoffs"
         ],
         "tools": [
           "models"
@@ -2953,8 +2940,7 @@
       "explanation": "Fast mode delivers up to 2.5x higher output tokens per second at premium pricing, opted into with speed: \"fast\" and the fast-mode beta header — it is not a different model, so reasoning quality is preserved while interactive latency improves, matching a workload where speed outweighs cost. A — the Batch API targets latency-tolerant workloads with results returned asynchronously; it is the opposite of what an interactive session needs (and fast mode is not available with it); B — extended thinking adds reasoning tokens before the answer, increasing time-to-answer rather than reducing it; D — model tiers trade capability for speed and cost; the scenario explicitly rules out sacrificing reasoning quality, and cost is stated as secondary.",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs",
-          "workflow-enforcement"
+          "model-selection-tradeoffs"
         ],
         "tools": [
           "models"
@@ -3529,8 +3515,7 @@
       "topic": "Model Selection and Optimization",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs",
-          "workflow-enforcement"
+          "model-selection-tradeoffs"
         ],
         "questionTypes": [
           "most-cost-effective"
@@ -4082,8 +4067,7 @@
       "topic": "Model Selection and Optimization",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs",
-          "workflow-enforcement"
+          "model-selection-tradeoffs"
         ],
         "questionTypes": [
           "most-cost-effective"
@@ -4107,8 +4091,7 @@
       "topic": "Model Selection and Optimization",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs",
-          "workflow-enforcement"
+          "model-selection-tradeoffs"
         ],
         "questionTypes": [
           "most-performant"
@@ -4156,8 +4139,7 @@
       "topic": "Model Selection and Optimization",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs",
-          "workflow-enforcement"
+          "model-selection-tradeoffs"
         ],
         "questionTypes": [
           "configuration"
@@ -4253,8 +4235,7 @@
       "topic": "Model Selection and Optimization",
       "themes": {
         "tasks": [
-          "model-selection-tradeoffs",
-          "workflow-enforcement"
+          "model-selection-tradeoffs"
         ],
         "questionTypes": [
           "most-cost-effective"
@@ -4830,7 +4811,7 @@
       "explanation": "",
       "themes": {
         "tasks": [
-          "workflow-enforcement"
+          "context-engineering"
         ],
         "tools": [
           "tool-use"
@@ -4854,7 +4835,7 @@
       "explanation": "",
       "themes": {
         "tasks": [
-          "workflow-enforcement"
+          "agent-construction"
         ],
         "tools": [
           "tool-use"
@@ -4878,7 +4859,7 @@
       "explanation": "",
       "themes": {
         "tasks": [
-          "workflow-enforcement"
+          "agent-patterns"
         ],
         "tools": [
           "tool-use"
@@ -4902,7 +4883,7 @@
       "explanation": "",
       "themes": {
         "tasks": [
-          "workflow-enforcement"
+          "cost-token-management"
         ],
         "tools": [
           "tool-use"
@@ -4926,7 +4907,7 @@
       "explanation": "",
       "themes": {
         "tasks": [
-          "workflow-enforcement"
+          "api-mechanics"
         ],
         "tools": [
           "tool-use"
@@ -4950,7 +4931,7 @@
       "explanation": "",
       "themes": {
         "tasks": [
-          "workflow-enforcement"
+          "configuration-management"
         ],
         "tools": [
           "tool-use"
@@ -4962,7 +4943,7 @@
     },
     {
       "id": "200",
-      "question": "During a streaming Messages API response that calls a client tool, how do updates to that tool&#39;s input reach the consumer across server-sent events?",
+      "question": "During a streaming Messages API response that calls a client tool, how do updates to that tool's input reach the consumer across server-sent events?",
       "options": [
         "Each delta carries a fully parsed JSON object for a single parameter key",
         "All parameters are buffered on the server and delivered in one final event",
@@ -4974,7 +4955,7 @@
       "explanation": "",
       "themes": {
         "tasks": [
-          "workflow-enforcement"
+          "api-mechanics"
         ],
         "tools": [
           "tool-use"
@@ -4998,7 +4979,7 @@
       "explanation": "",
       "themes": {
         "tasks": [
-          "workflow-enforcement"
+          "configuration-management"
         ],
         "tools": [
           "tool-use"
@@ -5022,7 +5003,7 @@
       "explanation": "",
       "themes": {
         "tasks": [
-          "workflow-enforcement"
+          "api-mechanics"
         ],
         "tools": [
           "tool-use"
@@ -5046,7 +5027,7 @@
       "explanation": "",
       "themes": {
         "tasks": [
-          "workflow-enforcement"
+          "claude-code-core"
         ],
         "tools": [
           "tool-use"
@@ -5070,7 +5051,7 @@
       "explanation": "",
       "themes": {
         "tasks": [
-          "workflow-enforcement"
+          "prompt-engineering"
         ],
         "tools": [
           "tool-use"
@@ -5094,7 +5075,7 @@
       "explanation": "",
       "themes": {
         "tasks": [
-          "workflow-enforcement"
+          "claude-code-core"
         ],
         "tools": [
           "tool-use"
@@ -5118,7 +5099,7 @@
       "explanation": "",
       "themes": {
         "tasks": [
-          "workflow-enforcement"
+          "agentic-customization"
         ],
         "tools": [
           "tool-use"
@@ -5142,7 +5123,7 @@
       "explanation": "",
       "themes": {
         "tasks": [
-          "workflow-enforcement"
+          "output-handling"
         ],
         "tools": [
           "tool-use"
@@ -5166,12 +5147,10 @@
       "explanation": "",
       "themes": {
         "tasks": [
-          "feature-selection",
-          "most-cost-effective"
+          "context-engineering"
         ],
         "tools": [
-          "message-batches",
-          "structured-outputs"
+          "messages-api"
         ],
         "questionTypes": [
           "most-cost-effective",
@@ -5193,12 +5172,10 @@
       "explanation": "",
       "themes": {
         "tasks": [
-          "feature-selection",
-          "most-cost-effective"
+          "context-engineering"
         ],
         "tools": [
-          "message-batches",
-          "structured-outputs"
+          "messages-api"
         ],
         "questionTypes": [
           "most-cost-effective",
@@ -5220,12 +5197,11 @@
       "explanation": "",
       "themes": {
         "tasks": [
-          "feature-selection",
-          "most-cost-effective"
+          "api-mechanics"
         ],
         "tools": [
-          "message-batches",
-          "structured-outputs"
+          "prompt-caching",
+          "message-batches"
         ],
         "questionTypes": [
           "most-cost-effective",
@@ -5247,12 +5223,10 @@
       "explanation": "",
       "themes": {
         "tasks": [
-          "feature-selection",
-          "most-cost-effective"
+          "cost-token-management"
         ],
         "tools": [
-          "message-batches",
-          "structured-outputs"
+          "prompt-caching"
         ],
         "questionTypes": [
           "most-cost-effective",
@@ -5274,7 +5248,7 @@
       "explanation": "",
       "themes": {
         "tasks": [
-          "workflow-enforcement"
+          "context-engineering"
         ],
         "tools": [
           "tool-use"
@@ -5298,7 +5272,7 @@
       "explanation": "",
       "themes": {
         "tasks": [
-          "workflow-enforcement"
+          "output-handling"
         ],
         "tools": [
           "tool-use"
@@ -5315,14 +5289,14 @@
         "Rewrite them so the self-check runs only on the final response",
         "Take them out, because this model checks its own work without being told",
         "Keep them but move them from the system prompt into the user turn",
-        "Replace them with a second call that grades the first call&#39;s output"
+        "Replace them with a second call that grades the first call's output"
       ],
       "answers": "B",
       "topic": "Prompt and Context Engineering",
       "explanation": "",
       "themes": {
         "tasks": [
-          "workflow-enforcement"
+          "prompt-engineering"
         ],
         "tools": [
           "tool-use"
@@ -5394,7 +5368,7 @@
       "explanation": "",
       "themes": {
         "tasks": [
-          "workflow-enforcement"
+          "context-engineering"
         ],
         "tools": [
           "tool-use"
@@ -5406,22 +5380,23 @@
     },
     {
       "id": "218",
-      "question": "An engineer authors an MCP server whose tools return extensive diagnostic data to Claude Code. What annotation can the server set in a tool&#39;s tools/list entry to increase the output threshold before data is written to disk?",
+      "question": "An engineer authors an MCP server whose tools return extensive diagnostic data to Claude Code. What annotation can the server set in a tool's tools/list entry to increase the output threshold before data is written to disk?",
       "options": [
-        "Set anthropic/maxResultSizeChars in the tool&#39;s _meta object.",
-        "Set readOnlyHint: true in the tool&#39;s annotations object.",
-        "Define alwaysLoad: true within the tool&#39;s parameter schema.",
-        "Provide defer_loading: false inside the tool&#39;s default_config."
+        "Set anthropic/maxResultSizeChars in the tool's _meta object.",
+        "Set readOnlyHint: true in the tool's annotations object.",
+        "Define alwaysLoad: true within the tool's parameter schema.",
+        "Provide defer_loading: false inside the tool's default_config."
       ],
       "answers": "A",
       "topic": "Tools and MCPs",
       "explanation": "",
       "themes": {
         "tasks": [
-          "workflow-enforcement"
+          "mcp-server-development"
         ],
         "tools": [
-          "tool-use"
+          "tool-use",
+          "mcp"
         ],
         "questionTypes": [
           "architecture-decision"
@@ -5442,12 +5417,10 @@
       "explanation": "",
       "themes": {
         "tasks": [
-          "feature-selection",
-          "most-cost-effective"
+          "cost-token-management"
         ],
         "tools": [
-          "message-batches",
-          "structured-outputs"
+          "prompt-caching"
         ],
         "questionTypes": [
           "most-cost-effective",
@@ -5469,7 +5442,7 @@
       "explanation": "",
       "themes": {
         "tasks": [
-          "workflow-enforcement"
+          "tool-implementation"
         ],
         "tools": [
           "tool-use"

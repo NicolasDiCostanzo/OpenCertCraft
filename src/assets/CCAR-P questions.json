@@ -43,11 +43,7 @@
       "structured-discovery",
       "team-tooling-configuration",
       "tradeoff-communication",
-      "workflow-enablement",
-      "solution-design",
-      "stakeholder-communication",
-      "prompt-engineering",
-      "developer-productivity"
+      "workflow-enablement"
     ],
     "tools": [
       "claude-code",
@@ -57,8 +53,7 @@
       "models",
       "prompt-caching",
       "rag",
-      "tracing",
-      "claude-app"
+      "tracing"
     ],
     "questionTypes": [
       "architecture-decision",
@@ -117,8 +112,7 @@
           "rag"
         ],
         "questionTypes": [
-          "troubleshooting",
-          "evaluation-frameworks"
+          "troubleshooting"
         ]
       }
     },
@@ -143,8 +137,7 @@
         ],
         "questionTypes": [
           "architecture-decision",
-          "troubleshooting",
-          "evaluation-frameworks"
+          "troubleshooting"
         ]
       }
     },
@@ -398,7 +391,6 @@
         ],
         "questionTypes": [
           "troubleshooting",
-          "evaluation-frameworks",
           "architecture-decision"
         ]
       }
@@ -875,7 +867,6 @@
         ],
         "questionTypes": [
           "troubleshooting",
-          "evaluation-frameworks",
           "architecture-decision"
         ]
       }
@@ -924,8 +915,7 @@
           "rag"
         ],
         "questionTypes": [
-          "troubleshooting",
-          "evaluation-frameworks"
+          "troubleshooting"
         ]
       }
     },
@@ -949,8 +939,7 @@
           "messages-api"
         ],
         "questionTypes": [
-          "troubleshooting",
-          "evaluation-frameworks"
+          "troubleshooting"
         ]
       }
     },
@@ -1173,12 +1162,10 @@
           "observability-and-tracing"
         ],
         "tools": [
-          "tracing",
-          "claude-app"
+          "tracing"
         ],
         "questionTypes": [
-          "troubleshooting",
-          "evaluation-frameworks"
+          "troubleshooting"
         ]
       }
     },
@@ -1582,8 +1569,7 @@
           "observability-and-tracing"
         ],
         "tools": [
-          "tracing",
-          "claude-app"
+          "tracing"
         ],
         "questionTypes": [
           "behavior-identification"
@@ -1678,7 +1664,6 @@
         ],
         "questionTypes": [
           "troubleshooting",
-          "evaluation-frameworks",
           "behavior-identification"
         ]
       }
@@ -1833,8 +1818,7 @@
           "failure-diagnosis"
         ],
         "questionTypes": [
-          "troubleshooting",
-          "evaluation-frameworks"
+          "troubleshooting"
         ]
       }
     },
@@ -1906,8 +1890,7 @@
           "claude-code"
         ],
         "questionTypes": [
-          "troubleshooting",
-          "evaluation-frameworks"
+          "troubleshooting"
         ]
       }
     },
@@ -1931,8 +1914,7 @@
           "architecture-decision"
         ],
         "tools": [
-          "tracing",
-          "claude-app"
+          "tracing"
         ]
       }
     },
@@ -2074,8 +2056,7 @@
           "business-problem-translation"
         ],
         "questionTypes": [
-          "troubleshooting",
-          "evaluation-frameworks"
+          "troubleshooting"
         ],
         "tools": [
           "rag"
@@ -2294,8 +2275,7 @@
           "behavior-identification"
         ],
         "tools": [
-          "tracing",
-          "claude-app"
+          "tracing"
         ]
       }
     },
@@ -2340,8 +2320,7 @@
           "architecture-pattern-selection"
         ],
         "questionTypes": [
-          "troubleshooting",
-          "evaluation-frameworks"
+          "troubleshooting"
         ],
         "tools": [
           "models"
@@ -2437,8 +2416,7 @@
           "prompt-reuse-and-caching"
         ],
         "questionTypes": [
-          "troubleshooting",
-          "evaluation-frameworks"
+          "troubleshooting"
         ],
         "tools": [
           "rag"
@@ -2489,8 +2467,7 @@
           "most-cost-effective"
         ],
         "tools": [
-          "tracing",
-          "claude-app"
+          "tracing"
         ]
       }
     },
@@ -3138,8 +3115,7 @@
           "architecture-decision"
         ],
         "tools": [
-          "tracing",
-          "claude-app"
+          "tracing"
         ]
       }
     },
@@ -3187,8 +3163,7 @@
           "most-secure"
         ],
         "tools": [
-          "tracing",
-          "claude-app"
+          "tracing"
         ]
       }
     },
@@ -3212,8 +3187,7 @@
           "architecture-decision"
         ],
         "tools": [
-          "tracing",
-          "claude-app"
+          "tracing"
         ]
       }
     },
@@ -3282,12 +3256,10 @@
           "regulatory-compliance"
         ],
         "questionTypes": [
-          "troubleshooting",
-          "evaluation-frameworks"
+          "troubleshooting"
         ],
         "tools": [
-          "tracing",
-          "claude-app"
+          "tracing"
         ]
       }
     },
@@ -3380,8 +3352,7 @@
           "tradeoff-communication"
         ],
         "questionTypes": [
-          "troubleshooting",
-          "evaluation-frameworks"
+          "troubleshooting"
         ],
         "tools": [
           "evals"
@@ -3433,391 +3404,6 @@
         ],
         "tools": [
           "prompt-caching"
-        ]
-      }
-    },
-    {
-      "id": "144",
-      "question": "A retailer wants Claude to answer product questions from a 40,000-document catalog that changes daily. Which architecture fits?",
-      "options": [
-        "Fine-tune a model on the catalog nightly",
-        "Load the catalog into the system prompt",
-        "An autonomous agent that browses the public website",
-        ""
-      ],
-      "answers": "A",
-      "topic": "Solution Design & Architecture",
-      "explanation": "",
-      "themes": {
-        "tasks": [
-          "solution-design",
-          "workflow-enablement"
-        ],
-        "tools": [
-          "messages-api",
-          "rag"
-        ],
-        "questionTypes": [
-          "architecture-decision",
-          "evaluation-frameworks"
-        ]
-      }
-    },
-    {
-      "id": "145",
-      "question": "After a re-index, your retrieval system returns semantically similar but commercially wrong products. Which investigation comes first?",
-      "options": [
-        "The generation prompt",
-        "The model version",
-        "The user interface",
-        ""
-      ],
-      "answers": "A",
-      "topic": "Integration",
-      "explanation": "",
-      "themes": {
-        "tasks": [
-          "solution-design",
-          "workflow-enablement"
-        ],
-        "tools": [
-          "messages-api",
-          "rag"
-        ],
-        "questionTypes": [
-          "architecture-decision",
-          "evaluation-frameworks"
-        ]
-      }
-    },
-    {
-      "id": "146",
-      "question": "An agent used by 300 employees exposes 45 tools across eight systems. Selection quality is degrading. What is the architectural response?",
-      "options": [
-        "Shorten all tool descriptions",
-        "Merge tools into a few multi-mode tools",
-        "Replace the agent with a larger model",
-        ""
-      ],
-      "answers": "A",
-      "topic": "Integration",
-      "explanation": "",
-      "themes": {
-        "tasks": [
-          "solution-design",
-          "workflow-enablement"
-        ],
-        "tools": [
-          "messages-api",
-          "rag"
-        ],
-        "questionTypes": [
-          "architecture-decision",
-          "evaluation-frameworks"
-        ]
-      }
-    },
-    {
-      "id": "147",
-      "question": "Which evaluation design best fits a summarization feature where quality is subjective?",
-      "options": [
-        "Exact match against reference summaries",
-        "Average output length compared to references",
-        "User thumbs-up counts alone",
-        ""
-      ],
-      "answers": "A",
-      "topic": "Evaluation, Testing & Optimization",
-      "explanation": "",
-      "themes": {
-        "tasks": [
-          "evaluation-frameworks"
-        ],
-        "tools": [
-          "evals"
-        ],
-        "questionTypes": [
-          "output-evaluation",
-          "architecture-decision"
-        ]
-      }
-    },
-    {
-      "id": "148",
-      "question": "Before a prompt change reaches all users, what is the disciplined sequence?",
-      "options": [
-        "Ship it and monitor complaints",
-        "Team vote followed by rollout",
-        "Rollout with a feedback form",
-        ""
-      ],
-      "answers": "A",
-      "topic": "Evaluation, Testing & Optimization",
-      "explanation": "",
-      "themes": {
-        "tasks": [
-          "evaluation-frameworks"
-        ],
-        "tools": [
-          "evals"
-        ],
-        "questionTypes": [
-          "output-evaluation",
-          "architecture-decision"
-        ]
-      }
-    },
-    {
-      "id": "149",
-      "question": "A hospital system requires that protected health information never reach the model provider, while clinicians need free-text search. Which design satisfies both?",
-      "options": [
-        "A policy instructing clinicians not to type identifiers",
-        "A system prompt instructing the model to disregard PHI",
-        "Restricting the feature to structured queries only",
-        ""
-      ],
-      "answers": "A",
-      "topic": "Governance, Safety & Risk Management",
-      "explanation": "",
-      "themes": {
-        "tasks": [
-          "safety-and-guardrails"
-        ],
-        "tools": [
-          "claude-app"
-        ],
-        "questionTypes": [
-          "responsibility-identification",
-          "output-evaluation"
-        ]
-      }
-    },
-    {
-      "id": "150",
-      "question": "Which is the correct application of human-in-the-loop review at scale?",
-      "options": [
-        "Review every output regardless of risk",
-        "Review a fixed 10% sample chosen at random",
-        "Review only what users complain about",
-        ""
-      ],
-      "answers": "A",
-      "topic": "Governance, Safety & Risk Management",
-      "explanation": "",
-      "themes": {
-        "tasks": [
-          "safety-and-guardrails"
-        ],
-        "tools": [
-          "claude-app"
-        ],
-        "questionTypes": [
-          "responsibility-identification",
-          "output-evaluation"
-        ]
-      }
-    },
-    {
-      "id": "151",
-      "question": "An executive sponsor demands a single accuracy number for a system whose performance varies sharply by document type. What does a competent architect present?",
-      "options": [
-        "The highest observed number",
-        "A refusal to quantify",
-        "An average weighted to look favorable",
-        ""
-      ],
-      "answers": "A",
-      "topic": "Stakeholder Communication & Lifecycle Management",
-      "explanation": "",
-      "themes": {
-        "tasks": [
-          "stakeholder-communication"
-        ],
-        "tools": [
-          "claude-app"
-        ],
-        "questionTypes": [
-          "responsibility-identification",
-          "architecture-decision"
-        ]
-      }
-    },
-    {
-      "id": "152",
-      "question": "Your design must satisfy GDPR for EU customer data. Which requirement most directly shapes the architecture?",
-      "options": [
-        "Response latency targets",
-        "The choice of programming language",
-        "The number of model providers",
-        ""
-      ],
-      "answers": "A",
-      "topic": "Governance, Safety & Risk Management",
-      "explanation": "",
-      "themes": {
-        "tasks": [
-          "safety-and-guardrails"
-        ],
-        "tools": [
-          "claude-app"
-        ],
-        "questionTypes": [
-          "responsibility-identification",
-          "output-evaluation"
-        ]
-      }
-    },
-    {
-      "id": "153",
-      "question": "Which is the correct reason to prefer a workflow over an agent for a document intake process?",
-      "options": [
-        "Workflows are always more accurate",
-        "Agents cannot process documents",
-        "Workflows use less context",
-        ""
-      ],
-      "answers": "A",
-      "topic": "Solution Design & Architecture",
-      "explanation": "",
-      "themes": {
-        "tasks": [
-          "solution-design",
-          "workflow-enablement"
-        ],
-        "tools": [
-          "messages-api",
-          "rag"
-        ],
-        "questionTypes": [
-          "architecture-decision",
-          "evaluation-frameworks"
-        ]
-      }
-    },
-    {
-      "id": "154",
-      "question": "An application sends an identical 12,000-token policy preamble on every request. Which optimization addresses both latency and cost?",
-      "options": [
-        "Splitting the preamble across two requests",
-        "Summarizing the preamble with the model at request time",
-        "Moving the preamble into a few-shot block",
-        ""
-      ],
-      "answers": "A",
-      "topic": "Claude Models, Prompting & Context Engineering",
-      "explanation": "",
-      "themes": {
-        "tasks": [
-          "prompt-engineering"
-        ],
-        "tools": [
-          "claude-code"
-        ],
-        "questionTypes": [
-          "architecture-decision",
-          "feature-selection"
-        ]
-      }
-    },
-    {
-      "id": "155",
-      "question": "What belongs in an architecture decision record for a Claude system?",
-      "options": [
-        "The final design only",
-        "The team members involved",
-        "The implementation timeline",
-        ""
-      ],
-      "answers": "A",
-      "topic": "Stakeholder Communication & Lifecycle Management",
-      "explanation": "",
-      "themes": {
-        "tasks": [
-          "stakeholder-communication"
-        ],
-        "tools": [
-          "claude-app"
-        ],
-        "questionTypes": [
-          "responsibility-identification",
-          "architecture-decision"
-        ]
-      }
-    },
-    {
-      "id": "156",
-      "question": "Observability for a production agent should capture which of the following to make incidents diagnosable?",
-      "options": [
-        "Final outputs only",
-        "Aggregate latency metrics only",
-        "User feedback only",
-        ""
-      ],
-      "answers": "A",
-      "topic": "Evaluation, Testing & Optimization",
-      "explanation": "",
-      "themes": {
-        "tasks": [
-          "evaluation-frameworks"
-        ],
-        "tools": [
-          "evals"
-        ],
-        "questionTypes": [
-          "output-evaluation",
-          "architecture-decision"
-        ]
-      }
-    },
-    {
-      "id": "157",
-      "question": "A partner team wants to adopt your Claude Code setup. What makes adoption durable rather than a one-time handoff?",
-      "options": [
-        "A recorded walkthrough",
-        "A shared chat channel",
-        "Individual coaching sessions",
-        ""
-      ],
-      "answers": "A",
-      "topic": "Developer Productivity & Operational Enablement",
-      "explanation": "",
-      "themes": {
-        "tasks": [
-          "developer-productivity"
-        ],
-        "tools": [
-          "claude-code"
-        ],
-        "questionTypes": [
-          "most-cost-effective",
-          "most-performant"
-        ]
-      }
-    },
-    {
-      "id": "158",
-      "question": "Which change best reduces risk in an agent that can both read and modify production records?",
-      "options": [
-        "Logging modifications for later review",
-        "Requiring a longer system prompt about caution",
-        "Running the agent during business hours only",
-        ""
-      ],
-      "answers": "A",
-      "topic": "Integration",
-      "explanation": "",
-      "themes": {
-        "tasks": [
-          "solution-design",
-          "workflow-enablement"
-        ],
-        "tools": [
-          "messages-api",
-          "rag"
-        ],
-        "questionTypes": [
-          "architecture-decision",
-          "evaluation-frameworks"
         ]
       }
     }
