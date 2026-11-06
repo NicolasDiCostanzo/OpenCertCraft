@@ -7,6 +7,7 @@ import { defineConfig } from 'vitest/config'
 import { isCSSRequest } from 'vite'
 import { appName } from './src/brand.ts'
 import { purgeCss } from './src/vite/purgecss.ts'
+import { seoPlugin } from './src/vite/seo.ts'
 
 const root = fileURLToPath(new URL('.', import.meta.url))
 
@@ -63,6 +64,7 @@ export default defineConfig(({ command }) => ({
   plugins: [
     vue(),
     appNamePlugin(),
+    seoPlugin(root),
     ...(command === 'build' ? [purgecssPlugin()] : []),
   ],
   resolve: {

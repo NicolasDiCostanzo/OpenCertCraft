@@ -1,7 +1,29 @@
-import { appName } from '../brand'
+import { appName } from '../brand.ts'
 
 export const texts = {
   appTitle: 'Home',
+  seoSiteTitle: `${appName} | Free certification exam practice quizzes`,
+  seoSiteDescription:
+    'Free practice quizzes for IT certification exams. Customizable preparation mode and real-exam simulation. No account required, with optional sign-in to sync your progress across devices.',
+  seoPageTitle: (label: string) => `${label} | ${appName}`,
+  seoCertTitle: (name: string, code: string) => `${code} practice quiz: ${name} | ${appName}`,
+  seoCertHeading: (name: string, code: string) => `${name} (${code}) practice quiz`,
+  seoCertDescription: (name: string, code: string, bankSize: number, examQuestions: number, minutes: number) =>
+    `Free ${code} practice quiz for ${name}: ${bankSize} questions, plus an exam simulation of ${examQuestions} questions in ${minutes} minutes. No account required.`,
+  seoCertDomainsTitle: 'Exam domains',
+  seoCertDomainItem: (topic: string, weight: number | null) => (weight === null ? topic : `${topic} (${weight}%)`),
+  seoRouteTitles: {
+    'cert-selector': 'Choose your certification',
+    auth: 'Sign in',
+    'quiz-configure': 'Configure your quiz',
+    'quiz-session': 'Quiz in progress',
+    'quiz-review': 'Quiz results',
+    'quiz-history-review': 'Quiz history',
+    'topic-review': 'Question review',
+    'theme-review': 'Question review',
+    'flagged-review': 'Flagged questions',
+    'not-found': 'Page not found',
+  } as Record<string, string>,
   headerBrand: appName,
   selectCertification: 'Choose your certification',
   favoriteAdd: 'Add to favorites',

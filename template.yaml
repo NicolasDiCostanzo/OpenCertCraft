@@ -187,30 +187,45 @@ Resources:
       Name: !Sub ${AWS::StackName}-legacy-domain-redirect
       AutoPublish: true
       FunctionCode: !Sub |
+        var APP_ROUTE = /^\/(cert|auth|certs\/[^\/]+\/(configure|quiz|quiz\/review|flagged|history\/[^\/]+|topic\/[^\/]+|theme\/[^\/]+\/[^\/]+))$/;
+        var CERT_PAGE = /^\/certs\/[^\/]+$/;
+        var INDEX_FILE = /^(.*)\/index\.html$/;
+        function redirect(path, params) {
+          var location = 'https://${SiteCustomDomain}' + path;
+          var keys = Object.keys(params);
+          if (keys.length > 0) {
+            var query = [];
+            for (var i = 0; i < keys.length; i++) {
+              query.push(keys[i] + '=' + params[keys[i]].value);
+            }
+            location += '?' + query.join('&');
+          }
+          return {
+            statusCode: 301,
+            statusDescription: 'Moved Permanently',
+            headers: { location: { value: location } }
+          };
+        }
         function handler(event) {
           var request = event.request;
           var host = request.headers.host.value;
-          if (host === 'quiz-cert.com' || host === 'www.quiz-cert.com') {
-            var location = 'https://${SiteCustomDomain}' + request.uri;
-            var params = request.querystring;
-            var keys = Object.keys(params);
-            if (keys.length > 0) {
-              var query = [];
-              for (var i = 0; i < keys.length; i++) {
-                query.push(keys[i] + '=' + params[keys[i]].value);
-              }
-              location += '?' + query.join('&');
-            }
-            return {
-              statusCode: 301,
-              status: 'Found',
-              headers: { location: { value: location } }
-            };
+          if (host === 'quiz-cert.com' || host === 'www.quiz-cert.com' || host === 'www.${SiteCustomDomain}') {
+            return redirect(request.uri, request.querystring);
+          }
+          var indexFile = INDEX_FILE.exec(request.uri);
+          if (indexFile) {
+            return redirect(indexFile[1] === '' ? '/' : indexFile[1], request.querystring);
+          }
+          var path = request.uri.replace(/\/+$/, '');
+          if (CERT_PAGE.test(path)) {
+            request.uri = path + '/index.html';
+          } else if (APP_ROUTE.test(path)) {
+            request.uri = '/index.html';
           }
           return request;
         }
       FunctionConfig:
-        Comment: Redirect legacy quiz-cert.com hostnames to the current site domain
+        Comment: Redirect legacy and www hostnames to the apex domain; map prerendered cert pages and SPA routes to their S3 keys
         Runtime: cloudfront-js-2.0
 
   SiteDistribution:
@@ -253,10 +268,10 @@ Resources:
         PriceClass: PriceClass_100
         CustomErrorResponses:
           - ErrorCode: 403
-            ResponseCode: 200
+            ResponseCode: 404
             ResponsePagePath: /index.html
           - ErrorCode: 404
-            ResponseCode: 200
+            ResponseCode: 404
             ResponsePagePath: /index.html
 
   SiteBucketPolicy:

@@ -1,4 +1,4 @@
-import type { PassingScore } from '../types'
+import type { PassingScore } from '../types.ts'
 
 export function passingScorePercent(passingScore: PassingScore): number {
   return passingScore.scale === undefined
