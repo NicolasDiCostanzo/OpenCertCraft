@@ -1,0 +1,149 @@
+{
+  "date": "2026-11-02T10:33:29.852Z",
+  "snapshots": [
+    {
+      "cert": "CCA-F",
+      "guideUrl": "https://everpath-course-content.s3-accelerate.amazonaws.com/instructor%2F8lsy243ftffjjy1cx9lm3o2bw%2Fpublic%2F1773274827%2FClaude+Certified+Architect+%E2%80%93+Foundations+Certification+Exam+Guide.pdf",
+      "verdict": {
+        "new_domains": [],
+        "removed_domains": [],
+        "renamed": [],
+        "notes": []
+      },
+      "bundleTopics": [
+        "Agentic Architecture & Orchestration",
+        "Claude Code Configuration & Workflows",
+        "Context Management & Reliability",
+        "Prompt Engineering & Structured Output",
+        "Tool Design & MCP Integration"
+      ]
+    },
+    {
+      "cert": "CCDV-F",
+      "guideUrl": "https://everpath-course-content.s3-accelerate.amazonaws.com/instructor%2F6nizmqk8tpzpfjvt6qmmav7rh%2Fpublic%2F1783542875%2FClaude+Certified+Developer+%E2%80%93+Foundations+Exam+Guide.pdf",
+      "verdict": {
+        "new_domains": [],
+        "removed_domains": [],
+        "renamed": [],
+        "notes": []
+      },
+      "bundleTopics": [
+        "Agents and Workflows",
+        "Applications and Integration",
+        "Claude Code",
+        "Eval, Testing, and Debugging",
+        "Model Selection and Optimization",
+        "Prompt and Context Engineering",
+        "Security and Safety",
+        "Tools and MCPs"
+      ]
+    },
+    {
+      "cert": "CKA",
+      "guideUrl": "https://github.com/cncf/curriculum/tree/master/cka",
+      "verdict": {
+        "new_domains": [],
+        "removed_domains": [],
+        "renamed": [],
+        "notes": []
+      },
+      "bundleTopics": [
+        "Cluster Architecture, Installation & Configuration",
+        "Services & Networking",
+        "Storage",
+        "Troubleshooting",
+        "Workloads & Scheduling"
+      ]
+    },
+    {
+      "cert": "CLF-C02",
+      "guideUrl": "https://docs.aws.amazon.com/pdfs/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.pdf",
+      "verdict": {
+        "new_domains": [],
+        "removed_domains": [],
+        "renamed": [],
+        "notes": []
+      },
+      "bundleTopics": [
+        "Billing, Pricing, and Support",
+        "Cloud Concepts",
+        "Cloud Technology and Services",
+        "Security and Compliance"
+      ]
+    },
+    {
+      "cert": "DVA-C02",
+      "guideUrl": "https://docs.aws.amazon.com/pdfs/aws-certification/latest/developer-associate-02/developer-associate-02.pdf",
+      "verdict": {
+        "new_domains": [],
+        "removed_domains": [],
+        "renamed": [],
+        "notes": []
+      },
+      "bundleTopics": [
+        "Deployment",
+        "Development with AWS Services",
+        "Security",
+        "Troubleshooting and Optimization"
+      ]
+    },
+    {
+      "cert": "GCP-ACE",
+      "guideUrl": "https://services.google.com/fh/files/misc/associate_cloud_engineer_exam_guide_english.pdf",
+      "verdict": {
+        "new_domains": [],
+        "removed_domains": [],
+        "renamed": [],
+        "notes": []
+      },
+      "bundleTopics": [
+        "Configuring access and security",
+        "Ensuring the successful operation of a cloud solution",
+        "Planning and implementing a cloud solution",
+        "Setting up a cloud solution environment"
+      ]
+    },
+    {
+      "cert": "SCW-FND",
+      "guideUrl": "https://www-uploads.scaleway.com/Scaleway_Foundations_Exam_Guide_d0b0e70a59.pdf",
+      "verdict": {
+        "new_domains": [],
+        "removed_domains": [],
+        "renamed": [],
+        "notes": []
+      },
+      "bundleTopics": [
+        "Bare Metal",
+        "Compute",
+        "Introduction to the Scaleway Ecosystem",
+        "Kubernetes",
+        "Managed Databases",
+        "Networking",
+        "Observability",
+        "Security & Identity",
+        "Serverless",
+        "Storage"
+      ]
+    },
+    {
+      "cert": "SCW-SA",
+      "guideUrl": "https://www-uploads.scaleway.com/Scaleway_Solution_Architect_Exam_Guide_c7f2faad64.pdf",
+      "verdict": {
+        "new_domains": [],
+        "removed_domains": [],
+        "renamed": [],
+        "notes": []
+      },
+      "bundleTopics": [
+        "Core Ecosystem Knowledge",
+        "Modern Deployment & Cloud native approach",
+        "Resilience & Availability",
+        "Scalability & elasticity",
+        "Security architecture",
+        "Sovereignty architecture",
+        "Standard architecture patterns",
+        "Sustainability architecture"
+      ]
+    }
+  ]
+}

@@ -38,7 +38,7 @@ jobs:
         run: npm run check:bundles --silent -- --json > internal-report.json || true
       - name: External LLM review
         if: steps.schedule.outputs.run == 'true'
-        run: node scripts/llm-review.mjs --internal internal-report.json --out weekly-report.md --write-snapshot .llm-snapshots || node scripts/llm-review.mjs --internal internal-report.json --out weekly-report.md --write-snapshot .llm-snapshots --no-llm
+        run: node scripts/llm-review.mjs --internal internal-report.json --out weekly-report.md --read-snapshot .llm-snapshots --write-snapshot .llm-snapshots || node scripts/llm-review.mjs --internal internal-report.json --out weekly-report.md --read-snapshot .llm-snapshots --write-snapshot .llm-snapshots --no-llm
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           LLM_MODEL: claude-haiku-4-5-20251001

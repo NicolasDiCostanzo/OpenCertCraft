@@ -1,0 +1,20 @@
+[
+  {
+    "name": "completed review without findings is reported as no drift",
+    "row": { "cert": "CKA", "status": "changed", "reviewed": true, "verdict": { "new_domains": [], "removed_domains": [], "renamed": [], "notes": [] } },
+    "present": ["✅ CKA: guide matches bundle structure, no drift."],
+    "absent": ["not reviewed"]
+  },
+  {
+    "name": "unreviewed snapshot is never reported as clean",
+    "row": { "cert": "CKA", "status": "changed", "reviewed": false, "verdict": { "new_domains": [], "removed_domains": [], "renamed": [], "notes": [] } },
+    "present": ["⏭️ CKA: not reviewed (--no-llm)"],
+    "absent": ["✅", "no drift"]
+  },
+  {
+    "name": "completed review with a new domain lists the finding",
+    "row": { "cert": "CKA", "status": "changed", "reviewed": true, "verdict": { "new_domains": [{ "name": "Gateway API", "quote": "", "alreadyReported": false }], "removed_domains": [], "renamed": [], "notes": [] } },
+    "present": ["🆕 CKA: guide now lists \"Gateway API\""],
+    "absent": ["✅", "not reviewed"]
+  }
+]

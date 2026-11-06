@@ -1,0 +1,47 @@
+[
+  {
+    "name": "no previous verdict marks nothing as already reported",
+    "previous": null,
+    "verdict": { "new_domains": [{ "name": "A", "quote": "" }], "removed_domains": [], "renamed": [], "notes": [] },
+    "expected": { "new_domains": [{ "name": "A", "quote": "", "alreadyReported": false }], "removed_domains": [], "renamed": [], "notes": [] }
+  },
+  {
+    "name": "identical finding is already reported, new one is not",
+    "previous": { "new_domains": [{ "name": "A", "quote": "x" }], "removed_domains": [], "renamed": [], "notes": [] },
+    "verdict": { "new_domains": [{ "name": "A", "quote": "y" }, { "name": "B", "quote": "" }], "removed_domains": [], "renamed": [], "notes": [] },
+    "expected": {
+      "new_domains": [{ "name": "A", "quote": "y", "alreadyReported": true }, { "name": "B", "quote": "", "alreadyReported": false }],
+      "removed_domains": [],
+      "renamed": [],
+      "notes": []
+    }
+  },
+  {
+    "name": "same name under another finding kind is not a match",
+    "previous": { "new_domains": [{ "name": "A", "quote": "" }], "removed_domains": [], "renamed": [], "notes": [] },
+    "verdict": { "new_domains": [], "removed_domains": [{ "name": "A", "quote": "" }], "renamed": [], "notes": [] },
+    "expected": { "new_domains": [], "removed_domains": [{ "name": "A", "quote": "", "alreadyReported": false }], "renamed": [], "notes": [] }
+  },
+  {
+    "name": "renames match on both from and to",
+    "previous": { "new_domains": [], "removed_domains": [], "renamed": [{ "from": "S", "to": "T", "quote": "" }], "notes": [] },
+    "verdict": {
+      "new_domains": [],
+      "removed_domains": [],
+      "renamed": [{ "from": "S", "to": "T", "quote": "" }, { "from": "S", "to": "U", "quote": "" }],
+      "notes": ["n"]
+    },
+    "expected": {
+      "new_domains": [],
+      "removed_domains": [],
+      "renamed": [{ "from": "S", "to": "T", "quote": "", "alreadyReported": true }, { "from": "S", "to": "U", "quote": "", "alreadyReported": false }],
+      "notes": ["n"]
+    }
+  },
+  {
+    "name": "malformed previous verdict is ignored",
+    "previous": { "new_domains": "oops", "removed_domains": [null, 3] },
+    "verdict": { "new_domains": [{ "name": "A", "quote": "" }], "removed_domains": [], "renamed": [], "notes": [] },
+    "expected": { "new_domains": [{ "name": "A", "quote": "", "alreadyReported": false }], "removed_domains": [], "renamed": [], "notes": [] }
+  }
+]

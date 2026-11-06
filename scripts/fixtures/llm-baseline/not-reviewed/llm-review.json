@@ -1,0 +1,19 @@
+{
+  "date": "2026-11-02T10:33:29.852Z",
+  "snapshots": [
+    {
+      "cert": "CKA",
+      "guideUrl": "https://example.test/cka",
+      "reviewStatus": "not-reviewed",
+      "verdict": { "new_domains": [], "removed_domains": [], "renamed": [], "notes": [] },
+      "bundleTopics": ["Storage"]
+    },
+    {
+      "cert": "DVA-C02",
+      "guideUrl": "https://example.test/dva",
+      "reviewStatus": "completed",
+      "verdict": { "new_domains": [], "removed_domains": [], "renamed": [], "notes": [] },
+      "bundleTopics": ["Security"]
+    }
+  ]
+}

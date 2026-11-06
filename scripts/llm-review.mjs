@@ -1,6 +1,8 @@
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { classifyFindings, hasFindings, loadBaseline, mergeSnapshots, priorVerdict, REVIEW_STATUS } from './llm-baseline.mjs';
+import { buildReport } from './llm-report.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const ASSETS_DIR = join(ROOT, 'src', 'assets');
@@ -125,7 +127,10 @@ function summarizeBundleStructure(cert) {
   return { file, text: lines.join('\n').slice(0, MAX_BUNDLE_CHARS), topics };
 }
 
-function buildPrompt(cert, guideUrl, guideText, bundleText) {
+function buildPrompt(cert, guideUrl, guideText, bundleText, previousVerdict) {
+  const previous = hasFindings(previousVerdict)
+    ? ['---PREVIOUS REVIEW (data from the last run on this same guide; reuse its exact domain names when reporting the same drift)---', JSON.stringify(previousVerdict)]
+    : [];
   return [
     `You review certification exam-prep content for staleness. Cert: ${cert}.`,
     `Official vendor exam guide (${guideUrl}) — extracted text:`,
@@ -133,6 +138,7 @@ function buildPrompt(cert, guideUrl, guideText, bundleText) {
     guideText,
     '---BUNDLE (our current question-bank structure)---',
     bundleText,
+    ...previous,
     'Compare the guide against the bundle structure and return JSON ONLY, no prose, with this shape:',
     '{"new_domains":[{"name":"...","quote":"verbatim guide line, max 200 chars"}],"removed_domains":[{"name":"...","quote":"..."}],"renamed":[{"from":"...","to":"...","quote":"..."}],"notes":["..."]}',
     'Rules: quote the guide VERBATIM for every claim or omit the claim. Bundle topics/themes are the baseline — only report guide-side drift. Never invent answer keys or rewrite questions. Empty arrays when nothing changed.',
@@ -178,51 +184,12 @@ function normalizeVerdict(raw) {
   };
 }
 
-function section(title, lines) {
-  return [`## ${title}`, ...(lines.length > 0 ? lines : ['- Nothing to report.']), ''].join('\n');
-}
-
-function buildReport(date, external, skipped, internal) {
-  const parts = [`# Weekly cert-bundle review — ${date}`, ''];
-  const externalLines = [];
-  for (const row of external) {
-    if (row.status === 'changed') {
-      for (const domain of row.verdict.new_domains) {
-        externalLines.push(`- 🆕 ${row.cert}: guide now lists "${domain.name}"${domain.quote ? ` — "${domain.quote}"` : ''}. Check whether questions cover it.`);
-      }
-      for (const domain of row.verdict.removed_domains) {
-        externalLines.push(`- ⚠️ ${row.cert}: guide no longer lists "${domain.name}"${domain.quote ? ` — "${domain.quote}"` : ''}. Questions on it are stale candidates.`);
-      }
-      for (const rename of row.verdict.renamed) {
-        externalLines.push(`- 🔁 ${row.cert}: "${rename.from}" → "${rename.to}" in the guide. Bundle topics/themes may need renaming.`);
-      }
-      for (const note of row.verdict.notes) externalLines.push(`- 📝 ${row.cert}: ${note}`);
-      if (row.verdict.new_domains.length === 0 && row.verdict.removed_domains.length === 0 && row.verdict.renamed.length === 0 && row.verdict.notes.length === 0) {
-        externalLines.push(`- ✅ ${row.cert}: guide matches bundle structure, no drift.`);
-      }
-    } else {
-      externalLines.push(`- ⏭️ ${row.cert}: ${row.note}`);
-    }
-  }
-  parts.push(section('External drift (vendor guides)', externalLines));
-  const skippedLines = skipped.map((row) => `- ${row.cert}: ${row.note}`);
-  if (skippedLines.length > 0) parts.push(section('Skipped (no fetchable guide — human pass)', skippedLines));
-  const errors = (internal.issues ?? []).filter((issue) => issue.severity === 'error');
-  const warnings = (internal.issues ?? []).filter((issue) => issue.severity === 'warning');
-  const internalLines = [
-    ...errors.map((issue) => `- ❌ [${issue.code}] ${issue.cert}: ${issue.message}`),
-    ...warnings.map((issue) => `- [${issue.code}] ${issue.cert}: ${issue.message}`),
-  ];
-  parts.push(section('Internal drift (check-bundles)', internalLines));
-  parts.push(section('Suggested actions', ['- [ ] Triage each 🆕/⚠️/🔁 item against the linked guide, then author, retag, or drop questions per docs/certifications/adding-a-certification.md.']));
-  return parts.join('\n');
-}
-
 function parseArgs(argv) {
-  const flags = { internal: undefined, writeSnapshotDir: undefined, out: undefined, strict: false, noLlm: false };
+  const flags = { internal: undefined, writeSnapshotDir: undefined, readSnapshotDir: undefined, out: undefined, strict: false, noLlm: false };
   for (let i = 0; i < argv.length; i += 1) {
     if (argv[i] === '--internal') flags.internal = argv[(i += 1)];
     else if (argv[i] === '--write-snapshot') flags.writeSnapshotDir = argv[(i += 1)];
+    else if (argv[i] === '--read-snapshot') flags.readSnapshotDir = argv[(i += 1)];
     else if (argv[i] === '--out') flags.out = argv[(i += 1)];
     else if (argv[i] === '--strict') flags.strict = true;
     else if (argv[i] === '--no-llm') flags.noLlm = true;
@@ -248,6 +215,7 @@ async function main() {
     return;
   }
   const sources = JSON.parse(readFileSync(SOURCES_PATH, 'utf-8'));
+  const baseline = flags.readSnapshotDir ? loadBaseline(flags.readSnapshotDir) : new Map();
   let internal = { issues: [] };
   if (flags.internal) {
     try {
@@ -273,10 +241,10 @@ async function main() {
   }
   const external = [];
   const skipped = [];
-  const snapshots = [];
+  const completedSnapshots = new Map();
   let strictSkipCount = 0;
-  for (const cert of Object.keys(sources).sort()) {
-    if (cert.startsWith('$')) continue;
+  const certs = Object.keys(sources).filter((cert) => !cert.startsWith('$')).sort();
+  for (const cert of certs) {
     let bundle;
     try {
       bundle = summarizeBundleStructure(cert);
@@ -296,11 +264,12 @@ async function main() {
       if (fetched.status !== 'no-source') strictSkipCount += 1;
       continue;
     }
+    const previous = priorVerdict(baseline, cert, fetched.url);
     let verdict = { new_domains: [], removed_domains: [], renamed: [], notes: [] };
     if (!flags.noLlm) {
       try {
         const guideText = fetched.pdf ? 'Attached as a PDF document in this message — read the attached document for the guide contents.' : fetched.text;
-        const prompt = buildPrompt(cert, fetched.url, guideText, bundle.text);
+        const prompt = buildPrompt(cert, fetched.url, guideText, bundle.text, previous);
         const content = fetched.pdf
           ? [
               { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: fetched.pdf } },
@@ -314,12 +283,14 @@ async function main() {
         continue;
       }
     }
-    external.push({ cert, status: 'changed', source: fetched.url, verdict });
-    snapshots.push({ cert, guideUrl: fetched.url, verdict, bundleTopics: bundle.topics ?? [] });
+    external.push({ cert, status: 'changed', source: fetched.url, reviewed: !flags.noLlm, verdict: classifyFindings(verdict, previous) });
+    if (!flags.noLlm) {
+      completedSnapshots.set(cert, { cert, guideUrl: fetched.url, reviewStatus: REVIEW_STATUS.completed, verdict, bundleTopics: bundle.topics ?? [] });
+    }
   }
   if (flags.writeSnapshotDir) {
     mkdirSync(flags.writeSnapshotDir, { recursive: true });
-    writeFileSync(join(flags.writeSnapshotDir, 'llm-review.json'), `${JSON.stringify({ date: new Date().toISOString(), snapshots }, undefined, 2)}\n`);
+    writeFileSync(join(flags.writeSnapshotDir, 'llm-review.json'), `${JSON.stringify({ date: new Date().toISOString(), snapshots: mergeSnapshots(baseline, completedSnapshots, certs) }, undefined, 2)}\n`);
   }
   const date = new Date().toISOString().slice(0, 10);
   const report = buildReport(date, external, skipped, internal);
