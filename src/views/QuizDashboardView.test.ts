@@ -14,6 +14,7 @@ vi.mock('../composables/useAccount', () => ({
 
 vi.mock('../composables/useQuizLoader', () => ({
   useQuizLoader: () => ({
+    groupedCerts: [],
     getCert: () => ({
       version: 1,
       exam: { name: 'Test', code: 'TEST', totalQuestions: 2, timeLimitMinutes: 10, passingScore: { passingScore: 700, scale: 1000 } },

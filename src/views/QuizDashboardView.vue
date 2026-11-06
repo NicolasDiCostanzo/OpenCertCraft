@@ -6,8 +6,11 @@ import { useQuizHistoryStore } from '../stores/quizHistory'
 import { useUserProgressStore } from '../stores/userProgress'
 import { texts } from '../texts/en'
 import { passingScorePercent } from '../utils/examDisplay'
+import { certMeta } from '../utils/seo'
 import { breakdownByThemeAllTime, breakdownByTopicAllTime } from '../utils/scoreBreakdown'
 
+import CertFact from '../components/cert/CertFact.vue'
+import ExamFacts from '../components/cert/ExamFacts.vue'
 import QuizHistoryList from '../components/history/QuizHistoryList.vue'
 import ReviewBreakdown from '../components/review/ReviewBreakdown.vue'
 import ConfirmModal from '../components/ui/ConfirmModal.vue'
@@ -20,7 +23,7 @@ const props = defineProps<{
 }>()
 
 const router = useRouter()
-const { getCert } = useQuizLoader()
+const { getCert, groupedCerts } = useQuizLoader()
 const { pushLocalData } = useAccount()
 const historyStore = useQuizHistoryStore()
 const progressStore = useUserProgressStore()
@@ -46,6 +49,16 @@ const passingPercent = computed(() => {
 })
 
 
+
+const aboutDescription = computed(() =>
+  cert.value ? certMeta(cert.value.exam, cert.value.questions.length).description : '',
+)
+const relatedCerts = computed(() => {
+  const group = groupedCerts.find((candidate) =>
+    candidate.certs.some((meta) => meta.exam.code === props.certCode),
+  )
+  return group ? group.certs.filter((meta) => meta.exam.code !== props.certCode) : []
+})
 
 const deleteTargetId = ref<string | null>(null)
 const showResetModal = ref(false)
@@ -149,6 +162,24 @@ function reviewFlagged() {
       <QuizHistoryList :entries="entries" @request-delete="requestDelete" @review="reviewEntry" />
     </section>
 
+    <section class="about">
+      <h2>{{ texts.aboutExamTitle }}</h2>
+      <p>{{ aboutDescription }}</p>
+      <ExamFacts :exam="cert.exam">
+        <CertFact :label="texts.questionBankLabel" :value="texts.questionBankValue(cert.questions.length)" />
+      </ExamFacts>
+      <template v-if="relatedCerts.length > 0">
+        <h3>{{ texts.relatedCertsTitle }}</h3>
+        <ul class="about__related">
+          <li v-for="meta in relatedCerts" :key="meta.exam.code">
+            <RouterLink :to="{ name: 'quiz-dashboard', params: { certCode: meta.exam.code } }">
+              {{ meta.exam.name }}
+            </RouterLink>
+          </li>
+        </ul>
+      </template>
+    </section>
+
     <ConfirmModal
       v-if="deleteTargetId"
       :title="texts.deleteQuizTitle"
@@ -172,6 +203,28 @@ function reviewFlagged() {
 </template>
 
 <style scoped>
+.about {
+  margin-top: 32px;
+  text-align: left;
+}
+
+.about h2 {
+  margin: 0 0 8px;
+  font-size: 18px;
+  color: var(--text-h);
+}
+
+.about h3 {
+  margin: 20px 0 8px;
+  font-size: 15px;
+  color: var(--text-h);
+}
+
+.about__related {
+  margin: 0;
+  padding-left: 20px;
+}
+
 .dashboard {
   padding: 24px 16px 48px;
 }

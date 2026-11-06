@@ -9,8 +9,10 @@ export const texts = {
   seoCertTitle: (name: string, code: string) => `${code} practice quiz: ${name} | ${appName}`,
   seoCertHeading: (name: string, code: string) => `${name} (${code}) practice quiz`,
   seoCertDescription: (name: string, code: string, bankSize: number, examQuestions: number, minutes: number) =>
-    `Free ${code} practice quiz for ${name}: ${bankSize} questions, plus an exam simulation of ${examQuestions} questions in ${minutes} minutes. No account required.`,
+    `Free ${code} practice quiz for ${name}: ${bankSize} questions, plus an exam simulation of ${examQuestions} questions in ${minutes} minutes.`,
   seoCertDomainsTitle: 'Exam domains',
+  aboutExamTitle: 'About this exam',
+  relatedCertsTitle: 'More certifications from the same provider',
   seoCertDomainItem: (topic: string, weight: number | null) => (weight === null ? topic : `${topic} (${weight}%)`),
   seoRouteTitles: {
     'cert-selector': 'Choose your certification',

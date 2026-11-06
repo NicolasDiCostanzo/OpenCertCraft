@@ -31,6 +31,7 @@ const router = createRouter({
     { path: '/welcome', name: 'welcome', component: WelcomeView },
     { path: '/auth', name: 'auth', component: { template: '<div/>' } },
     { path: '/', name: 'cert-selector', component: { template: '<div/>' } },
+    { path: '/certs/:certCode', name: 'quiz-dashboard', component: { template: '<div/>' } },
   ],
 })
 
