@@ -259,8 +259,7 @@ Resources:
             - GET
             - HEAD
             - OPTIONS
-          ForwardedValues:
-            QueryString: false
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
           Compress: true
           FunctionAssociations:
             - EventType: viewer-request

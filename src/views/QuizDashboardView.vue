@@ -225,6 +225,10 @@ function reviewFlagged() {
   padding-left: 20px;
 }
 
+.about__related a {
+  color: var(--accent);
+}
+
 .dashboard {
   padding: 24px 16px 48px;
 }
