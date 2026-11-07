@@ -46,10 +46,10 @@ import ExternalLink from './ExternalLink.vue'
     </RouterLink>
     <div class="app-header__actions">
       <div class="app-header__links">
-        <ExternalLink :href="links.repo" icon-only>
+        <ExternalLink :href="links.repo" :label="texts.repoLinkLabel" icon-only>
           <template #icon><IconGithub /></template>
         </ExternalLink>
-        <ExternalLink :href="links.sponsor" icon-only>
+        <ExternalLink :href="links.sponsor" :label="texts.sponsorLinkLabel" icon-only>
           <template #icon><IconCoffee /></template>
         </ExternalLink>
       </div>
