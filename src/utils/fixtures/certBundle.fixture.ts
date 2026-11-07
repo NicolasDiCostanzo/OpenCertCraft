@@ -1,4 +1,4 @@
-import type { CertBundle } from '../../types'
+import type { CertBundle, CertFamilyGroup } from '../../types'
 
 export const validCertBundle: CertBundle = {
   version: 2,
@@ -76,3 +76,7 @@ export const examCertBundle: CertBundle = (() => {
   bundle.questions = [...build('Security', 'sec', 'lambda'), ...build('Deployment', 'dep', 's3')]
   return bundle
 })()
+
+export const certFamilyGroups: CertFamilyGroup[] = [
+  { familyId: 'fixture', label: 'Fixture provider', certs: [{ exam: validCertBundle.exam, questionCount: 120 }] },
+]

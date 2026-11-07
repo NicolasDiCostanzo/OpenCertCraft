@@ -6,11 +6,13 @@ import { useQuizHistoryStore } from '../stores/quizHistory'
 import { useUserProgressStore } from '../stores/userProgress'
 import { texts } from '../texts/en'
 import { passingScorePercent } from '../utils/examDisplay'
+import { pickSampleQuestions, SAMPLE_QUESTION_COUNT } from '../utils/sampleQuestions'
 import { certMeta } from '../utils/seo'
 import { breakdownByThemeAllTime, breakdownByTopicAllTime } from '../utils/scoreBreakdown'
 
 import CertFact from '../components/cert/CertFact.vue'
 import ExamFacts from '../components/cert/ExamFacts.vue'
+import SampleQuestions from '../components/cert/SampleQuestions.vue'
 import QuizHistoryList from '../components/history/QuizHistoryList.vue'
 import ReviewBreakdown from '../components/review/ReviewBreakdown.vue'
 import ConfirmModal from '../components/ui/ConfirmModal.vue'
@@ -53,6 +55,7 @@ const passingPercent = computed(() => {
 const aboutDescription = computed(() =>
   cert.value ? certMeta(cert.value.exam, cert.value.questions.length).description : '',
 )
+const sampleQuestions = computed(() => pickSampleQuestions(cert.value?.questions ?? [], SAMPLE_QUESTION_COUNT))
 const relatedCerts = computed(() => {
   const group = groupedCerts.find((candidate) =>
     candidate.certs.some((meta) => meta.exam.code === props.certCode),
@@ -114,7 +117,7 @@ function reviewFlagged() {
         <PrimaryButton size="sm" @click="goHome">{{ texts.toCertsList }}</PrimaryButton>
         <PrimaryButton size="sm" @click="startQuiz">{{ texts.startQuizCta }}</PrimaryButton>
       </div>
-      <h1>{{ cert.exam.name }}</h1>
+      <h1>{{ texts.seoCertHeading(cert.exam.name, cert.exam.code) }}</h1>
     </header>
 
     <section class="all-time">
@@ -133,6 +136,17 @@ function reviewFlagged() {
         </div>
       </div>
     </section>
+
+    <details class="about">
+      <summary>
+        <h2>{{ texts.aboutExamTitle(cert.exam.code) }}</h2>
+      </summary>
+      <p>{{ aboutDescription }}</p>
+      <ExamFacts :exam="cert.exam">
+        <CertFact :label="texts.questionBankLabel" :value="texts.questionBankValue(cert.questions.length)" />
+      </ExamFacts>
+      <SampleQuestions :questions="sampleQuestions" />
+    </details>
 
     <ReviewBreakdown
       v-if="entries.length > 0 || hasFlaggedQuestions"
@@ -162,22 +176,15 @@ function reviewFlagged() {
       <QuizHistoryList :entries="entries" @request-delete="requestDelete" @review="reviewEntry" />
     </section>
 
-    <section class="about">
-      <h2>{{ texts.aboutExamTitle }}</h2>
-      <p>{{ aboutDescription }}</p>
-      <ExamFacts :exam="cert.exam">
-        <CertFact :label="texts.questionBankLabel" :value="texts.questionBankValue(cert.questions.length)" />
-      </ExamFacts>
-      <template v-if="relatedCerts.length > 0">
-        <h3>{{ texts.relatedCertsTitle }}</h3>
-        <ul class="about__related">
-          <li v-for="meta in relatedCerts" :key="meta.exam.code">
-            <RouterLink :to="{ name: 'quiz-dashboard', params: { certCode: meta.exam.code } }">
-              {{ meta.exam.name }}
-            </RouterLink>
-          </li>
-        </ul>
-      </template>
+    <section v-if="relatedCerts.length > 0" class="related">
+      <h2>{{ texts.relatedCertsTitle }}</h2>
+      <ul class="related__list">
+        <li v-for="meta in relatedCerts" :key="meta.exam.code">
+          <RouterLink :to="{ name: 'quiz-dashboard', params: { certCode: meta.exam.code } }">
+            {{ meta.exam.name }}
+          </RouterLink>
+        </li>
+      </ul>
     </section>
 
     <ConfirmModal
@@ -204,28 +211,41 @@ function reviewFlagged() {
 
 <style scoped>
 .about {
-  margin-top: 32px;
+  margin: 32px 0;
   text-align: left;
 }
 
+.about > summary {
+  cursor: pointer;
+}
+
 .about h2 {
+  display: inline;
+  margin: 0;
+  font-size: 18px;
+  color: var(--text-h);
+}
+
+.about[open] > summary {
+  margin-bottom: 8px;
+}
+
+.related {
+  text-align: left;
+}
+
+.related h2 {
   margin: 0 0 8px;
   font-size: 18px;
   color: var(--text-h);
 }
 
-.about h3 {
-  margin: 20px 0 8px;
-  font-size: 15px;
-  color: var(--text-h);
-}
-
-.about__related {
+.related__list {
   margin: 0;
   padding-left: 20px;
 }
 
-.about__related a {
+.related__list a {
   color: var(--accent);
 }
 

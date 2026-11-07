@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import type { CertManifestEntry } from '../types'
-import { fillSiteTemplate, renderCertPage, renderRobots, renderSitemap } from './seo'
+import { multiAnswerQuestion, riskyQuestion, singleAnswerQuestion } from '../utils/fixtures/sampleQuestions.fixture'
+import { COMMIT_DATE, makeSiteRoot } from './fixtures/siteRoot.fixture'
+import { fillSiteTemplate, renderCertPage, renderRobots, renderSitemap, seoPlugin } from './seo'
 
 const template = fillSiteTemplate(`<!doctype html>
 <html lang="en">
@@ -38,12 +40,18 @@ function entry(overrides: Partial<CertManifestEntry['exam']> = {}): CertManifest
 describe('renderCertPage', () => {
   it('gives the page its own title, description, canonical and social tags', () => {
     const html = renderCertPage(template, entry(), BANK)
-    expect(html).toContain('<title>X-1 practice quiz: Cloud &amp; &quot;Ops&quot; &lt;Associate&gt; | OpenCertCraft</title>')
+    expect(html).toContain('<title>X-1 practice test: Cloud &amp; &quot;Ops&quot; &lt;Associate&gt; | OpenCertCraft</title>')
     expect(html).toContain('<link rel="canonical" href="https://opencertcraft.com/certs/X-1" />')
     expect(html).toContain('<meta property="og:url" content="https://opencertcraft.com/certs/X-1" />')
     expect(html).not.toContain('%SITE_')
     expect(html.match(/<meta name="description"/g)).toHaveLength(1)
-    expect(html).toMatch(/<meta property="og:title" content="X-1 practice quiz/)
+    expect(html).toMatch(/<meta property="og:title" content="X-1 practice test/)
+  })
+
+  it('prerenders a heading and description that use the practice test and mock exam wording', () => {
+    const html = renderCertPage(template, entry(), BANK)
+    expect(html).toMatch(/<h1>[^<]*practice test<\/h1>/)
+    expect(html).toMatch(/<main>.*<p>[^<]*mock exam[^<]*<\/p>/)
   })
 
   it('preloads the question bank chunk so it downloads alongside the entry script', () => {
@@ -58,6 +66,32 @@ describe('renderCertPage', () => {
     const uniform = renderCertPage(template, entry({ weights: { Security: 50, Networking: 50 } }), BANK)
     expect(uniform).toContain('<li>Security</li>')
     expect(uniform).not.toContain('(50%)')
+  })
+
+  it('prerenders the sample questions as a folded set with tags, options and a folded answer', () => {
+    const html = renderCertPage(template, entry(), BANK, [singleAnswerQuestion, multiAnswerQuestion])
+    expect(html).toContain('<details class="samples"><summary>Example practice questions</summary>')
+    expect(html).not.toMatch(/<details[^>]*\sopen/)
+    expect(html).toContain('Topic: Security')
+    expect(html).toContain('services: s3, kms')
+    expect(html).toContain('Which option encrypts data at rest?')
+    expect(html).toContain('<span>B</span>Server-side encryption')
+    expect(html).toContain('Correct answer:</strong> B, D')
+    expect(html).toContain('Server-side encryption protects stored data.')
+  })
+
+  it('omits the sample section when there are no samples', () => {
+    expect(renderCertPage(template, entry(), BANK)).not.toContain('samples')
+    expect(renderCertPage(template, entry(), BANK, [])).not.toContain('samples')
+  })
+
+  it('escapes sample text and renders code like the app does', () => {
+    const html = renderCertPage(template, entry(), BANK, [riskyQuestion])
+    expect(html).not.toContain('<script>')
+    expect(html).not.toContain('<i>text</i>')
+    expect(html).toContain('<code>&lt;b&gt;</code>')
+    expect(html).toContain('<pre><code>&lt;script&gt;alert(1)&lt;/script&gt;')
+    expect(html).toContain('bold &amp; nothing')
   })
 
   it('refuses an exam code that cannot be a URL path segment', () => {
@@ -86,9 +120,56 @@ describe('sitemap and robots', () => {
     expect(sitemap).toContain('<loc>https://opencertcraft.com/</loc></url>')
   })
 
+  it('ignores inherited object properties when looking up a lastmod', () => {
+    expect(renderSitemap([entry({ code: 'constructor' })])).not.toContain('<lastmod>')
+  })
+
   it('points crawlers at the sitemap without blocking anything', () => {
     const robots = renderRobots()
     expect(robots).toContain('Sitemap: https://opencertcraft.com/sitemap.xml')
     expect(robots).not.toMatch(/^Disallow:\s*\S/m)
+  })
+})
+
+describe('seoPlugin', () => {
+  const chunk = (fileName: string, root: string) => ({
+    type: 'chunk',
+    fileName,
+    facadeModuleId: `${root}/src/assets/X-1 questions.json`,
+  })
+
+  async function generate(root: string, outputs: Record<string, unknown>) {
+    const emitted: { fileName: string; source: string }[] = []
+    const plugin = seoPlugin(root)
+    const { handler } = plugin.generateBundle as unknown as {
+      handler: (this: unknown, options: unknown, bundle: unknown) => Promise<void>
+    }
+    const bundle = { 'index.html': { type: 'asset', source: template }, ...outputs }
+    await handler.call({ emitFile: (file: { fileName: string; source: string }) => emitted.push(file) }, {}, bundle)
+    return Object.fromEntries(emitted.map((file) => [file.fileName, file.source]))
+  }
+
+  it('preloads the bank chunk found in the bundle and embeds sample questions from the bundle file', async () => {
+    const root = makeSiteRoot({ withGit: false })
+    const files = await generate(root, { 'assets/X-1 questions-h4sh.js': chunk('assets/X-1 questions-h4sh.js', root) })
+
+    expect(files['certs/X-1/index.html']).toContain('href="/assets/X-1%20questions-h4sh.js"')
+    expect(files['certs/X-1/index.html']).toContain('Which option encrypts data at rest?')
+    expect(Object.keys(files)).toEqual(expect.arrayContaining(['robots.txt', 'sitemap.xml']))
+  })
+
+  it('fails the build when the question bank chunk is missing from the bundle', async () => {
+    await expect(generate(makeSiteRoot({ withGit: false }), {})).rejects.toThrow(/X-1 questions\.json/)
+  })
+
+  it.each([
+    { withGit: true, expected: `<lastmod>${COMMIT_DATE}</lastmod>` },
+    { withGit: false, expected: null },
+  ])('sets the sitemap lastmod from git history only when available (git: $withGit)', async ({ withGit, expected }) => {
+    const root = makeSiteRoot({ withGit })
+    const files = await generate(root, { 'assets/b.js': chunk('assets/b.js', root) })
+
+    if (expected) expect(files['sitemap.xml']).toContain(expected)
+    else expect(files['sitemap.xml']).not.toContain('<lastmod>')
   })
 })
