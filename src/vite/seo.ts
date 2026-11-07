@@ -40,6 +40,7 @@ function richText(text: string): string {
     .map((segment) => {
       if (segment.type === 'code-block') return `<pre><code>${escapeHtml(segment.value)}</code></pre>`
       if (segment.type === 'inline-code') return `<code>${escapeHtml(segment.value)}</code>`
+      if (segment.type === 'image') return `<img src="${escapeHtml(segment.value)}" alt="${escapeHtml(segment.alt)}">`
       return segment.type === 'text' ? escapeHtml(segment.value) : ''
     })
     .join('')
