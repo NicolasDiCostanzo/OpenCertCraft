@@ -6,10 +6,10 @@ export const texts = {
   seoSiteDescription:
     'Free practice quizzes for IT certification exams. Customizable preparation mode and real-exam simulation. No account required, with optional sign-in to sync your progress across devices.',
   seoPageTitle: (label: string) => `${label} | ${appName}`,
-  seoCertTitle: (name: string, code: string) => `${code} practice quiz: ${name} | ${appName}`,
-  seoCertHeading: (name: string, code: string) => `${name} (${code}) practice quiz`,
+  seoCertTitle: (name: string, code: string) => `${code} practice test: ${name} | ${appName}`,
+  seoCertHeading: (name: string, code: string) => `${name} (${code}) practice test`,
   seoCertDescription: (name: string, code: string, bankSize: number, examQuestions: number, minutes: number) =>
-    `Free ${code} practice quiz for ${name}: ${bankSize} questions, plus an exam simulation of ${examQuestions} questions in ${minutes} minutes.`,
+    `Free ${code} practice test for ${name}: ${bankSize} questions, plus a mock exam of ${examQuestions} questions in ${minutes} minutes.`,
   seoCertDomainsTitle: 'Exam domains',
   aboutExamTitle: 'About this exam',
   sampleQuestionsTitle: 'Example practice questions',

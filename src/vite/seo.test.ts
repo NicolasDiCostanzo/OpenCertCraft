@@ -39,12 +39,18 @@ function entry(overrides: Partial<CertManifestEntry['exam']> = {}): CertManifest
 describe('renderCertPage', () => {
   it('gives the page its own title, description, canonical and social tags', () => {
     const html = renderCertPage(template, entry(), BANK)
-    expect(html).toContain('<title>X-1 practice quiz: Cloud &amp; &quot;Ops&quot; &lt;Associate&gt; | OpenCertCraft</title>')
+    expect(html).toContain('<title>X-1 practice test: Cloud &amp; &quot;Ops&quot; &lt;Associate&gt; | OpenCertCraft</title>')
     expect(html).toContain('<link rel="canonical" href="https://opencertcraft.com/certs/X-1" />')
     expect(html).toContain('<meta property="og:url" content="https://opencertcraft.com/certs/X-1" />')
     expect(html).not.toContain('%SITE_')
     expect(html.match(/<meta name="description"/g)).toHaveLength(1)
-    expect(html).toMatch(/<meta property="og:title" content="X-1 practice quiz/)
+    expect(html).toMatch(/<meta property="og:title" content="X-1 practice test/)
+  })
+
+  it('prerenders a heading and description that use the practice test and mock exam wording', () => {
+    const html = renderCertPage(template, entry(), BANK)
+    expect(html).toMatch(/<h1>[^<]*practice test<\/h1>/)
+    expect(html).toMatch(/<main>.*<p>[^<]*mock exam[^<]*<\/p>/)
   })
 
   it('preloads the question bank chunk so it downloads alongside the entry script', () => {
