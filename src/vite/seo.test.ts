@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { CertManifestEntry } from '../types'
+import { multiAnswerQuestion, riskyQuestion, singleAnswerQuestion } from '../utils/fixtures/sampleQuestions.fixture'
 import { fillSiteTemplate, renderCertPage, renderRobots, renderSitemap } from './seo'
 
 const template = fillSiteTemplate(`<!doctype html>
@@ -58,6 +59,32 @@ describe('renderCertPage', () => {
     const uniform = renderCertPage(template, entry({ weights: { Security: 50, Networking: 50 } }), BANK)
     expect(uniform).toContain('<li>Security</li>')
     expect(uniform).not.toContain('(50%)')
+  })
+
+  it('prerenders the sample questions as a folded set with tags, options and a folded answer', () => {
+    const html = renderCertPage(template, entry(), BANK, [singleAnswerQuestion, multiAnswerQuestion])
+    expect(html).toContain('<details class="samples"><summary>Example practice questions</summary>')
+    expect(html).not.toMatch(/<details[^>]*\sopen/)
+    expect(html).toContain('Topic: Security')
+    expect(html).toContain('services: s3, kms')
+    expect(html).toContain('Which option encrypts data at rest?')
+    expect(html).toContain('<span>B</span>Server-side encryption')
+    expect(html).toContain('Correct answer:</strong> B, D')
+    expect(html).toContain('Server-side encryption protects stored data.')
+  })
+
+  it('omits the sample section when there are no samples', () => {
+    expect(renderCertPage(template, entry(), BANK)).not.toContain('samples')
+    expect(renderCertPage(template, entry(), BANK, [])).not.toContain('samples')
+  })
+
+  it('escapes sample text and renders code like the app does', () => {
+    const html = renderCertPage(template, entry(), BANK, [riskyQuestion])
+    expect(html).not.toContain('<script>')
+    expect(html).not.toContain('<i>text</i>')
+    expect(html).toContain('<code>&lt;b&gt;</code>')
+    expect(html).toContain('<pre><code>&lt;script&gt;alert(1)&lt;/script&gt;')
+    expect(html).toContain('bold &amp; nothing')
   })
 
   it('refuses an exam code that cannot be a URL path segment', () => {

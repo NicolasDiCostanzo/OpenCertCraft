@@ -4,8 +4,10 @@ import { join } from 'node:path'
 import type { Plugin } from 'vite'
 import { appName, siteUrl } from '../brand.ts'
 import { texts } from '../texts/en.ts'
-import type { CertManifestEntry } from '../types.ts'
+import type { CertBundle, CertManifestEntry, Question } from '../types.ts'
 import { areWeightsUniform, formatPassingScore } from '../utils/examDisplay.ts'
+import { parseInlineSegments } from '../utils/markdownImage.ts'
+import { pickSampleQuestions, SAMPLE_QUESTION_COUNT } from '../utils/sampleQuestions.ts'
 import { absoluteUrl, certMeta, certPath } from '../utils/seo.ts'
 
 const SAFE_CERT_CODE = /^[A-Za-z0-9._-]+$/
@@ -33,7 +35,40 @@ function replaceMetaContent(html: string, attribute: 'name' | 'property', key: s
   return html.replace(pattern, (_match, before: string, after: string) => `${before}${escapeHtml(content)}${after}`)
 }
 
-function certBody(entry: CertManifestEntry): string {
+function richText(text: string): string {
+  return parseInlineSegments(text)
+    .map((segment) => {
+      if (segment.type === 'code-block') return `<pre><code>${escapeHtml(segment.value)}</code></pre>`
+      if (segment.type === 'inline-code') return `<code>${escapeHtml(segment.value)}</code>`
+      return segment.type === 'text' ? escapeHtml(segment.value) : ''
+    })
+    .join('')
+}
+
+function sampleQuestion(question: Question): string {
+  const themeTags = Object.entries(question.themes ?? {})
+    .filter(([, values]) => values.length > 0)
+    .map(([group, values]) => `<span>${escapeHtml(texts.themeGroupDisplay(group, values))}</span>`)
+  const tags = [`<span>${escapeHtml(`${texts.topic}: ${question.topic}`)}</span>`, ...themeTags].join('')
+  const options = question.options
+    .map((option, index) => `<li><span>${String.fromCharCode(65 + index)}</span>${richText(option)}</li>`)
+    .join('')
+  const explanation = question.explanation
+    ? `<div><strong>${escapeHtml(texts.explanation)}:</strong> ${richText(question.explanation)}</div>`
+    : ''
+  return (
+    `<article><div>${tags}</div><div>${richText(question.question)}</div><ol>${options}</ol>` +
+    `<details><summary>${escapeHtml(texts.showAnswer)}</summary>` +
+    `<p><strong>${escapeHtml(texts.correctAnswer)}:</strong> ${escapeHtml([question.answers].flat().join(', '))}</p>${explanation}</details></article>`
+  )
+}
+
+function samplesSection(samples: Question[]): string {
+  if (samples.length === 0) return ''
+  return `<details class="samples"><summary>${escapeHtml(texts.sampleQuestionsTitle)}</summary>${samples.map(sampleQuestion).join('')}</details>`
+}
+
+function certBody(entry: CertManifestEntry, samples: Question[]): string {
   const { exam, questionCount } = entry
   const showWeights = exam.weights !== undefined && !areWeightsUniform(exam.weights)
   const facts = [
@@ -52,12 +87,17 @@ function certBody(entry: CertManifestEntry): string {
   return (
     `<main><h1>${escapeHtml(texts.seoCertHeading(exam.name, exam.code))}</h1>` +
     `<p>${escapeHtml(certMeta(exam, questionCount).description)}</p>` +
-    `<ul>${facts}</ul>${domains}` +
+    `<ul>${facts}</ul>${domains}${samplesSection(samples)}` +
     `<p><a href="/">${escapeHtml(appName)}</a></p></main>`
   )
 }
 
-export function renderCertPage(template: string, entry: CertManifestEntry, bankChunkPath: string): string {
+export function renderCertPage(
+  template: string,
+  entry: CertManifestEntry,
+  bankChunkPath: string,
+  samples: Question[] = [],
+): string {
   const { exam } = entry
   if (!SAFE_CERT_CODE.test(exam.code)) {
     throw new Error(`Exam code "${exam.code}" cannot be used as a URL path segment.`)
@@ -78,7 +118,7 @@ export function renderCertPage(template: string, entry: CertManifestEntry, bankC
   html = html.replace('</head>', () => `${headExtras}</head>`)
   const emptyRoot = '<div id="app"></div>'
   if (!html.includes(emptyRoot)) throw new Error('index.html has no empty <div id="app"></div> to prerender into.')
-  return html.replace(emptyRoot, () => `<div id="app">${certBody(entry)}</div>`)
+  return html.replace(emptyRoot, () => `<div id="app">${certBody(entry, samples)}</div>`)
 }
 
 export function renderRobots(): string {
@@ -136,10 +176,18 @@ export function seoPlugin(root: string): Plugin {
         ) as CertManifestEntry[]
         const lastModified: Record<string, string> = {}
         for (const entry of manifest) {
+          const { questions } = JSON.parse(
+            await readFile(join(root, 'src/assets', entry.file), 'utf8'),
+          ) as CertBundle
           this.emitFile({
             type: 'asset',
             fileName: `certs/${entry.exam.code}/index.html`,
-            source: renderCertPage(template, entry, findBankChunk(bundle, entry)),
+            source: renderCertPage(
+              template,
+              entry,
+              findBankChunk(bundle, entry),
+              pickSampleQuestions(questions, SAMPLE_QUESTION_COUNT),
+            ),
           })
           const date = bundleLastModified(root, entry.file)
           if (date) lastModified[entry.exam.code] = date

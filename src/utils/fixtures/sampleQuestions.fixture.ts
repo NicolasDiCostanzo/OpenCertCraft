@@ -40,3 +40,10 @@ export const multiAnswerQuestion: Question = q('multi', 'Networking', {
   answers: ['B', 'D'],
   explanation: 'Only the private subnets have no internet route.',
 })
+
+export const riskyQuestion: Question = q('risky', 'Security', {
+  question: 'What does `<b>` do?\n\n```html\n<script>alert(1)</script>\n```',
+  options: ['Bold <i>text</i>', 'Nothing'],
+  answers: 'A',
+  explanation: 'It renders bold & nothing else.',
+})

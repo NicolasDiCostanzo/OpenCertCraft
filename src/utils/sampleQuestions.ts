@@ -1,4 +1,4 @@
-import type { Question } from '../types'
+import type { Question } from '../types.ts'
 
 export const SAMPLE_QUESTION_COUNT = 5
 
