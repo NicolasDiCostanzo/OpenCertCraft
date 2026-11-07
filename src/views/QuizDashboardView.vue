@@ -6,11 +6,13 @@ import { useQuizHistoryStore } from '../stores/quizHistory'
 import { useUserProgressStore } from '../stores/userProgress'
 import { texts } from '../texts/en'
 import { passingScorePercent } from '../utils/examDisplay'
+import { pickSampleQuestions, SAMPLE_QUESTION_COUNT } from '../utils/sampleQuestions'
 import { certMeta } from '../utils/seo'
 import { breakdownByThemeAllTime, breakdownByTopicAllTime } from '../utils/scoreBreakdown'
 
 import CertFact from '../components/cert/CertFact.vue'
 import ExamFacts from '../components/cert/ExamFacts.vue'
+import SampleQuestions from '../components/cert/SampleQuestions.vue'
 import QuizHistoryList from '../components/history/QuizHistoryList.vue'
 import ReviewBreakdown from '../components/review/ReviewBreakdown.vue'
 import ConfirmModal from '../components/ui/ConfirmModal.vue'
@@ -53,6 +55,7 @@ const passingPercent = computed(() => {
 const aboutDescription = computed(() =>
   cert.value ? certMeta(cert.value.exam, cert.value.questions.length).description : '',
 )
+const sampleQuestions = computed(() => pickSampleQuestions(cert.value?.questions ?? [], SAMPLE_QUESTION_COUNT))
 const relatedCerts = computed(() => {
   const group = groupedCerts.find((candidate) =>
     candidate.certs.some((meta) => meta.exam.code === props.certCode),
@@ -168,6 +171,7 @@ function reviewFlagged() {
       <ExamFacts :exam="cert.exam">
         <CertFact :label="texts.questionBankLabel" :value="texts.questionBankValue(cert.questions.length)" />
       </ExamFacts>
+      <SampleQuestions :questions="sampleQuestions" />
       <template v-if="relatedCerts.length > 0">
         <h3>{{ texts.relatedCertsTitle }}</h3>
         <ul class="about__related">

@@ -25,3 +25,18 @@ export const withIneligible: Question[] = [
   q('blank-explanation', 'Security', { explanation: '   ' }),
   q('ok', 'Security'),
 ]
+
+export const singleAnswerQuestion: Question = q('single', 'Security', {
+  question: 'Which option encrypts data at rest?',
+  options: ['Plain storage', 'Server-side encryption'],
+  answers: 'B',
+  explanation: 'Server-side encryption protects stored data.',
+  themes: { services: ['s3', 'kms'], concepts: [] },
+})
+
+export const multiAnswerQuestion: Question = q('multi', 'Networking', {
+  question: 'Which options are private subnets?',
+  options: ['Public', 'Private one', 'Gateway', 'Private two'],
+  answers: ['B', 'D'],
+  explanation: 'Only the private subnets have no internet route.',
+})

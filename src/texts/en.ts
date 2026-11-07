@@ -12,6 +12,8 @@ export const texts = {
     `Free ${code} practice quiz for ${name}: ${bankSize} questions, plus an exam simulation of ${examQuestions} questions in ${minutes} minutes.`,
   seoCertDomainsTitle: 'Exam domains',
   aboutExamTitle: 'About this exam',
+  sampleQuestionsTitle: 'Example practice questions',
+  showAnswer: 'Show answer',
   relatedCertsTitle: 'More certifications from the same provider',
   seoCertDomainItem: (topic: string, weight: number | null) => (weight === null ? topic : `${topic} (${weight}%)`),
   seoRouteTitles: {

@@ -6,7 +6,14 @@ import { useQuizHistoryStore } from '../stores/quizHistory'
 import { useUserProgressStore } from '../stores/userProgress'
 import QuizDashboardView from './QuizDashboardView.vue'
 
-const { pushLocalData } = vi.hoisted(() => ({ pushLocalData: vi.fn() }))
+const defaultQuestions = [
+  { id: 'q1', question: 'Q1?', options: ['A', 'B'], answers: 'A', topic: 'Security', themes: { services: ['lambda'] } },
+]
+
+const { pushLocalData, bank } = vi.hoisted(() => ({
+  pushLocalData: vi.fn(),
+  bank: { questions: [] as unknown[] },
+}))
 
 vi.mock('../composables/useAccount', () => ({
   useAccount: () => ({ pushLocalData }),
@@ -19,9 +26,7 @@ vi.mock('../composables/useQuizLoader', () => ({
       version: 1,
       exam: { name: 'Test', code: 'TEST', totalQuestions: 2, timeLimitMinutes: 10, passingScore: { passingScore: 700, scale: 1000 } },
       themes: { services: ['lambda'] },
-      questions: [
-        { id: 'q1', question: 'Q1?', options: ['A', 'B'], answers: 'A', topic: 'Security', themes: { services: ['lambda'] } },
-      ],
+      questions: bank.questions,
     }),
   }),
 }))
@@ -44,6 +49,7 @@ const router = createRouter({
 describe('QuizDashboardView', () => {
   beforeEach(() => {
     pushLocalData.mockClear()
+    bank.questions = defaultQuestions
     useUserProgressStore().byExamCode = {}
     useQuizHistoryStore().entries = []
   })
@@ -67,6 +73,23 @@ describe('QuizDashboardView', () => {
     const wrapper = mount(QuizDashboardView, { global: { plugins: [pinia, router] }, props: { certCode: 'TEST' } })
 
     expect(wrapper.find('.flagged-review-btn').exists()).toBe(false)
+  })
+
+  it('shows sample questions drawn from the bank when some have an explanation', async () => {
+    bank.questions = [{ ...defaultQuestions[0], explanation: 'Because A.' }]
+
+    await router.push('/certs/TEST')
+    const wrapper = mount(QuizDashboardView, { global: { plugins: [pinia, router] }, props: { certCode: 'TEST' } })
+
+    expect(wrapper.find('.samples').exists()).toBe(true)
+    expect(wrapper.find('.samples').text()).toContain('Because A.')
+  })
+
+  it('shows no sample section when no bank question is eligible', async () => {
+    await router.push('/certs/TEST')
+    const wrapper = mount(QuizDashboardView, { global: { plugins: [pinia, router] }, props: { certCode: 'TEST' } })
+
+    expect(wrapper.find('.samples').exists()).toBe(false)
   })
 
   it('syncs to the backend after deleting a history entry', async () => {

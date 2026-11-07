@@ -1,5 +1,7 @@
 import type { Question } from '../types'
 
+export const SAMPLE_QUESTION_COUNT = 5
+
 const hasImage = (question: Question): boolean =>
   (question.promptImages?.length ?? 0) > 0 || question.options.some((option) => option.includes('!['))
 
