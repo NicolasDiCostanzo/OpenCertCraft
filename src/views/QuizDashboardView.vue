@@ -137,6 +137,17 @@ function reviewFlagged() {
       </div>
     </section>
 
+    <details class="about">
+      <summary>
+        <h2>{{ texts.aboutExamTitle }}</h2>
+      </summary>
+      <p>{{ aboutDescription }}</p>
+      <ExamFacts :exam="cert.exam">
+        <CertFact :label="texts.questionBankLabel" :value="texts.questionBankValue(cert.questions.length)" />
+      </ExamFacts>
+      <SampleQuestions :questions="sampleQuestions" />
+    </details>
+
     <ReviewBreakdown
       v-if="entries.length > 0 || hasFlaggedQuestions"
       :topic-breakdown="topicBreakdown"
@@ -165,23 +176,15 @@ function reviewFlagged() {
       <QuizHistoryList :entries="entries" @request-delete="requestDelete" @review="reviewEntry" />
     </section>
 
-    <section class="about">
-      <h2>{{ texts.aboutExamTitle }}</h2>
-      <p>{{ aboutDescription }}</p>
-      <ExamFacts :exam="cert.exam">
-        <CertFact :label="texts.questionBankLabel" :value="texts.questionBankValue(cert.questions.length)" />
-      </ExamFacts>
-      <SampleQuestions :questions="sampleQuestions" />
-      <template v-if="relatedCerts.length > 0">
-        <h3>{{ texts.relatedCertsTitle }}</h3>
-        <ul class="about__related">
-          <li v-for="meta in relatedCerts" :key="meta.exam.code">
-            <RouterLink :to="{ name: 'quiz-dashboard', params: { certCode: meta.exam.code } }">
-              {{ meta.exam.name }}
-            </RouterLink>
-          </li>
-        </ul>
-      </template>
+    <section v-if="relatedCerts.length > 0" class="related">
+      <h2>{{ texts.relatedCertsTitle }}</h2>
+      <ul class="related__list">
+        <li v-for="meta in relatedCerts" :key="meta.exam.code">
+          <RouterLink :to="{ name: 'quiz-dashboard', params: { certCode: meta.exam.code } }">
+            {{ meta.exam.name }}
+          </RouterLink>
+        </li>
+      </ul>
     </section>
 
     <ConfirmModal
@@ -208,28 +211,41 @@ function reviewFlagged() {
 
 <style scoped>
 .about {
-  margin-top: 32px;
+  margin: 32px 0;
   text-align: left;
 }
 
+.about > summary {
+  cursor: pointer;
+}
+
 .about h2 {
+  display: inline;
+  margin: 0;
+  font-size: 18px;
+  color: var(--text-h);
+}
+
+.about[open] > summary {
+  margin-bottom: 8px;
+}
+
+.related {
+  text-align: left;
+}
+
+.related h2 {
   margin: 0 0 8px;
   font-size: 18px;
   color: var(--text-h);
 }
 
-.about h3 {
-  margin: 20px 0 8px;
-  font-size: 15px;
-  color: var(--text-h);
-}
-
-.about__related {
+.related__list {
   margin: 0;
   padding-left: 20px;
 }
 
-.about__related a {
+.related__list a {
   color: var(--accent);
 }
 

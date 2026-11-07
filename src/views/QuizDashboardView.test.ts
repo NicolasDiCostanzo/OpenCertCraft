@@ -75,6 +75,16 @@ describe('QuizDashboardView', () => {
     expect(wrapper.find('.flagged-review-btn').exists()).toBe(false)
   })
 
+  it('folds the About this exam section by default while keeping its text in the DOM', async () => {
+    await router.push('/certs/TEST')
+    const wrapper = mount(QuizDashboardView, { global: { plugins: [pinia, router] }, props: { certCode: 'TEST' } })
+
+    const about = wrapper.find('details.about')
+    expect(about.exists()).toBe(true)
+    expect(about.attributes('open')).toBeUndefined()
+    expect(about.text()).toContain('TEST')
+  })
+
   it('shows sample questions drawn from the bank when some have an explanation', async () => {
     bank.questions = [{ ...defaultQuestions[0], explanation: 'Because A.' }]
 
