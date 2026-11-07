@@ -23,7 +23,12 @@ import Card from '../ui/BaseCard.vue'
       </summary>
       <ul class="available-exams__list">
         <li v-for="cert in group.certs" :key="cert.exam.code" class="available-exams__item">
-          <span class="available-exams__name">{{ cert.exam.name }}</span>
+          <RouterLink
+            class="available-exams__name"
+            :to="{ name: 'quiz-dashboard', params: { certCode: cert.exam.code } }"
+          >
+            {{ cert.exam.name }}
+          </RouterLink>
           <span class="available-exams__meta">
             <CertCodeBadge :code="cert.exam.code" />
             <Badge variant="weight">{{ texts.questionBankValue(cert.questionCount) }}</Badge>
@@ -136,6 +141,12 @@ import Card from '../ui/BaseCard.vue'
   .available-exams__name {
     font-size: 15px;
     color: var(--text-h);
+    text-decoration: none;
+  }
+
+  .available-exams__name:hover {
+    color: var(--accent);
+    text-decoration: underline;
   }
 
   .available-exams__meta {

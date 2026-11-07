@@ -13,6 +13,7 @@ import QuizHistoryReviewView from '../views/QuizHistoryReviewView.vue'
 import QuizReviewView from '../views/QuizReviewView.vue'
 import QuizSessionView from '../views/QuizSessionView.vue'
 import WelcomeView from '../views/WelcomeView.vue'
+import { applyPageMeta, resolvePageMeta } from './pageMeta'
 
 export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,7 +33,7 @@ export const router = createRouter({
   ],
 })
 
-const { ensureCertLoaded } = useQuizLoader()
+const { ensureCertLoaded, availableCerts } = useQuizLoader()
 
 router.beforeEach(async (to) => {
   const certCode = to.params.certCode
@@ -68,4 +69,9 @@ router.beforeEach((to) => {
   if (to.name === 'quiz-review' && !session.currentSession?.finished) {
     return { name: 'quiz-session', params: { certCode: to.params.certCode } }
   }
+})
+
+router.afterEach((to) => {
+  const certCode = typeof to.params.certCode === 'string' ? to.params.certCode : undefined
+  applyPageMeta(resolvePageMeta(to.name, certCode, availableCerts))
 })

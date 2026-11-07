@@ -12,6 +12,7 @@ vi.mock('./useQuizLoader', async () => {
   const { examCertBundle } = await import('../utils/fixtures/certBundle.fixture')
   return {
     useQuizLoader: () => ({
+      availableCerts: [],
       ensureCertLoaded: async () => true,
       getCert: () => examCertBundle,
       activePool: () => examCertBundle.questions,
