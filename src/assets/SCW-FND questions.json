@@ -19,7 +19,9 @@
             "Security & Identity": 10.0,
             "Serverless": 10.0,
             "Storage": 10.0
-        }
+        },
+        "overview": "An entry-level certification for new Scaleway users (decision makers, consultants, architects, DevOps and sysadmins, developers, students). Covers cloud concepts and Scaleway products: choosing the right product for a use case, billing and cost estimation, and building scalable, secure and highly available infrastructure.",
+        "officialUrl": "https://www-uploads.scaleway.com/Scaleway_Learning_Exam_91b7fb5790.pdf"
     },
     "themes": {
         "services": [

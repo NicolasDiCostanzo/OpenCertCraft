@@ -23,6 +23,14 @@ describe('cert manifest', () => {
     }
   })
 
+  it.each(certManifest.map((entry) => [entry.exam.code, entry.exam] as const))(
+    '%s declares an overview and an https link to its official exam guide',
+    (_code, exam: { overview?: string; officialUrl?: string }) => {
+      expect(exam.overview?.trim().length ?? 0).toBeGreaterThan(0)
+      expect(exam.officialUrl).toMatch(/^https:\/\//)
+    },
+  )
+
   it.each(certManifest.map((entry) => [entry.exam.code, entry.file] as const))(
     '%s has at least exam.totalQuestions answerable questions',
     (code, file) => {

@@ -4,7 +4,6 @@ import type { ExamInfo } from '../types.ts'
 
 export interface PageMeta {
   title: string
-  description: string
   canonicalPath: string | null
 }
 
@@ -17,17 +16,16 @@ export function certPath(code: string): string {
 }
 
 export function homeMeta(): PageMeta {
-  return { title: texts.seoSiteTitle, description: texts.seoSiteDescription, canonicalPath: '/' }
+  return { title: texts.seoSiteTitle, canonicalPath: '/' }
 }
 
-export function certMeta(exam: ExamInfo, questionCount: number): PageMeta {
+export function certMeta(exam: ExamInfo): PageMeta {
   return {
     title: texts.seoCertTitle(exam.name, exam.code),
-    description: texts.seoCertDescription(exam.name, exam.code, questionCount, exam.totalQuestions, exam.timeLimitMinutes),
     canonicalPath: certPath(exam.code),
   }
 }
 
 export function privateMeta(label: string): PageMeta {
-  return { title: texts.seoPageTitle(label), description: texts.seoSiteDescription, canonicalPath: null }
+  return { title: texts.seoPageTitle(label), canonicalPath: null }
 }

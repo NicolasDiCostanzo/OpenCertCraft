@@ -45,18 +45,39 @@ const answerLetters = (question: Question): string => [question.answers].flat().
 
 <style scoped>
 .samples {
-  margin: 20px 0 8px;
+  border-top: 1px solid var(--border);
 }
 
 .samples > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0 0;
+  list-style: none;
   cursor: pointer;
   font-size: 15px;
   font-weight: 600;
   color: var(--text-h);
 }
 
+.samples > summary::-webkit-details-marker {
+  display: none;
+}
+
+.samples > summary::after {
+  content: '▼';
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text);
+  transition: transform 0.2s ease;
+}
+
 .samples[open] > summary {
-  margin-bottom: 8px;
+  margin-bottom: 12px;
+}
+
+.samples[open] > summary::after {
+  transform: rotate(180deg);
 }
 
 .sample {
@@ -73,6 +94,18 @@ const answerLetters = (question: Question): string => [question.answers].flat().
   flex-wrap: wrap;
   gap: 6px;
   margin-bottom: 8px;
+}
+
+.sample__tags :deep(.badge) {
+  white-space: normal;
+}
+
+@media (max-width: 600px) {
+  .sample__tags :deep(.badge) {
+    padding: 4px 10px;
+    border-radius: var(--radius-lg);
+    line-height: 1.35;
+  }
 }
 
 .sample__options {
@@ -96,7 +129,8 @@ const answerLetters = (question: Question): string => [question.answers].flat().
 
 .sample__answer summary {
   cursor: pointer;
-  color: var(--accent);
+  font-weight: 600;
+  color: var(--text-h);
 }
 
 .sample__answer p {

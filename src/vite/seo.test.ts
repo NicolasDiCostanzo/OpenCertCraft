@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { texts } from '../texts/en'
 import type { CertManifestEntry } from '../types'
 import { multiAnswerQuestion, riskyQuestion, singleAnswerQuestion } from '../utils/fixtures/sampleQuestions.fixture'
 import { COMMIT_DATE, makeSiteRoot } from './fixtures/siteRoot.fixture'
@@ -19,6 +20,8 @@ const template = fillSiteTemplate(`<!doctype html>
   </body>
 </html>`)
 
+const escapeForAttribute = (value: string): string => value.replaceAll('&', '&amp;').replaceAll('"', '&quot;')
+
 const BANK = '/assets/X-1 questions-abc123.js'
 
 function entry(overrides: Partial<CertManifestEntry['exam']> = {}): CertManifestEntry {
@@ -38,20 +41,37 @@ function entry(overrides: Partial<CertManifestEntry['exam']> = {}): CertManifest
 }
 
 describe('renderCertPage', () => {
-  it('gives the page its own title, description, canonical and social tags', () => {
+  it('gives the page its own title, canonical and social tags and keeps the site-wide description', () => {
     const html = renderCertPage(template, entry(), BANK)
     expect(html).toContain('<title>X-1 practice test: Cloud &amp; &quot;Ops&quot; &lt;Associate&gt; | OpenCertCraft</title>')
     expect(html).toContain('<link rel="canonical" href="https://opencertcraft.com/certs/X-1" />')
     expect(html).toContain('<meta property="og:url" content="https://opencertcraft.com/certs/X-1" />')
     expect(html).not.toContain('%SITE_')
     expect(html.match(/<meta name="description"/g)).toHaveLength(1)
+    expect(html).toContain(`<meta name="description" content="${escapeForAttribute(texts.seoSiteDescription)}" />`)
     expect(html).toMatch(/<meta property="og:title" content="X-1 practice test/)
   })
 
-  it('prerenders a heading and description that use the practice test and mock exam wording', () => {
+  it('prerenders a heading with the practice test wording and no paragraph repeating the meta description', () => {
     const html = renderCertPage(template, entry(), BANK)
     expect(html).toMatch(/<h1>[^<]*practice test<\/h1>/)
-    expect(html).toMatch(/<main>.*<p>[^<]*mock exam[^<]*<\/p>/)
+    expect(html).not.toMatch(/<main>.*<p>[^<]*mock exam/)
+  })
+
+  it('prerenders the overview and a link to the official guide when the exam has them', () => {
+    const html = renderCertPage(
+      template,
+      entry({ overview: 'For <admins> who run clusters.', officialUrl: 'https://example.com/guide?a=1&b=2' }),
+      BANK,
+    )
+    expect(html).toContain('<p>For &lt;admins&gt; who run clusters.</p>')
+    expect(html).toContain('<a href="https://example.com/guide?a=1&amp;b=2" rel="noopener noreferrer">Official exam guide</a>')
+  })
+
+  it('omits the overview and the official guide link when the exam has neither', () => {
+    const html = renderCertPage(template, entry(), BANK)
+    expect(html).not.toContain('Official exam guide')
+    expect(html.match(/<p>/g)).toHaveLength(1)
   })
 
   it('preloads the question bank chunk so it downloads alongside the entry script', () => {
@@ -99,7 +119,7 @@ describe('renderCertPage', () => {
   })
 
   it('fails loudly when the index.html template lost a tag it has to specialize', () => {
-    expect(() => renderCertPage(template.replace(/<meta name="description"[^>]*>/, ''), entry(), BANK)).toThrow(/description/)
+    expect(() => renderCertPage(template.replace(/<meta property="og:title"[^>]*>/, ''), entry(), BANK)).toThrow(/og:title/)
     expect(() => renderCertPage(template.replace('<div id="app"></div>', ''), entry(), BANK)).toThrow(/prerender/)
   })
 })

@@ -14,7 +14,9 @@
       "Services & Networking": 20,
       "Storage": 10,
       "Troubleshooting": 30
-    }
+    },
+    "overview": "A hands-on exam for Kubernetes administrators: tasks run on live clusters from the command line, not as multiple choice. Covers cluster installation and configuration, workloads and scheduling, services and networking, storage, and troubleshooting, which carries the largest weight (30%). The questions here practice the concepts, not the live-terminal format.",
+    "officialUrl": "https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/"
   },
   "themes": {
     "resources": [

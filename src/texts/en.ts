@@ -7,12 +7,15 @@ export const texts = {
     'Free practice tests and mock exams for IT certifications, with a real exam simulation, topic filters and explanations. No account required, with optional sign-in to sync your progress across devices.',
   seoPageTitle: (label: string) => `${label} | ${appName}`,
   seoCertTitle: (name: string, code: string) => `${code} practice test: ${name} | ${appName}`,
-  seoCertHeading: (name: string, code: string) => `${name} (${code}) practice test`,
-  seoCertDescription: (name: string, code: string, bankSize: number, examQuestions: number, minutes: number) =>
-    `Free ${code} practice test for ${name}: ${bankSize} questions, plus a mock exam of ${examQuestions} questions in ${minutes} minutes.`,
+  seoCertHeading: (name: string, code: string) =>
+    `${name.includes(`(${code})`) ? name : `${name} (${code})`} practice test`,
   seoCertDomainsTitle: 'Exam domains',
   aboutExamTitle: (code: string) => `About the ${code} exam`,
   certLinkLabel: (name: string) => `${name} practice test`,
+  officialGuideLabel: 'Official exam guide',
+  mockExamTipTitle: 'New to this certification? Start with a mock exam.',
+  mockExamTipBody:
+    'Take a mock exam first (Exam mode) to find your biggest gaps. Your results are broken down by exam domain and by theme, so you can see precisely which concepts to work on first and start there.',
   sampleQuestionsTitle: 'Example practice questions',
   showAnswer: 'Show answer',
   relatedCertsTitle: 'More certifications from the same provider',

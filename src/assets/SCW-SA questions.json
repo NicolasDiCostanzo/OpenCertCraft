@@ -17,7 +17,9 @@
             "Sovereignty architecture": 12.5,
             "Standard architecture patterns": 12.5,
             "Sustainability architecture": 12.5
-        }
+        },
+        "overview": "For experienced architects who know the Scaleway ecosystem. Validates the ability to design IT solutions by identifying, evaluating and combining Scaleway resources into scalable, resilient architectures, including security, sovereignty and sustainability. Scaleway recommends the Foundations and Product certifications first.",
+        "officialUrl": "https://www-uploads.scaleway.com/Scaleway_Solution_Architect_Exam_Guide_c7f2faad64.pdf"
     },
     "themes": {
         "services": [

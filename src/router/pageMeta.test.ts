@@ -54,6 +54,5 @@ describe('applyPageMeta', () => {
     applyPageMeta(resolvePageMeta('auth', undefined, certs))
     applyPageMeta(resolvePageMeta('welcome', undefined, certs))
     expect(document.head.querySelector('meta[name="robots"]')).toBeNull()
-    expect(document.head.querySelectorAll('meta[name="description"]')).toHaveLength(1)
   })
 })
