@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { links } from '../../config'
+import { texts } from '../../texts/en'
 import RequestNotice from '../cert/RequestNotice.vue'
 import IconCoffee from '../icons/IconCoffee.vue'
 import IconGithub from '../icons/IconGithub.vue'
@@ -10,10 +11,10 @@ import ExternalLink from './ExternalLink.vue'
   <footer class="app-footer">
     <RequestNotice />
     <div class="app-footer__links">
-      <ExternalLink :href="links.repo">
+      <ExternalLink :href="links.repo" :label="texts.repoLinkLabel">
         <template #icon><IconGithub /></template>
       </ExternalLink>
-      <ExternalLink :href="links.sponsor">
+      <ExternalLink :href="links.sponsor" :label="texts.sponsorLinkLabel">
         <template #icon><IconCoffee /></template>
       </ExternalLink>
     </div>

@@ -1,3 +1,4 @@
+import { Amplify } from 'aws-amplify'
 import { resendSignUpCode as amplifyResendSignUpCode, signIn as amplifySignIn, confirmResetPassword, fetchUserAttributes, getCurrentUser, resetPassword } from 'aws-amplify/auth';
 import type { AuthUser } from '../types';
 
@@ -41,7 +42,6 @@ export async function signIn(email: string, password: string): Promise<AuthUser>
 
 export async function configureAuth(userPoolId: string, userPoolClientId: string): Promise<boolean> {
   try {
-    const { Amplify } = await import('aws-amplify')
     Amplify.configure({ Auth: { Cognito: { userPoolId, userPoolClientId } } })
     return true
   } catch {

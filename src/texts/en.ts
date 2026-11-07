@@ -80,6 +80,8 @@ export const texts = {
   matchAllGroups: 'Match all groups',
   matchingCountValue: (n: number) => `${n} question${n === 1 ? '' : 's'} match your filters`,
   noMatchWarning: 'No question matches your filters — widen them.',
+  repoLinkLabel: 'GitHub repository',
+  sponsorLinkLabel: 'Sponsor the project',
   themeToggle: (dark: boolean) => (dark ? 'Switch to light mode' : 'Switch to dark mode'),
   questionOf: (n: number, total: number) => `Question ${n} of ${total}`,
   previous: 'Previous',
