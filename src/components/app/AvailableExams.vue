@@ -10,7 +10,7 @@ import Card from '../ui/BaseCard.vue'
 </script>
 
 <template>
-  <Card tag="details" padding="lg" class="available-exams">
+  <Card tag="details" padding="lg" class="available-exams" open>
     <summary class="available-exams__summary">
       <span class="available-exams__chevron" aria-hidden="true">▼</span>
       <span>{{ texts.examsIncluded(familyCertCount(groups)) }}</span>
@@ -27,7 +27,7 @@ import Card from '../ui/BaseCard.vue'
             class="available-exams__name"
             :to="{ name: 'quiz-dashboard', params: { certCode: cert.exam.code } }"
           >
-            {{ cert.exam.name }}
+            {{ texts.certLinkLabel(cert.exam.name) }}
           </RouterLink>
           <span class="available-exams__meta">
             <CertCodeBadge :code="cert.exam.code" />

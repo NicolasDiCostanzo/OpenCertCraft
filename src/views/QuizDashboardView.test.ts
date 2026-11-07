@@ -75,6 +75,15 @@ describe('QuizDashboardView', () => {
     expect(wrapper.find('.flagged-review-btn').exists()).toBe(false)
   })
 
+  it('headlines the page with the practice test wording and the exam code, and names the exam in its About section', async () => {
+    await router.push('/certs/TEST')
+    const wrapper = mount(QuizDashboardView, { global: { plugins: [pinia, router] }, props: { certCode: 'TEST' } })
+
+    expect(wrapper.find('h1').text()).toContain('practice test')
+    expect(wrapper.find('h1').text()).toContain('TEST')
+    expect(wrapper.find('details.about summary h2').text()).toContain('TEST')
+  })
+
   it('folds the About this exam section by default while keeping its text in the DOM', async () => {
     await router.push('/certs/TEST')
     const wrapper = mount(QuizDashboardView, { global: { plugins: [pinia, router] }, props: { certCode: 'TEST' } })

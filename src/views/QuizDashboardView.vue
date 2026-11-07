@@ -117,7 +117,7 @@ function reviewFlagged() {
         <PrimaryButton size="sm" @click="goHome">{{ texts.toCertsList }}</PrimaryButton>
         <PrimaryButton size="sm" @click="startQuiz">{{ texts.startQuizCta }}</PrimaryButton>
       </div>
-      <h1>{{ cert.exam.name }}</h1>
+      <h1>{{ texts.seoCertHeading(cert.exam.name, cert.exam.code) }}</h1>
     </header>
 
     <section class="all-time">
@@ -139,7 +139,7 @@ function reviewFlagged() {
 
     <details class="about">
       <summary>
-        <h2>{{ texts.aboutExamTitle }}</h2>
+        <h2>{{ texts.aboutExamTitle(cert.exam.code) }}</h2>
       </summary>
       <p>{{ aboutDescription }}</p>
       <ExamFacts :exam="cert.exam">

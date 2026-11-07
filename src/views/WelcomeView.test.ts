@@ -51,6 +51,12 @@ beforeEach(() => {
 })
 
 describe('WelcomeView', () => {
+  it('headlines the page with the practice tests and mock exams wording', () => {
+    const heading = mountWelcome().get('h1').text()
+    expect(heading).toContain('practice tests')
+    expect(heading).toContain('mock exams')
+  })
+
   it.each([
     ['existing account', 'signin', 'welcomeExistingAccountCta' as const],
     ['new account', 'signup', 'welcomeNewAccountCta' as const],

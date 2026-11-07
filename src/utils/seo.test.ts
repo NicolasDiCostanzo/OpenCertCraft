@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { validCertBundle } from './fixtures/certBundle.fixture'
-import { certMeta } from './seo'
+import { certMeta, homeMeta } from './seo'
 
 describe('certMeta', () => {
   const meta = certMeta(validCertBundle.exam, 120)
@@ -19,5 +19,23 @@ describe('certMeta', () => {
 
   it('no longer sells the page as a quiz', () => {
     expect(`${meta.title} ${meta.description}`).not.toMatch(/practice quiz/i)
+  })
+})
+
+describe('homeMeta', () => {
+  const meta = homeMeta()
+
+  it.each([
+    { field: 'title', phrase: 'practice tests' },
+    { field: 'title', phrase: 'mock exams' },
+    { field: 'description', phrase: 'practice tests' },
+    { field: 'description', phrase: 'mock exams' },
+    { field: 'description', phrase: 'No account required' },
+  ] as const)('puts "$phrase" in the $field', ({ field, phrase }) => {
+    expect(meta[field]).toContain(phrase)
+  })
+
+  it('no longer sells the site as quizzes', () => {
+    expect(`${meta.title} ${meta.description}`).not.toMatch(/quizzes/i)
   })
 })

@@ -2,16 +2,17 @@ import { appName } from '../brand.ts'
 
 export const texts = {
   appTitle: 'Home',
-  seoSiteTitle: `${appName} | Free certification exam practice quizzes`,
+  seoSiteTitle: `${appName} | Free certification practice tests and mock exams`,
   seoSiteDescription:
-    'Free practice quizzes for IT certification exams. Customizable preparation mode and real-exam simulation. No account required, with optional sign-in to sync your progress across devices.',
+    'Free practice tests and mock exams for IT certifications, with a real exam simulation, topic filters and explanations. No account required, with optional sign-in to sync your progress across devices.',
   seoPageTitle: (label: string) => `${label} | ${appName}`,
   seoCertTitle: (name: string, code: string) => `${code} practice test: ${name} | ${appName}`,
   seoCertHeading: (name: string, code: string) => `${name} (${code}) practice test`,
   seoCertDescription: (name: string, code: string, bankSize: number, examQuestions: number, minutes: number) =>
     `Free ${code} practice test for ${name}: ${bankSize} questions, plus a mock exam of ${examQuestions} questions in ${minutes} minutes.`,
   seoCertDomainsTitle: 'Exam domains',
-  aboutExamTitle: 'About this exam',
+  aboutExamTitle: (code: string) => `About the ${code} exam`,
+  certLinkLabel: (name: string) => `${name} practice test`,
   sampleQuestionsTitle: 'Example practice questions',
   showAnswer: 'Show answer',
   relatedCertsTitle: 'More certifications from the same provider',
@@ -144,8 +145,8 @@ export const texts = {
   collapseAllLabel: 'Collapse all',
   expandAllLabel: 'Expand all',
   familyCertCount: (n: number) => `${n} certification${n === 1 ? '' : 's'}`,
-  welcomeEyebrowPoints: ['100% free', 'No account required', 'Tailor quizzes to the topics you need to practice'],
-  welcomeIntroTitle: 'Practice for certification exams',
+  welcomeEyebrowPoints: ['100% free', 'No account required', 'Tailor practice tests to the topics you need'],
+  welcomeIntroTitle: 'Free certification practice tests and mock exams',
   welcomeHowItWorksTitle: 'How it works',
   welcomeNoAccount: 'Start practicing now',
   welcomeNoAccountDesc:
