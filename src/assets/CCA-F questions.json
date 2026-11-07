@@ -15,7 +15,9 @@
       "Claude Code Configuration & Workflows": 20,
       "Prompt Engineering & Structured Output": 20,
       "Context Management & Reliability": 15
-    }
+    },
+    "overview": "For solution architects who design and build production applications with Claude. Tests judgment on tradeoffs across Claude Code, the Agent SDK, the Claude API and MCP: agent orchestration, tool design, prompting and structured output, and context management. Anthropic recommends about six months of hands-on experience.",
+    "officialUrl": "https://anthropic-partners.skilljar.com/page/partner-certifications"
   },
   "themes": {
     "tasks": [

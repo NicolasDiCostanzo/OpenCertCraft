@@ -11,6 +11,8 @@ export interface ExamInfo {
   passingScore: PassingScore
   weights?: Record<string, number>
   instructions?: string
+  overview?: string
+  officialUrl?: string
 }
 
 export type ThemeRegistry = Record<string, string[]>

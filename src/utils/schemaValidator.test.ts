@@ -20,6 +20,11 @@ describe('validateCertBundle', () => {
     ['exam.code is missing', (b) => ({ ...b, exam: { ...b.exam, code: undefined } }), 'exam.code must be a non-empty string'],
     ['exam.totalQuestions is not a number', (b) => ({ ...b, exam: { ...b.exam, totalQuestions: '65' } }), 'exam.totalQuestions must be a number'],
     ['exam.timeLimitMinutes is not a number', (b) => ({ ...b, exam: { ...b.exam, timeLimitMinutes: '130' } }), 'exam.timeLimitMinutes must be a number'],
+    ['exam.overview is not a string', (b) => ({ ...b, exam: { ...b.exam, overview: 42 } }), 'exam.overview must be a non-empty string when present'],
+    ['exam.overview is blank', (b) => ({ ...b, exam: { ...b.exam, overview: '  ' } }), 'exam.overview must be a non-empty string when present'],
+    ['exam.officialUrl is not a string', (b) => ({ ...b, exam: { ...b.exam, officialUrl: 42 } }), 'exam.officialUrl must be an https URL when present'],
+    ['exam.officialUrl is not https', (b) => ({ ...b, exam: { ...b.exam, officialUrl: 'http://example.com/guide' } }), 'exam.officialUrl must be an https URL when present'],
+    ['exam.officialUrl is a javascript URL', (b) => ({ ...b, exam: { ...b.exam, officialUrl: 'javascript:alert(1)' } }), 'exam.officialUrl must be an https URL when present'],
     ['exam.weights is not an object', (b) => ({ ...b, exam: { ...b.exam, weights: 'high' } }), 'exam.weights must be an object mapping topic names to numbers'],
     ['exam.weights has a non-number value', (b) => ({ ...b, exam: { ...b.exam, weights: { ...b.exam.weights, Security: 'sixty' } } }), 'exam.weights must have a numeric value for every topic'],
     ['exam.weights has a negative value', (b) => ({ ...b, exam: { ...b.exam, weights: { ...b.exam.weights, Security: -10 } } }), 'exam.weights values must be non-negative, finite numbers'],
@@ -64,6 +69,18 @@ describe('validateCertBundle', () => {
 
     expect(result.valid).toBe(false)
     expect(result.errors.some((e) => e.includes(expectedError))).toBe(true)
+  })
+
+  it('keeps a valid overview and official guide URL on the validated exam', () => {
+    const bundle = cloneBundle()
+    bundle.exam.overview = 'What the exam covers.'
+    bundle.exam.officialUrl = 'https://example.com/exam-guide'
+
+    const result = validateCertBundle(bundle)
+
+    expect(result.valid).toBe(true)
+    expect(result.bundle?.exam.overview).toBe('What the exam covers.')
+    expect(result.bundle?.exam.officialUrl).toBe('https://example.com/exam-guide')
   })
 
   it('accepts more than 5 options when every answer letter stays within range', () => {

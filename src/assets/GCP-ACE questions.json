@@ -13,7 +13,9 @@
       "Planning and implementing a cloud solution": 30,
       "Ensuring the successful operation of a cloud solution": 30,
       "Configuring access and security": 20
-    }
+    },
+    "overview": "For people who deploy and secure applications and infrastructure, monitor operations across projects, and keep solutions at target performance, using the console and the command line. Google recommends six months of hands-on Google Cloud experience, with no prerequisites.",
+    "officialUrl": "https://cloud.google.com/learn/certification/cloud-engineer"
   },
   "themes": {
     "services": [

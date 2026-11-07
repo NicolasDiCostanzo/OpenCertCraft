@@ -7,11 +7,11 @@ import { useUserProgressStore } from '../stores/userProgress'
 import { texts } from '../texts/en'
 import { passingScorePercent } from '../utils/examDisplay'
 import { pickSampleQuestions, SAMPLE_QUESTION_COUNT } from '../utils/sampleQuestions'
-import { certMeta } from '../utils/seo'
 import { breakdownByThemeAllTime, breakdownByTopicAllTime } from '../utils/scoreBreakdown'
 
 import CertFact from '../components/cert/CertFact.vue'
 import ExamFacts from '../components/cert/ExamFacts.vue'
+import MockExamTip from '../components/cert/MockExamTip.vue'
 import SampleQuestions from '../components/cert/SampleQuestions.vue'
 import QuizHistoryList from '../components/history/QuizHistoryList.vue'
 import ReviewBreakdown from '../components/review/ReviewBreakdown.vue'
@@ -50,11 +50,6 @@ const passingPercent = computed(() => {
   return ps ? passingScorePercent(ps) : 0
 })
 
-
-
-const aboutDescription = computed(() =>
-  cert.value ? certMeta(cert.value.exam, cert.value.questions.length).description : '',
-)
 const sampleQuestions = computed(() => pickSampleQuestions(cert.value?.questions ?? [], SAMPLE_QUESTION_COUNT))
 const relatedCerts = computed(() => {
   const group = groupedCerts.find((candidate) =>
@@ -137,15 +132,22 @@ function reviewFlagged() {
       </div>
     </section>
 
+    <MockExamTip v-if="entries.length === 0" />
+
     <details class="about">
       <summary>
         <h2>{{ texts.aboutExamTitle(cert.exam.code) }}</h2>
       </summary>
-      <p>{{ aboutDescription }}</p>
-      <ExamFacts :exam="cert.exam">
-        <CertFact :label="texts.questionBankLabel" :value="texts.questionBankValue(cert.questions.length)" />
-      </ExamFacts>
-      <SampleQuestions :questions="sampleQuestions" />
+      <div class="about__body">
+        <p v-if="cert.exam.overview" class="about__overview">{{ cert.exam.overview }}</p>
+        <a v-if="cert.exam.officialUrl" class="about__guide" :href="cert.exam.officialUrl" target="_blank" rel="noopener noreferrer">
+          {{ texts.officialGuideLabel }}
+        </a>
+        <ExamFacts :exam="cert.exam">
+          <CertFact :label="texts.questionBankLabel" :value="texts.questionBankValue(cert.questions.length)" />
+        </ExamFacts>
+        <SampleQuestions :questions="sampleQuestions" />
+      </div>
     </details>
 
     <ReviewBreakdown
@@ -212,22 +214,74 @@ function reviewFlagged() {
 <style scoped>
 .about {
   margin: 32px 0;
+  padding: 0 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: var(--surface);
   text-align: left;
 }
 
 .about > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  list-style: none;
   cursor: pointer;
 }
 
+.about > summary::-webkit-details-marker {
+  display: none;
+}
+
+.about > summary::after {
+  content: '▼';
+  font-size: 12px;
+  color: var(--text);
+  transition: transform 0.2s ease;
+}
+
+.about[open] > summary {
+  border-bottom: 1px solid var(--border);
+}
+
+.about[open] > summary::after {
+  transform: rotate(180deg);
+}
+
 .about h2 {
-  display: inline;
   margin: 0;
   font-size: 18px;
   color: var(--text-h);
 }
 
-.about[open] > summary {
-  margin-bottom: 8px;
+.about__body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 0;
+}
+
+.about__overview {
+  margin: 0;
+  line-height: 1.55;
+  color: var(--text);
+}
+
+.about__guide {
+  align-self: flex-start;
+  font-weight: 600;
+  color: var(--text-h);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.about__guide::after {
+  content: ' ↗';
+}
+
+.about__guide:hover {
+  text-decoration-thickness: 2px;
 }
 
 .related {
@@ -246,7 +300,8 @@ function reviewFlagged() {
 }
 
 .related__list a {
-  color: var(--accent);
+  color: var(--text-h);
+  text-underline-offset: 3px;
 }
 
 .dashboard {

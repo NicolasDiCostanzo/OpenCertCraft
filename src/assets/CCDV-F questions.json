@@ -18,7 +18,9 @@
       "Prompt and Context Engineering": 11,
       "Security and Safety": 8,
       "Tools and MCPs": 10
-    }
+    },
+    "overview": "For technical professionals who build, integrate and ship production applications, agents and workflows on Claude. Weighted toward applications and integration, with model selection, prompt and context engineering, tools and MCP, and security. Anthropic recommends one to five years in software engineering plus six months with LLM systems.",
+    "officialUrl": "https://anthropic-partners.skilljar.com/page/partner-certifications"
   },
   "themes": {
     "tasks": [

@@ -14,7 +14,9 @@
             "Manage access to your Organization's resources": 20.0,
             "Monitor your resources and immediately detect unauthorized activity": 20.0,
             "Share and encrypt sensitive data": 20.0
-        }
+        },
+        "overview": "For people who manage access for developers or invited partners and protect sensitive data on Scaleway. Covers organizations and projects, IAM, sharing and encrypting secrets, access to encrypted data in Object Storage, and monitoring for unauthorized activity.",
+        "officialUrl": "https://scaleway-learning-exam-guides-shared.s3.nl-ams.scw.cloud/Scaleway%20Associate%20Security%20%26%20Identity%20Exam%20Guide.pdf"
     },
     "themes": {
         "services": [

@@ -15,7 +15,9 @@
         "Deployment": 24,
         "Security": 26,
         "Troubleshooting and Optimization": 18
-      }
+      },
+      "overview": "For developers with at least a year of hands-on experience building and maintaining AWS applications. Covers developing with AWS services and SDKs, deploying applications with CI/CD, securing code and data, and troubleshooting and optimizing applications.",
+      "officialUrl": "https://docs.aws.amazon.com/aws-certification/latest/developer-associate-02/developer-associate-02.html"
     },
     "questionCount": 547
   },
@@ -35,7 +37,9 @@
         "Security and Compliance": 30,
         "Cloud Technology and Services": 34,
         "Billing, Pricing, and Support": 12
-      }
+      },
+      "overview": "A role-independent, entry-level exam for people with up to six months of AWS exposure. Covers the value of the cloud, the shared responsibility model, security best practices, core compute, network, database and storage services, and billing and pricing.",
+      "officialUrl": "https://docs.aws.amazon.com/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
     },
     "questionCount": 716
   },
@@ -56,7 +60,9 @@
         "Claude Code Configuration & Workflows": 20,
         "Prompt Engineering & Structured Output": 20,
         "Context Management & Reliability": 15
-      }
+      },
+      "overview": "For solution architects who design and build production applications with Claude. Tests judgment on tradeoffs across Claude Code, the Agent SDK, the Claude API and MCP: agent orchestration, tool design, prompting and structured output, and context management. Anthropic recommends about six months of hands-on experience.",
+      "officialUrl": "https://anthropic-partners.skilljar.com/page/partner-certifications"
     },
     "questionCount": 382
   },
@@ -79,7 +85,9 @@
         "Configuration and Knowledge Management": 12,
         "Governance, Risk, and Responsible Use": 15,
         "Troubleshooting and Optimization": 10
-      }
+      },
+      "overview": "For professionals who use Claude as a productivity tool (operations, marketing, project management, education, communications), not for developers building on the API. Covers prompting, evaluating outputs, designing workflows, choosing models and features, responsible use and troubleshooting. No prerequisites.",
+      "officialUrl": "https://anthropic-partners.skilljar.com/page/partner-certifications"
     },
     "questionCount": 140
   },
@@ -102,7 +110,9 @@
         "Governance, Safety & Risk Management": 14,
         "Stakeholder Communication & Lifecycle Management": 14,
         "Developer Productivity & Operational Enablement": 7
-      }
+      },
+      "overview": "For practitioners in an architect role who choose models, architectures and API patterns, and integrate Claude into enterprise systems with evaluation, security and governance in mind. Anthropic recommends three or more years in systems architecture or platform engineering, plus six months of production experience with LLM systems.",
+      "officialUrl": "https://anthropic-partners.skilljar.com/page/partner-certifications"
     },
     "questionCount": 143
   },
@@ -121,7 +131,9 @@
         "Planning and implementing a cloud solution": 30,
         "Ensuring the successful operation of a cloud solution": 30,
         "Configuring access and security": 20
-      }
+      },
+      "overview": "For people who deploy and secure applications and infrastructure, monitor operations across projects, and keep solutions at target performance, using the console and the command line. Google recommends six months of hands-on Google Cloud experience, with no prerequisites.",
+      "officialUrl": "https://cloud.google.com/learn/certification/cloud-engineer"
     },
     "questionCount": 214
   },
@@ -145,7 +157,9 @@
         "Prompt and Context Engineering": 11,
         "Security and Safety": 8,
         "Tools and MCPs": 10
-      }
+      },
+      "overview": "For technical professionals who build, integrate and ship production applications, agents and workflows on Claude. Weighted toward applications and integration, with model selection, prompt and context engineering, tools and MCP, and security. Anthropic recommends one to five years in software engineering plus six months with LLM systems.",
+      "officialUrl": "https://anthropic-partners.skilljar.com/page/partner-certifications"
     },
     "questionCount": 220
   },
@@ -165,7 +179,9 @@
         "Services & Networking": 20,
         "Storage": 10,
         "Troubleshooting": 30
-      }
+      },
+      "overview": "A hands-on exam for Kubernetes administrators: tasks run on live clusters from the command line, not as multiple choice. Covers cluster installation and configuration, workloads and scheduling, services and networking, storage, and troubleshooting, which carries the largest weight (30%). The questions here practice the concepts, not the live-terminal format.",
+      "officialUrl": "https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/"
     },
     "questionCount": 100
   },
@@ -188,7 +204,9 @@
         "Sovereignty architecture": 12.5,
         "Standard architecture patterns": 12.5,
         "Sustainability architecture": 12.5
-      }
+      },
+      "overview": "For experienced architects who know the Scaleway ecosystem. Validates the ability to design IT solutions by identifying, evaluating and combining Scaleway resources into scalable, resilient architectures, including security, sovereignty and sustainability. Scaleway recommends the Foundations and Product certifications first.",
+      "officialUrl": "https://www-uploads.scaleway.com/Scaleway_Solution_Architect_Exam_Guide_c7f2faad64.pdf"
     },
     "questionCount": 117
   },
@@ -213,7 +231,9 @@
         "Security & Identity": 10.0,
         "Serverless": 10.0,
         "Storage": 10.0
-      }
+      },
+      "overview": "An entry-level certification for new Scaleway users (decision makers, consultants, architects, DevOps and sysadmins, developers, students). Covers cloud concepts and Scaleway products: choosing the right product for a use case, billing and cost estimation, and building scalable, secure and highly available infrastructure.",
+      "officialUrl": "https://www-uploads.scaleway.com/Scaleway_Learning_Exam_91b7fb5790.pdf"
     },
     "questionCount": 96
   },
@@ -233,7 +253,9 @@
         "Manage access to your Organization's resources": 20.0,
         "Monitor your resources and immediately detect unauthorized activity": 20.0,
         "Share and encrypt sensitive data": 20.0
-      }
+      },
+      "overview": "For people who manage access for developers or invited partners and protect sensitive data on Scaleway. Covers organizations and projects, IAM, sharing and encrypting secrets, access to encrypted data in Object Storage, and monitoring for unauthorized activity.",
+      "officialUrl": "https://scaleway-learning-exam-guides-shared.s3.nl-ams.scw.cloud/Scaleway%20Associate%20Security%20%26%20Identity%20Exam%20Guide.pdf"
     },
     "questionCount": 92
   }

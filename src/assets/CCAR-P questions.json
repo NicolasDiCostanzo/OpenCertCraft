@@ -17,7 +17,9 @@
       "Governance, Safety & Risk Management": 14,
       "Stakeholder Communication & Lifecycle Management": 14,
       "Developer Productivity & Operational Enablement": 7
-    }
+    },
+    "overview": "For practitioners in an architect role who choose models, architectures and API patterns, and integrate Claude into enterprise systems with evaluation, security and governance in mind. Anthropic recommends three or more years in systems architecture or platform engineering, plus six months of production experience with LLM systems.",
+    "officialUrl": "https://anthropic-partners.skilljar.com/page/partner-certifications"
   },
   "themes": {
     "tasks": [

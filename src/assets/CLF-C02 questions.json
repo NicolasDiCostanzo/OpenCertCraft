@@ -14,7 +14,9 @@
       "Security and Compliance": 30,
       "Cloud Technology and Services": 34,
       "Billing, Pricing, and Support": 12
-    }
+    },
+    "overview": "A role-independent, entry-level exam for people with up to six months of AWS exposure. Covers the value of the cloud, the shared responsibility model, security best practices, core compute, network, database and storage services, and billing and pricing.",
+    "officialUrl": "https://docs.aws.amazon.com/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
   },
   "themes": {
     "services": [

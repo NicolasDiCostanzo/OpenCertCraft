@@ -83,6 +83,10 @@ function validatePassingScore(value: unknown, errors: string[]): PassingScore | 
   return { passingScore: value.passingScore, ...(value.scale !== undefined ? { scale: value.scale } : {}) }
 }
 
+function isHttpsUrl(value: unknown): boolean {
+  return typeof value === 'string' && URL.canParse(value) && new URL(value).protocol === 'https:'
+}
+
 function validateExam(value: unknown, errors: string[], warnings: string[]): ExamInfo | undefined {
   const before = errors.length
 
@@ -97,6 +101,12 @@ function validateExam(value: unknown, errors: string[], warnings: string[]): Exa
   if (typeof value.timeLimitMinutes !== 'number') errors.push('exam.timeLimitMinutes must be a number.')
   if (value.instructions !== undefined && typeof value.instructions !== 'string') {
     errors.push('exam.instructions must be a string when present.')
+  }
+  if (value.overview !== undefined && (typeof value.overview !== 'string' || value.overview.trim().length === 0)) {
+    errors.push('exam.overview must be a non-empty string when present.')
+  }
+  if (value.officialUrl !== undefined && !isHttpsUrl(value.officialUrl)) {
+    errors.push('exam.officialUrl must be an https URL when present.')
   }
 
   const passingScore = validatePassingScore(value.passingScore, errors)
@@ -128,6 +138,8 @@ function validateExam(value: unknown, errors: string[], warnings: string[]): Exa
     passingScore,
     ...(weights !== undefined ? { weights } : {}),
     ...(value.instructions !== undefined ? { instructions: value.instructions as string } : {}),
+    ...(value.overview !== undefined ? { overview: value.overview as string } : {}),
+    ...(value.officialUrl !== undefined ? { officialUrl: value.officialUrl as string } : {}),
   }
 }
 

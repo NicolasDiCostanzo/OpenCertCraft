@@ -87,7 +87,10 @@ function certBody(entry: CertManifestEntry, samples: Question[]): string {
     : ''
   return (
     `<main><h1>${escapeHtml(texts.seoCertHeading(exam.name, exam.code))}</h1>` +
-    `<p>${escapeHtml(certMeta(exam, questionCount).description)}</p>` +
+    (exam.overview ? `<p>${escapeHtml(exam.overview)}</p>` : '') +
+    (exam.officialUrl
+      ? `<p><a href="${escapeHtml(exam.officialUrl)}" rel="noopener noreferrer">${escapeHtml(texts.officialGuideLabel)}</a></p>`
+      : '') +
     `<ul>${facts}</ul>${domains}${samplesSection(samples)}` +
     `<p><a href="/">${escapeHtml(appName)}</a></p></main>`
   )
@@ -103,14 +106,11 @@ export function renderCertPage(
   if (!SAFE_CERT_CODE.test(exam.code)) {
     throw new Error(`Exam code "${exam.code}" cannot be used as a URL path segment.`)
   }
-  const meta = certMeta(exam, entry.questionCount)
+  const meta = certMeta(exam)
   const url = absoluteUrl(certPath(exam.code))
   let html = template.replace(/<title>[^<]*<\/title>/, () => `<title>${escapeHtml(meta.title)}</title>`)
-  html = replaceMetaContent(html, 'name', 'description', meta.description)
   html = replaceMetaContent(html, 'property', 'og:title', meta.title)
-  html = replaceMetaContent(html, 'property', 'og:description', meta.description)
   html = replaceMetaContent(html, 'name', 'twitter:title', meta.title)
-  html = replaceMetaContent(html, 'name', 'twitter:description', meta.description)
   const headExtras =
     `<link rel="canonical" href="${escapeHtml(url)}" />` +
     `<meta property="og:url" content="${escapeHtml(url)}" />` +

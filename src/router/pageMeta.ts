@@ -9,7 +9,7 @@ export function resolvePageMeta(
 ): PageMeta {
   if (routeName === 'welcome') return homeMeta()
   const cert = certs.find((candidate) => candidate.exam.code === certCode)
-  if (routeName === 'quiz-dashboard' && cert) return certMeta(cert.exam, cert.questionCount)
+  if (routeName === 'quiz-dashboard' && cert) return certMeta(cert.exam)
   const label = typeof routeName === 'string' ? texts.seoRouteTitles[routeName] : undefined
   const base = label ?? texts.notFoundTitle
   return privateMeta(cert ? `${base} (${cert.exam.code})` : base)
@@ -53,7 +53,6 @@ function setCanonical(doc: Document, href: string | null) {
 
 export function applyPageMeta(meta: PageMeta, doc: Document = document) {
   doc.title = meta.title
-  setMeta(doc, 'description', meta.description)
   setMeta(doc, 'robots', meta.canonicalPath === null ? 'noindex' : null)
   setCanonical(doc, meta.canonicalPath === null ? null : absoluteUrl(meta.canonicalPath))
 }

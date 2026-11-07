@@ -17,7 +17,9 @@
       "Configuration and Knowledge Management": 12,
       "Governance, Risk, and Responsible Use": 15,
       "Troubleshooting and Optimization": 10
-    }
+    },
+    "overview": "For professionals who use Claude as a productivity tool (operations, marketing, project management, education, communications), not for developers building on the API. Covers prompting, evaluating outputs, designing workflows, choosing models and features, responsible use and troubleshooting. No prerequisites.",
+    "officialUrl": "https://anthropic-partners.skilljar.com/page/partner-certifications"
   },
   "themes": {
     "tasks": [

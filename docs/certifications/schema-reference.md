@@ -57,6 +57,8 @@ Metadata about the certification itself. Displayed on the home screen and used f
 | `passingScore.scale` | number | optional | Max scale (e.g. `1000` for AWS scaled scores). Omit for percentage-based certs — `passingScore` is then itself the pass percentage. The pass percentage is always computed as `passingScore / scale`. |
 | `weights` | `Record<string, number>` | optional | Keys **must** be topic names used on questions; values are percentages summing to 100. When the cert publishes its domains but no percentages, split 100 equally across the official domain names (two decimals, e.g. `7.69` for 13 domains; the validator tolerates a total within 0.5 of 100). Omit only if no domain list is published; the app then samples uniformly. A weighted topic that no question uses yet is ignored by sampling and the remaining weights are renormalized. |
 | `instructions` | string | optional | Free-text instructions shown on the home screen. |
+| `overview` | string | optional | Two to three plain sentences on what the exam covers (target candidate, skills measured), paraphrased from the vendor's official documentation. Shown in the dashboard's "About the exam" section and in the prerendered certification page. Must be non-empty when present. |
+| `officialUrl` | string | optional | `https` URL of the vendor's official exam guide or certification page, shown as an "Official exam guide" link. Any other scheme is rejected by the validator. |
 
 ### Session scoring
 

@@ -14,7 +14,9 @@
       "Deployment": 24,
       "Security": 26,
       "Troubleshooting and Optimization": 18
-    }
+    },
+    "overview": "For developers with at least a year of hands-on experience building and maintaining AWS applications. Covers developing with AWS services and SDKs, deploying applications with CI/CD, securing code and data, and troubleshooting and optimizing applications.",
+    "officialUrl": "https://docs.aws.amazon.com/aws-certification/latest/developer-associate-02/developer-associate-02.html"
   },
   "themes": {
     "services": [

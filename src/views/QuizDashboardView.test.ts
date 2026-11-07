@@ -12,7 +12,7 @@ const defaultQuestions = [
 
 const { pushLocalData, bank } = vi.hoisted(() => ({
   pushLocalData: vi.fn(),
-  bank: { questions: [] as unknown[] },
+  bank: { questions: [] as unknown[], examExtras: {} as Record<string, string> },
 }))
 
 vi.mock('../composables/useAccount', () => ({
@@ -24,7 +24,7 @@ vi.mock('../composables/useQuizLoader', () => ({
     groupedCerts: [],
     getCert: () => ({
       version: 1,
-      exam: { name: 'Test', code: 'TEST', totalQuestions: 2, timeLimitMinutes: 10, passingScore: { passingScore: 700, scale: 1000 } },
+      exam: { name: 'Test', code: 'TEST', totalQuestions: 2, timeLimitMinutes: 10, passingScore: { passingScore: 700, scale: 1000 }, ...bank.examExtras },
       themes: { services: ['lambda'] },
       questions: bank.questions,
     }),
@@ -50,6 +50,7 @@ describe('QuizDashboardView', () => {
   beforeEach(() => {
     pushLocalData.mockClear()
     bank.questions = defaultQuestions
+    bank.examExtras = {}
     useUserProgressStore().byExamCode = {}
     useQuizHistoryStore().entries = []
   })
@@ -82,6 +83,46 @@ describe('QuizDashboardView', () => {
     expect(wrapper.find('h1').text()).toContain('practice test')
     expect(wrapper.find('h1').text()).toContain('TEST')
     expect(wrapper.find('details.about summary h2').text()).toContain('TEST')
+  })
+
+  it('shows the exam overview and a link to the official guide inside the About section', async () => {
+    bank.examExtras = { overview: 'For admins who run clusters.', officialUrl: 'https://example.com/guide' }
+
+    await router.push('/certs/TEST')
+    const wrapper = mount(QuizDashboardView, { global: { plugins: [pinia, router] }, props: { certCode: 'TEST' } })
+
+    const about = wrapper.get('details.about')
+    expect(about.text()).toContain('For admins who run clusters.')
+    expect(about.get('a.about__guide').attributes('href')).toBe('https://example.com/guide')
+    expect(about.get('a.about__guide').attributes('rel')).toContain('noopener')
+  })
+
+  it('shows neither overview nor official guide link when the exam declares none', async () => {
+    await router.push('/certs/TEST')
+    const wrapper = mount(QuizDashboardView, { global: { plugins: [pinia, router] }, props: { certCode: 'TEST' } })
+
+    expect(wrapper.find('a.about__guide').exists()).toBe(false)
+    expect(wrapper.find('.about__overview').exists()).toBe(false)
+  })
+
+  it('advises a first mock exam only while the certification has no quiz history', async () => {
+    await router.push('/certs/TEST')
+    const wrapper = mount(QuizDashboardView, { global: { plugins: [pinia, router] }, props: { certCode: 'TEST' } })
+    expect(wrapper.find('.mock-exam-tip').exists()).toBe(true)
+
+    useQuizHistoryStore().entries.push({
+      id: 'h1',
+      certCode: 'TEST',
+      mode: 'exam',
+      startedAt: 0,
+      finishedAt: 1,
+      questionIds: ['q1'],
+      answers: {},
+      flags: [],
+      result: { percentCorrect: 100, passed: true, timesCorrect: 1, totalAnswered: 1 },
+    })
+    await wrapper.vm.$nextTick()
+    expect(wrapper.find('.mock-exam-tip').exists()).toBe(false)
   })
 
   it('folds the About this exam section by default while keeping its text in the DOM', async () => {
