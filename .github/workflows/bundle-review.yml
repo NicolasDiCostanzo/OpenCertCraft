@@ -50,7 +50,7 @@ jobs:
         run: git add -f .bundle-snapshots .llm-snapshots 2>/dev/null || true
       - name: Open review PR
         if: steps.schedule.outputs.run == 'true'
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: 'chore: weekly cert-bundle review'
