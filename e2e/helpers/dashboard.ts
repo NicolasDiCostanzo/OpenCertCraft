@@ -1,8 +1,12 @@
 import { expect, type Page } from '@playwright/test'
 import { texts } from '../../src/texts/en'
 
-export async function openCertDashboardCard(page: Page, examName: string): Promise<void> {
-  await page.getByRole('heading', { name: examName }).click()
+export function certCard(page: Page, code: string) {
+  return page.locator('.cert-card', { hasText: code })
+}
+
+export async function openCertDashboardCard(page: Page, examName: string, code: string): Promise<void> {
+  await certCard(page, code).getByRole('heading', { name: examName }).click()
 }
 
 export async function goBackToCertDashboard(page: Page): Promise<void> {

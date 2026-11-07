@@ -18,6 +18,7 @@ import {
   expectSingleHistoryEntry,
   goBackToDashboard,
   goBackToCertDashboard,
+  certCard,
   openCertDashboardCard,
   openFlaggedReviewOnly,
   signOut,
@@ -81,12 +82,12 @@ test.describe.serial('quiz journey on the DVA-C02 certification', () => {
 
     await expect(page.locator('.cert-card')).toHaveCount(certManifest.length)
     for (const entry of certManifest) {
-      await expect(page.getByRole('heading', { name: entry.exam.name })).toBeVisible()
+      await expect(certCard(page, entry.exam.code).getByRole('heading', { name: entry.exam.name })).toBeVisible()
     }
   })
 
   test('shows a blank dashboard before any quiz is taken', async ({ sharedPage: page }) => {
-    await openCertDashboardCard(page, certExamName)
+    await openCertDashboardCard(page, certExamName, certCode)
     await expect(page).toHaveURL(new RegExp(`/certs/${certCode}$`))
 
     await expectDashboardStat(page, texts.quizzesTaken, '0')
