@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import type { CertManifestEntry } from '../types'
 import { multiAnswerQuestion, riskyQuestion, singleAnswerQuestion } from '../utils/fixtures/sampleQuestions.fixture'
-import { fillSiteTemplate, renderCertPage, renderRobots, renderSitemap } from './seo'
+import { COMMIT_DATE, makeSiteRoot } from './fixtures/siteRoot.fixture'
+import { fillSiteTemplate, renderCertPage, renderRobots, renderSitemap, seoPlugin } from './seo'
 
 const template = fillSiteTemplate(`<!doctype html>
 <html lang="en">
@@ -119,9 +120,56 @@ describe('sitemap and robots', () => {
     expect(sitemap).toContain('<loc>https://opencertcraft.com/</loc></url>')
   })
 
+  it('ignores inherited object properties when looking up a lastmod', () => {
+    expect(renderSitemap([entry({ code: 'constructor' })])).not.toContain('<lastmod>')
+  })
+
   it('points crawlers at the sitemap without blocking anything', () => {
     const robots = renderRobots()
     expect(robots).toContain('Sitemap: https://opencertcraft.com/sitemap.xml')
     expect(robots).not.toMatch(/^Disallow:\s*\S/m)
+  })
+})
+
+describe('seoPlugin', () => {
+  const chunk = (fileName: string, root: string) => ({
+    type: 'chunk',
+    fileName,
+    facadeModuleId: `${root}/src/assets/X-1 questions.json`,
+  })
+
+  async function generate(root: string, outputs: Record<string, unknown>) {
+    const emitted: { fileName: string; source: string }[] = []
+    const plugin = seoPlugin(root)
+    const { handler } = plugin.generateBundle as unknown as {
+      handler: (this: unknown, options: unknown, bundle: unknown) => Promise<void>
+    }
+    const bundle = { 'index.html': { type: 'asset', source: template }, ...outputs }
+    await handler.call({ emitFile: (file: { fileName: string; source: string }) => emitted.push(file) }, {}, bundle)
+    return Object.fromEntries(emitted.map((file) => [file.fileName, file.source]))
+  }
+
+  it('preloads the bank chunk found in the bundle and embeds sample questions from the bundle file', async () => {
+    const root = makeSiteRoot({ withGit: false })
+    const files = await generate(root, { 'assets/X-1 questions-h4sh.js': chunk('assets/X-1 questions-h4sh.js', root) })
+
+    expect(files['certs/X-1/index.html']).toContain('href="/assets/X-1%20questions-h4sh.js"')
+    expect(files['certs/X-1/index.html']).toContain('Which option encrypts data at rest?')
+    expect(Object.keys(files)).toEqual(expect.arrayContaining(['robots.txt', 'sitemap.xml']))
+  })
+
+  it('fails the build when the question bank chunk is missing from the bundle', async () => {
+    await expect(generate(makeSiteRoot({ withGit: false }), {})).rejects.toThrow(/X-1 questions\.json/)
+  })
+
+  it.each([
+    { withGit: true, expected: `<lastmod>${COMMIT_DATE}</lastmod>` },
+    { withGit: false, expected: null },
+  ])('sets the sitemap lastmod from git history only when available (git: $withGit)', async ({ withGit, expected }) => {
+    const root = makeSiteRoot({ withGit })
+    const files = await generate(root, { 'assets/b.js': chunk('assets/b.js', root) })
+
+    if (expected) expect(files['sitemap.xml']).toContain(expected)
+    else expect(files['sitemap.xml']).not.toContain('<lastmod>')
   })
 })

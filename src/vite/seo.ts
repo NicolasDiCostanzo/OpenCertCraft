@@ -128,7 +128,10 @@ export function renderRobots(): string {
 export function renderSitemap(entries: CertManifestEntry[], lastModified: Record<string, string> = {}): string {
   const pages = [
     { path: '/', lastmod: undefined },
-    ...entries.map((entry) => ({ path: certPath(entry.exam.code), lastmod: lastModified[entry.exam.code] })),
+    ...entries.map((entry) => ({
+      path: certPath(entry.exam.code),
+      lastmod: Object.hasOwn(lastModified, entry.exam.code) ? lastModified[entry.exam.code] : undefined,
+    })),
   ]
   const urls = pages
     .map(
