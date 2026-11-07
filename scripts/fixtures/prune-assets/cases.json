@@ -1,0 +1,37 @@
+[
+  {
+    "name": "keeps assets younger than the retention window",
+    "now": "2026-11-07T00:00:00Z",
+    "retentionDays": 30,
+    "objects": [
+      { "Key": "assets/index-a1.js", "LastModified": "2026-11-06T12:00:00Z" },
+      { "Key": "assets/index-b2.js", "LastModified": "2026-10-20T00:00:00Z" }
+    ],
+    "expected": []
+  },
+  {
+    "name": "removes only assets older than the retention window",
+    "now": "2026-11-07T00:00:00Z",
+    "retentionDays": 30,
+    "objects": [
+      { "Key": "assets/index-old.js", "LastModified": "2026-09-01T00:00:00Z" },
+      { "Key": "assets/index-new.js", "LastModified": "2026-11-07T00:00:00Z" },
+      { "Key": "assets/style-old.css", "LastModified": "2026-10-01T00:00:00Z" }
+    ],
+    "expected": ["assets/index-old.js", "assets/style-old.css"]
+  },
+  {
+    "name": "keeps an asset exactly at the cutoff",
+    "now": "2026-11-07T00:00:00Z",
+    "retentionDays": 30,
+    "objects": [{ "Key": "assets/edge.js", "LastModified": "2026-10-08T00:00:00Z" }],
+    "expected": []
+  },
+  {
+    "name": "returns nothing for an empty listing",
+    "now": "2026-11-07T00:00:00Z",
+    "retentionDays": 30,
+    "objects": [],
+    "expected": []
+  }
+]

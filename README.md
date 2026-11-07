@@ -74,8 +74,10 @@ The frontend is fully static — `npm run build` emits a `dist/` directory you c
 To deploy to the project's own S3 + CloudFront setup:
 
 ```bash
-npm run deploy:front   # build + S3 sync + CloudFront invalidation
+npm run deploy:front   # build + S3 sync + asset pruning + CloudFront invalidation
 ```
+
+Hashed files under `assets/` are never deleted by the sync, so cached HTML can still load the previous build's chunks; `scripts/prune-assets.mjs` removes those older than 30 days (every deploy re-uploads the live assets, so they are never pruned).
 
 Defaults to stack `sam-app` (the stack `samconfig.toml` deploys to); override with `STACK_NAME=<stack>`. `template.yaml` (SAM) defines the optional AWS backend — Cognito user pool, HTTP API, two Lambdas, DynamoDB, and the S3 + CloudFront layer with Origin Access Control and ACM.
 
