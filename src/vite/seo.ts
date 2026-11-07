@@ -1,3 +1,4 @@
+import { execFileSync } from 'node:child_process'
 import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import type { Plugin } from 'vite'
@@ -56,7 +57,7 @@ function certBody(entry: CertManifestEntry): string {
   )
 }
 
-export function renderCertPage(template: string, entry: CertManifestEntry): string {
+export function renderCertPage(template: string, entry: CertManifestEntry, bankChunkPath: string): string {
   const { exam } = entry
   if (!SAFE_CERT_CODE.test(exam.code)) {
     throw new Error(`Exam code "${exam.code}" cannot be used as a URL path segment.`)
@@ -70,7 +71,9 @@ export function renderCertPage(template: string, entry: CertManifestEntry): stri
   html = replaceMetaContent(html, 'name', 'twitter:title', meta.title)
   html = replaceMetaContent(html, 'name', 'twitter:description', meta.description)
   const headExtras =
-    `<link rel="canonical" href="${escapeHtml(url)}" />` + `<meta property="og:url" content="${escapeHtml(url)}" />`
+    `<link rel="canonical" href="${escapeHtml(url)}" />` +
+    `<meta property="og:url" content="${escapeHtml(url)}" />` +
+    `<link rel="modulepreload" crossorigin href="${escapeHtml(encodeURI(bankChunkPath))}" />`
   if (!html.includes('</head>')) throw new Error('index.html has no </head> to inject certification metadata into.')
   html = html.replace('</head>', () => `${headExtras}</head>`)
   const emptyRoot = '<div id="app"></div>'
@@ -82,10 +85,39 @@ export function renderRobots(): string {
   return `User-agent: *\nAllow: /\n\nSitemap: ${absoluteUrl('/sitemap.xml')}\n`
 }
 
-export function renderSitemap(entries: CertManifestEntry[]): string {
-  const paths = ['/', ...entries.map((entry) => certPath(entry.exam.code))]
-  const urls = paths.map((path) => `  <url><loc>${escapeHtml(absoluteUrl(path))}</loc></url>`).join('\n')
+export function renderSitemap(entries: CertManifestEntry[], lastModified: Record<string, string> = {}): string {
+  const pages = [
+    { path: '/', lastmod: undefined },
+    ...entries.map((entry) => ({ path: certPath(entry.exam.code), lastmod: lastModified[entry.exam.code] })),
+  ]
+  const urls = pages
+    .map(
+      ({ path, lastmod }) =>
+        `  <url><loc>${escapeHtml(absoluteUrl(path))}</loc>${lastmod ? `<lastmod>${lastmod}</lastmod>` : ''}</url>`,
+    )
+    .join('\n')
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`
+}
+
+function bundleLastModified(root: string, file: string): string | null {
+  const run = (args: string[]) =>
+    execFileSync('git', args, { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim()
+  try {
+    if (run(['rev-parse', '--is-shallow-repository']) !== 'false') return null
+    const date = run(['log', '-1', '--format=%cs', '--', `src/assets/${file}`])
+    return /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : null
+  } catch {
+    return null
+  }
+}
+
+function findBankChunk(bundle: Record<string, { type: string; fileName: string; facadeModuleId?: string | null }>, entry: CertManifestEntry): string {
+  for (const output of Object.values(bundle)) {
+    if (output.type === 'chunk' && output.facadeModuleId?.endsWith(`/src/assets/${entry.file}`)) {
+      return `/${output.fileName}`
+    }
+  }
+  throw new Error(`SEO plugin could not find the built question-bank chunk for "${entry.file}".`)
 }
 
 export function seoPlugin(root: string): Plugin {
@@ -102,15 +134,18 @@ export function seoPlugin(root: string): Plugin {
         const manifest = JSON.parse(
           await readFile(join(root, 'src/assets/cert-manifest.json'), 'utf8'),
         ) as CertManifestEntry[]
+        const lastModified: Record<string, string> = {}
         for (const entry of manifest) {
           this.emitFile({
             type: 'asset',
             fileName: `certs/${entry.exam.code}/index.html`,
-            source: renderCertPage(template, entry),
+            source: renderCertPage(template, entry, findBankChunk(bundle, entry)),
           })
+          const date = bundleLastModified(root, entry.file)
+          if (date) lastModified[entry.exam.code] = date
         }
         this.emitFile({ type: 'asset', fileName: 'robots.txt', source: renderRobots() })
-        this.emitFile({ type: 'asset', fileName: 'sitemap.xml', source: renderSitemap(manifest) })
+        this.emitFile({ type: 'asset', fileName: 'sitemap.xml', source: renderSitemap(manifest, lastModified) })
       },
     },
   }
