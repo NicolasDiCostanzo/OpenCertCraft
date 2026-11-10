@@ -81,7 +81,7 @@ test.describe.serial('quiz journey on the DVA-C02 certification', () => {
 
     await expect(page.locator('.cert-card')).toHaveCount(certManifest.length)
     for (const entry of certManifest) {
-      await expect(page.getByRole('heading', { name: entry.exam.name })).toBeVisible()
+      await expect(page.getByRole('heading', { name: entry.exam.name, exact: true })).toBeVisible()
     }
   })
 
