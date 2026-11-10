@@ -89,6 +89,29 @@
     "questionCount": 382
   },
   {
+    "file": "CCA-F-exam-topics questions.json",
+    "exam": {
+      "name": "Claude Certified Architect - Foundations (ExamTopics)",
+      "code": "CCA-F-exam-topics",
+      "totalQuestions": 60,
+      "timeLimitMinutes": 120,
+      "passingScore": {
+        "passingScore": 720,
+        "scale": 1000
+      },
+      "weights": {
+        "Agentic Architecture & Orchestration": 27,
+        "Tool Design & MCP Integration": 18,
+        "Claude Code Configuration & Workflows": 20,
+        "Prompt Engineering & Structured Output": 20,
+        "Context Management & Reliability": 15
+      },
+      "overview": "For solution architects who design and build production applications with Claude. Tests judgment on tradeoffs across Claude Code, the Agent SDK, the Claude API and MCP: agent orchestration, tool design, prompting and structured output, and context management. Anthropic recommends about six months of hands-on experience.",
+      "officialUrl": "https://anthropic-partners.skilljar.com/page/partner-certifications"
+    },
+    "questionCount": 134
+  },
+  {
     "file": "CCAO-F questions.json",
     "exam": {
       "name": "Claude Certified Associate - Foundations",
