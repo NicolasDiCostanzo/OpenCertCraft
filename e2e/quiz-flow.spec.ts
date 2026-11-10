@@ -86,6 +86,17 @@ test.describe.serial('quiz journey on the DVA-C02 certification', () => {
     }
   })
 
+  test('opens the DVA-C03 dashboard from its card, distinct from DVA-C02', async ({ sharedPage: page }) => {
+    const entry = certManifest.find(({ exam }) => exam.code === 'DVA-C03')
+    expect(entry).toBeDefined()
+
+    await openCertDashboardCard(page, entry!.exam.name, 'DVA-C03')
+    await expect(page).toHaveURL(/\/certs\/DVA-C03$/)
+
+    await page.goto('/cert')
+    await page.getByRole('button', { name: texts.expandAllLabel }).click()
+  })
+
   test('shows a blank dashboard before any quiz is taken', async ({ sharedPage: page }) => {
     await openCertDashboardCard(page, certExamName, certCode)
     await expect(page).toHaveURL(new RegExp(`/certs/${certCode}$`))

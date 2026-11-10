@@ -78,5 +78,12 @@ export const examCertBundle: CertBundle = (() => {
 })()
 
 export const certFamilyGroups: CertFamilyGroup[] = [
-  { familyId: 'fixture', label: 'Fixture provider', certs: [{ exam: validCertBundle.exam, questionCount: 120 }] },
+  {
+    familyId: 'fixture',
+    label: 'Fixture provider',
+    certs: [
+      { exam: validCertBundle.exam, questionCount: 120 },
+      { exam: { ...validCertBundle.exam, code: 'FIX-002' }, questionCount: 90 },
+    ],
+  },
 ]

@@ -173,7 +173,7 @@
       ],
       "answers": "B",
       "topic": "Development with AWS Services",
-      "explanation": "Hot users create hot partitions; write sharding (user_id#shard) distributes writes across partitions. Same pattern needed for popular hashtags. DAX provides single-digit millisecond reads. Provisioned capacity with auto-scaling is more cost-effective than on-demand at 50K writes/second. Option A lacks write sharding for hot keys. Option C post_id PK does not support efficient user queries. Option D with transactions adds latency and cost without solving hot partition issue.",
+      "explanation": "Hot users create hot partitions; write sharding (user_id#shard) distributes writes across partitions. Same pattern needed for popular hashtags. DAX provides single-digit millisecond reads. Provisioned capacity with auto-scaling is more cost-effective than on-demand at 50K writes/second. Option A lacks write sharding for hot keys. Option C keys its user GSI on user_id (partition) and timestamp (sort) with no sharding, so hot users concentrate writes on a few partitions and create hot partitions at 50,000 writes/second. Option D with transactions adds latency and cost without solving hot partition issue.",
       "themes": {
         "services": [
           "dynamodb"
@@ -320,14 +320,14 @@
       "id": "10",
       "question": "A developer is implementing a Lambda function that processes S3 events. During testing, the developer notices the function is invoked multiple times for a single S3 upload, and duplicate records appear in the downstream DynamoDB table. How should the developer ensure exactly-once processing?",
       "options": [
-        "Implement idempotency by using the S3 object ETag as a conditional write key in DynamoDB",
+        "Implement idempotency by using the bucket, object key and version ID (or the event sequencer) as a conditional write key in DynamoDB",
         "Enable versioning on the S3 bucket to prevent duplicate events",
         "Set the Lambda reserved concurrency to 1 to prevent parallel processing of duplicate events",
         "Configure S3 event notifications to use SQS FIFO queue as the target"
       ],
       "answers": "A",
       "topic": "Development with AWS Services",
-      "explanation": "S3 event notifications guarantee at-least-once delivery, so duplicates are expected. Idempotency using the ETag (or object key + version) as a conditional write ensures duplicate invocations do not create duplicate records. S3 event notifications cannot target an SQS FIFO queue (D), so that option is not even possible. Versioning (B) does not prevent duplicate events. Concurrency=1 (C) serializes but does not prevent duplicates from retries.",
+      "explanation": "S3 event notifications guarantee at-least-once delivery, so duplicates are expected. Idempotency using an upload-specific identity (bucket, object key and version ID, or the event sequencer) as a conditional write key ensures duplicate invocations do not create duplicate records. The ETag alone is not suitable: it is a content hash, so different objects with identical content can share one. S3 event notifications cannot target an SQS FIFO queue (D), so that option is not even possible. Versioning (B) does not prevent duplicate events. Concurrency=1 (C) serializes but does not prevent duplicates from retries.",
       "themes": {
         "services": [
           "lambda",
@@ -345,9 +345,9 @@
     },
     {
       "id": "11",
-      "question": "A developer is debugging Lambda function failures. The function processes S3 events and writes to DynamoDB. Errors occur sporadically: some invocations fail with ProvisionedThroughputExceededException, others with ConditionalCheckFailedException, and some complete successfully but data appears missing. CloudWatch shows the function is invoked multiple times for single S3 uploads. What combination explains ALL symptoms and fixes them? (Select TWO)",
+      "question": "A developer is debugging Lambda function failures. The function processes S3 events and writes to DynamoDB. Errors occur sporadically: some invocations fail with ProvisionedThroughputExceededException and others with ConditionalCheckFailedException. CloudWatch shows the function is invoked multiple times for single S3 uploads. What combination explains ALL symptoms and fixes them? (Select TWO)",
       "options": [
-        "Lambda retries on transient failures while previous invocation is still running, causing throughput exhaustion; increase DynamoDB provisioned capacity or switch to on-demand",
+        "Lambda retries a failed invocation only after the failed attempt returns an error or times out; these retries, added to concurrent invocations handling other events, exhaust DynamoDB throughput; increase provisioned capacity or switch to on-demand",
         "S3 event notifications deliver at-least-once causing duplicate invocations; implement idempotency using conditional writes that throw ConditionalCheckFailedException on duplicates",
         "Enable S3 event notifications to use SQS FIFO to prevent duplicate events and eliminate all issues",
         "Concurrent Lambda invocations for the same S3 object race to write to DynamoDB, causing conditional write failures; wrap every write in DynamoDB transactions to ensure consistency",
@@ -358,7 +358,7 @@
         "B"
       ],
       "topic": "Troubleshooting and Optimization",
-      "explanation": "S3 events are at-least-once, so duplicates are expected (B). ConditionalCheckFailedException from idempotency checks on duplicates is correct behavior. ProvisionedThroughputExceededException occurs when retried invocations plus new invocations exceed capacity (A). Missing data could be writes failing silently without proper error handling. Option D transactions do not solve duplicate invocations. Option E consistent reads do not explain writes appearing missing. Option C FIFO does not change S3 at-least-once delivery.",
+      "explanation": "S3 events are at-least-once, so duplicates are expected (B). ConditionalCheckFailedException from idempotency checks on duplicates is correct behavior. ProvisionedThroughputExceededException occurs when retried invocations plus concurrent invocations for other events exceed capacity (A). Option D transactions do not solve duplicate invocations. Option E: an eventually consistent read can omit a just-written item, but no symptom in the scenario involves reads, so it explains none of the reported errors. Option C FIFO does not change S3 at-least-once delivery.",
       "themes": {
         "services": [
           "lambda",
@@ -407,12 +407,12 @@
       "options": [
         "Use AWS::Serverless::Function with Policies: SecretsManagerReadWrite and pass the secret ARN as an environment variable",
         "Create a custom IAM role with full Secrets Manager access and reference it in the Role property",
-        "Use AWS::Serverless::Function with Policies: - SecretsManagerGetSecretValue and reference the secret using !Sub arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:myapp/*",
+        "Use AWS::Serverless::Function with Policies: - AWSSecretsManagerGetSecretValuePolicy, supplying SecretArn from a template parameter (SecretArn: !Ref SecretArnParam)",
         "Use Globals section to grant all functions SecretsManagerReadWrite permission"
       ],
       "answers": "C",
       "topic": "Security",
-      "explanation": "SAM Policy Templates like SecretsManagerGetSecretValue provide least-privilege access. Using !Sub with pseudo parameters avoids hardcoding while scoping to specific secrets (myapp/*). Option A uses overly broad SecretsManagerReadWrite. Options B and D grant excessive permissions violating least-privilege.",
+      "explanation": "The SAM policy template AWSSecretsManagerGetSecretValuePolicy grants only secretsmanager:GetSecretValue on a single secret. Its SecretArn parameter is mapped from a template parameter with !Ref, so the ARN is not hardcoded in the template and access stays scoped to that one secret. Option A uses overly broad SecretsManagerReadWrite. Options B and D grant excessive permissions violating least-privilege.",
       "themes": {
         "services": [
           "sam",
@@ -435,13 +435,13 @@
       "question": "A developer needs to implement a REST API that allows users to upload files up to 10GB. The API runs on Lambda with API Gateway. Files should be stored in S3 with metadata in DynamoDB. What is the correct implementation approach?",
       "options": [
         "Use an API Gateway REST API with multipart upload enabled on the method and stream every part directly into S3",
-        "Lambda issues a presigned URL, client uploads to S3, S3 event invokes Lambda to save metadata in DynamoDB",
+        "Lambda initiates an S3 multipart upload and issues presigned URLs for individual parts, the client uploads the parts directly to S3 and Lambda completes the upload, then the S3 event invokes Lambda to save metadata in DynamoDB",
         "Configure API Gateway with binary media types and raise the integration payload limit to 10GB",
         "Implement chunked transfer encoding in Lambda to handle large files"
       ],
       "answers": "B",
       "topic": "Development with AWS Services",
-      "explanation": "API Gateway has a 10MB payload limit and Lambda has a 6MB limit for synchronous invocations. For large files, the pattern is: Lambda generates presigned URL -> client uploads directly to S3 -> S3 event notification triggers another Lambda for metadata processing. This bypasses API Gateway/Lambda size limits entirely.",
+      "explanation": "API Gateway has a 10MB payload limit and Lambda has a 6MB limit for synchronous invocations. For large files, the pattern is: Lambda initiates an S3 multipart upload and issues presigned URLs for individual parts -> client uploads the parts directly to S3 (a single presigned PUT is limited to 5 GB, so 10 GB requires multipart) -> Lambda completes the upload -> the S3 ObjectCreated:CompleteMultipartUpload event notification triggers another Lambda for metadata processing. This bypasses API Gateway/Lambda size limits entirely.",
       "themes": {
         "services": [
           "api-gateway",
@@ -498,7 +498,7 @@
         "D"
       ],
       "topic": "Security",
-      "explanation": "Cross-account access requires: 1) The target account role's trust policy must allow the Lambda execution role to assume it, and 2) The Lambda code must call STS AssumeRole to get temporary credentials for the target account.",
+      "explanation": "Cross-account access requires: 1) The target account role's trust policy must allow the Lambda execution role to assume it, and 2) The Lambda code must call STS AssumeRole to get temporary credentials for the target account. The execution role also needs an identity-based policy allowing sts:AssumeRole on the target role, since a trust policy alone does not grant the permission to call it from the source account.",
       "themes": {
         "services": [
           "lambda",
@@ -520,11 +520,11 @@
         "AWS WAF rules",
         "API keys",
         "API Gateway resource policies",
-        "Amazon Cognito User Pool groups with IAM roles"
+        "Amazon Cognito user pool groups mapped to IAM roles through an identity pool, with AWS_IAM authorization on the API methods"
       ],
       "answers": "D",
       "topic": "Security",
-      "explanation": "Cognito User Pool groups can be assigned IAM roles. When a user authenticates, their group membership is included in the token. Combined with API Gateway authorization, this enables fine-grained access control based on group membership.",
+      "explanation": "Cognito user pool groups can be assigned IAM roles. An identity pool exchanges the user's token for temporary credentials of the role matching their group, the client signs requests with SigV4, and API Gateway AWS_IAM authorization enforces each role's execute-api permissions per resource. A user pool authorizer alone only validates the token; enforcing group access with it would require checking the cognito:groups claim, for example in a Lambda authorizer.",
       "themes": {
         "services": [
           "api-gateway",
@@ -651,7 +651,7 @@
       ],
       "answers": "A",
       "topic": "Troubleshooting and Optimization",
-      "explanation": "C extensions compiled on macOS produce .dylib files that are incompatible with Lambda Linux runtime which expects .so files. Solutions include: building in a Docker container matching Lambda environment (amazon/aws-lambda-python), using Lambda layers with pre-compiled Linux binaries, or using pure Python alternatives. This is a common cross-platform deployment pitfall.",
+      "explanation": "A compiled C extension targets one operating system and CPU architecture. An extension built on macOS cannot be loaded by Lambda's Linux runtime, which needs extensions built for Linux and for the function's architecture (x86_64 or arm64); the filename suffix alone does not decide compatibility. Solutions include: building in a Docker container matching Lambda environment (amazon/aws-lambda-python), using Lambda layers with pre-compiled Linux binaries, or using pure Python alternatives. This is a common cross-platform deployment pitfall.",
       "themes": {
         "services": [
           "lambda"
@@ -696,7 +696,7 @@
     },
     {
       "id": "24",
-      "question": "A developer is implementing pagination for an API that queries DynamoDB. The table has millions of items. The API must support forward pagination with consistent results even when new items are added during pagination. Which implementation approach ensures consistency?",
+      "question": "A developer is implementing pagination for an API that queries DynamoDB. The table has millions of items. The API must support forward pagination with consistent results even when new items are added during pagination; new items are always inserted with a createdAt later than the initial request time. Which implementation approach ensures consistency?",
       "options": [
         "Use Scan with a global secondary index and page through the results using numeric offset values sent by the client",
         "Use PartiQL SELECT with OFFSET and LIMIT clauses for pagination",
@@ -705,7 +705,7 @@
       ],
       "answers": "C",
       "topic": "Development with AWS Services",
-      "explanation": "LastEvaluatedKey-based pagination maintains position even as data changes. Adding a timestamp condition (e.g., createdAt <= initial request time) ensures new items added during pagination do not appear, providing consistent results. Offset-based pagination (A, B) can miss or duplicate items when data changes. Caching (D) does not scale for millions of items and has staleness issues.",
+      "explanation": "LastEvaluatedKey preserves the traversal position but does not provide snapshot consistency by itself. Adding a timestamp condition (e.g., createdAt <= initial request time) excludes items inserted during pagination because they always get a later createdAt; backfilled or backdated items could still appear on later pages. Offset-based pagination (A, B) can miss or duplicate items when data changes. Caching (D) does not scale for millions of items and has staleness issues.",
       "themes": {
         "services": [
           "dynamodb"
@@ -772,7 +772,7 @@
     },
     {
       "id": "27",
-      "question": "A developer needs to store sensitive API keys that a Lambda function uses to call third-party services. The keys must be encrypted, automatically rotated every 30 days, and the function should always use the current key without redeployment. Which solution meets ALL requirements?",
+      "question": "A developer needs to store sensitive API keys that a Lambda function uses to call third-party services. The keys must be encrypted, automatically rotated every 30 days, and the function should pick up each rotated key without redeployment. Which solution meets ALL requirements?",
       "options": [
         "Store keys in Parameter Store SecureString; use EventBridge scheduled rule to update parameters monthly",
         "Store keys in Secrets Manager with automatic rotation enabled; Lambda retrieves secret at runtime using caching with short TTL",
@@ -781,7 +781,7 @@
       ],
       "answers": "B",
       "topic": "Security",
-      "explanation": "Secrets Manager supports automatic rotation with Lambda rotation functions. The application retrieves secrets at runtime, so rotated credentials are used without redeployment. Using caching with short TTL balances performance with rotation responsiveness. Environment variables (D) require redeployment. Parameter Store (A) does not have built-in automatic rotation. DynamoDB (C) lacks rotation capabilities.",
+      "explanation": "Secrets Manager supports automatic rotation with Lambda rotation functions. The application retrieves secrets at runtime, so rotated credentials are used without redeployment. Using caching with short TTL balances performance with rotation responsiveness; a cached secret may stay in use until its TTL expires, so the TTL bounds how long the previous key is used. Environment variables (D) require redeployment. Parameter Store (A) does not have built-in automatic rotation. DynamoDB (C) lacks rotation capabilities.",
       "themes": {
         "services": [
           "lambda",
@@ -849,16 +849,16 @@
     },
     {
       "id": "30",
-      "question": "A developer is troubleshooting a Lambda function that returns 502 errors from API Gateway. CloudWatch logs show the function completes successfully with correct response. X-Ray traces show the Lambda duration is 200ms. The response body contains nested JSON with special characters. What is the MOST likely cause?",
+      "question": "A developer is troubleshooting a Lambda function that returns 502 errors from an API Gateway REST API with Lambda proxy integration. CloudWatch logs show the function completes successfully with correct response. X-Ray traces show the Lambda duration is 200ms. The response body contains nested JSON with special characters. What is the MOST likely cause?",
       "options": [
         "X-Ray is adding latency that causes timeouts",
         "The 200ms execution time exceeds the API Gateway integration timeout configured for the method",
         "Special characters in the nested JSON are causing API Gateway to fail when parsing the Lambda response body",
-        "Lambda's response does not match the proxy integration format (missing statusCode, headers, or body)"
+        "Lambda's response does not match the proxy integration format (for example, no statusCode or a body that is not a string)"
       ],
       "answers": "D",
       "topic": "Troubleshooting and Optimization",
-      "explanation": "API Gateway Lambda proxy integration expects a specific response format: {statusCode: number, headers: object, body: string}. If the Lambda returns plain JSON without this wrapper, API Gateway returns 502. The body must be a stringified JSON, not a JSON object. This is the most common cause of 502 errors when Lambda executes successfully. Timeout (B) would show different symptoms. X-Ray (A) does not cause timeouts. Special characters (C) are handled if body is properly stringified.",
+      "explanation": "A REST API Lambda proxy integration expects a specific response format: {statusCode: number, body: string}; headers is optional. If the Lambda returns plain JSON without this wrapper, or a body that is an object rather than a string, API Gateway returns 502. HTTP APIs with payload format 2.0 differ: they can infer a successful response from plain JSON. This is the most common cause of 502 errors when Lambda executes successfully. Timeout (B) would show different symptoms. X-Ray (A) does not cause timeouts. Special characters (C) are handled if body is properly stringified.",
       "themes": {
         "services": [
           "api-gateway",
@@ -901,7 +901,7 @@
     },
     {
       "id": "32",
-      "question": "A developer is implementing application health checks for a containerized application running on Amazon ECS. What should be configured to ensure unhealthy containers are replaced?",
+      "question": "A developer is implementing application health checks for a containerized application running as a service on Amazon ECS. What should be configured to ensure unhealthy containers are replaced?",
       "options": [
         "VPC security group rules that block unhealthy container ports",
         "CloudWatch alarm on CPU utilization that sends an SNS notification",
@@ -910,7 +910,7 @@
       ],
       "answers": "D",
       "topic": "Troubleshooting and Optimization",
-      "explanation": "ECS task definitions support container health checks that run commands to verify container health. ECS monitors these health checks and replaces containers that fail, maintaining application availability.",
+      "explanation": "ECS task definitions support container health checks that run commands to verify container health. When an essential container fails its health check, ECS marks the task unhealthy and the service scheduler replaces it with a new task to maintain the desired count. A standalone task is not replaced automatically.",
       "themes": {
         "services": [
           "container"
