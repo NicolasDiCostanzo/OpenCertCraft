@@ -6,6 +6,12 @@
       "https://docs.aws.amazon.com/pdfs/aws-certification/latest/developer-associate-02/developer-associate-02.pdf"
     ]
   },
+  "DVA-C03": {
+    "vendor": "AWS",
+    "guide": [
+      "https://docs.aws.amazon.com/pdfs/aws-certification/latest/developer-associate-03/developer-associate-03.pdf"
+    ]
+  },
   "CLF-C02": {
     "vendor": "AWS",
     "guide": [

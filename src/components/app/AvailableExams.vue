@@ -27,12 +27,10 @@ import Card from '../ui/BaseCard.vue'
             class="available-exams__name"
             :to="{ name: 'quiz-dashboard', params: { certCode: cert.exam.code } }"
           >
-            {{ texts.certLinkLabel(cert.exam.name) }}
-          </RouterLink>
-          <span class="available-exams__meta">
+            {{ cert.exam.name }}
             <CertCodeBadge :code="cert.exam.code" />
-            <Badge variant="weight">{{ texts.questionBankValue(cert.questionCount) }}</Badge>
-          </span>
+          </RouterLink>
+          <Badge variant="weight">{{ texts.questionBankValue(cert.questionCount) }}</Badge>
         </li>
       </ul>
     </details>
@@ -139,6 +137,10 @@ import Card from '../ui/BaseCard.vue'
   }
 
   .available-exams__name {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px 10px;
     font-size: 15px;
     color: var(--text-h);
     text-decoration: none;
@@ -147,12 +149,6 @@ import Card from '../ui/BaseCard.vue'
   .available-exams__name:hover {
     color: var(--accent);
     text-decoration: underline;
-  }
-
-  .available-exams__meta {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
   }
 
 </style>

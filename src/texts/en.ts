@@ -11,7 +11,6 @@ export const texts = {
     `${name.includes(`(${code})`) ? name : `${name} (${code})`} practice test`,
   seoCertDomainsTitle: 'Exam domains',
   aboutExamTitle: (code: string) => `About the ${code} exam`,
-  certLinkLabel: (name: string) => `${name} practice test`,
   officialGuideLabel: 'Official exam guide',
   mockExamTipTitle: 'New to this certification? Start with a mock exam.',
   mockExamTipBody:

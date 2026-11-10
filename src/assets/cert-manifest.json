@@ -22,6 +22,28 @@
     "questionCount": 547
   },
   {
+    "file": "DVA-C03 questions.json",
+    "exam": {
+      "name": "AWS Certified Developer - Associate",
+      "code": "DVA-C03",
+      "totalQuestions": 65,
+      "timeLimitMinutes": 130,
+      "passingScore": {
+        "passingScore": 720,
+        "scale": 1000
+      },
+      "weights": {
+        "Development with AWS Services": 30,
+        "Security": 26,
+        "Testing and Deployment": 22,
+        "Troubleshooting and Optimization": 22
+      },
+      "overview": "For developers who build, test, deploy and troubleshoot applications on AWS. Covers developing with AWS services and Lambda, securing applications and data (including the security risks of AI services), testing and deploying with CI/CD, and troubleshooting and optimizing applications. Compared with DVA-C02, it adds AI-assisted development tools and container topics.",
+      "officialUrl": "https://docs.aws.amazon.com/aws-certification/latest/developer-associate-03/developer-associate-03.html"
+    },
+    "questionCount": 65
+  },
+  {
     "file": "CLF-C02 questions.json",
     "exam": {
       "name": "AWS Certified Cloud Practitioner",

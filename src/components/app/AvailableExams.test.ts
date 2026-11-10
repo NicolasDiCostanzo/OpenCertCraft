@@ -18,10 +18,14 @@ describe('AvailableExams', () => {
     expect(mountList().find('details.available-exams').attributes('open')).toBeDefined()
   })
 
-  it('links each certification with a practice test anchor to its dashboard', () => {
-    const link = mountList().find('a.available-exams__name')
-    expect(link.text()).toContain('Fixture Certification')
-    expect(link.text()).toContain('practice test')
-    expect(link.attributes('href')).toBe('/certs/FIX-001')
+  it('links same-named certifications by their distinct codes and dashboard URLs', () => {
+    const links = mountList().findAll('a.available-exams__name')
+    expect(links).toHaveLength(2)
+    for (const [i, code] of ['FIX-001', 'FIX-002'].entries()) {
+      expect(links[i].text()).toContain('Fixture Certification')
+      expect(links[i].text()).toContain(code)
+      expect(links[i].text()).not.toContain('practice test')
+      expect(links[i].attributes('href')).toBe(`/certs/${code}`)
+    }
   })
 })

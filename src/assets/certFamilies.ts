@@ -5,7 +5,7 @@ export interface CertFamily {
 }
 
 export const CERT_FAMILIES: readonly CertFamily[] = [
-  { id: 'aws', label: 'AWS', codes: ['DVA-C02', 'CLF-C02'] },
+  { id: 'aws', label: 'AWS', codes: ['DVA-C02', 'DVA-C03', 'CLF-C02'] },
   { id: 'anthropic', label: 'Anthropic', codes: ['CCA-F', 'CCA-F-exam-topics', 'CCAO-F', 'CCAR-P', 'CCDV-F'] },
   { id: 'gcp', label: 'Google Cloud', codes: ['GCP-ACE'] },
   { id: 'kubernetes', label: 'Kubernetes', codes: ['CKA', 'CKS'] },
