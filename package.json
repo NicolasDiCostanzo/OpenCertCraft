@@ -28,7 +28,7 @@
     "knip": "knip --exclude cycles --no-progress"
   },
   "dependencies": {
-    "aws-amplify": "^6.22.1",
+    "aws-amplify": "^6.22.2",
     "pinia": "^4.1.0",
     "pinia-plugin-persistedstate": "^4.7.1",
     "vue": "^3.5.41",
