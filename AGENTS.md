@@ -33,7 +33,11 @@ npm run test:certs   # cert-bundle gate: manifest + theme integrity (fast; run a
 
 CI (`.github/workflows/ci.yml`, Node 22) runs **lint, typecheck, test, build, and `npm audit --omit=dev --audit-level=high`** on every PR — run `npm run lint && npm run typecheck && npm run test` locally before considering work done.
 
-The audit job is scoped to runtime deps with `--omit=dev`. The only high advisory in the tree is `braces` (GHSA-vfj7-8cjw-p6xm), pulled in transitively by `@vue/eslint-config-typescript` → `fast-glob` → `micromatch`. It is used only for build-time glob matching inside the ESLint config, is unreachable from app code, and **has no patched release** (`braces@3.0.3` is the latest and is still within the vulnerable `<=3.0.3` range), so `npm audit fix` can only "resolve" it by downgrading to `@vue/eslint-config-typescript@14.0.1` — a version that breaks `eslint.config.js` and is incompatible with ESLint 10. Remove `--omit=dev` once a patched `braces` ships.
+The audit job is scoped to runtime deps with `--omit=dev`, but a plain `npm audit` (dev deps included) currently reports no advisory, so the flag can be dropped. The former `braces` advisory (GHSA-vfj7-8cjw-p6xm) is no longer reported by `npm audit` even though `braces@3.0.3` is still in the tree (build-time glob matching in the ESLint config only).
+
+The `overrides` entry in `package.json` exists because `@vue/test-utils` depends on `js-beautify@2.0.3`, which requires `glob@^13` (GHSA-3g3m-2fjr-6pw4, fixed in 14.0.2) and `editorconfig@^3`, itself on `minimatch@^10` (GHSA-g3hv-75wg-m249, fixed in 11.0.1), and no `js-beautify` release fixes this yet. `glob` and `editorconfig` are only loaded by the `js-beautify` CLI, never by `@vue/test-utils`. `npm audit fix --force` would instead downgrade `@vue/test-utils` to 2.4.11, which contradicts the `^2.5.1` range. Remove the override once `js-beautify` ships patched ranges (delete it, then check that `npm audit` stays clean).
+
+Edit `package-lock.json` with npm 11 (`npx npm@11 install`): the npm 10 bundled with Node 20/22 drops the `libc` and `devOptional` fields and produces a noisy diff.
 
 ## Project layout
 
